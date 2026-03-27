@@ -1,0 +1,479 @@
+# Amazon Wholesale — Keepa Veri Filtreleme & Skorlama Sistemi
+
+## AMAÇ
+Bu sistem, tam Keepa CSV şablonu verilen bir ürün listesini Amazon Wholesale iş modeline uygunluk açısından analiz eder.
+Çıktı olarak üç kategori üretir:
+- ✅ **WHOLESALE_UYGUN** → Aktif değerlendirmeye al
+- ⚠️ **TEKRAR_KONTROL** → Otomatik elenemiyor, manuel inceleme gerekli
+- ❌ **ELENDI** → Wholesale için uygun değil, neden belirtilir
+
+---
+
+## BÖLÜM 1 — HARD FILTER (Kesin Eleme)
+
+Bu koşullardan herhangi birini taşıyan ürün doğrudan `ELENDI` kategorisine gider.
+Her elenen ürün için `eleme_nedeni` alanı doldurulur.
+
+```python
+HARD_FILTERS = {
+
+    # 1. Amazon Buy Box hakimiyeti
+    "amazon_buybox_dominant": {
+        "column": "Buy Box: % Amazon 30 days",
+        "condition": "> 85",
+        "neden": "Amazon 30 günün %85'inden fazlasında Buy Box'ta — wholesale satıcıya yer yok"
+    },
+
+    # 2. Satış sıralaması yok / çok yüksek (kategori bazlı üst eşik)
+    "bsr_too_high": {
+        "column": "Sales Rank: Current",
+        "condition": "> 300000 OR is NaN",
+        "neden": "BSR çok yüksek veya yok — ürün aktif satılmıyor"
+    },
+
+    # 3. Çok düşük fiyat
+    "price_too_low": {
+        "column": "Buy Box: Current",
+        "condition": "< 1000",  # Keepa cent cinsinden saklar → $10
+        "neden": "Fiyat $10 altında — wholesale marjı mümkün değil"
+    },
+
+    # 4. Tehlikeli madde
+    "hazmat": {
+        "column": "Is HazMat",
+        "condition": "== True OR == 1",
+        "neden": "HazMat ürün — FBA kısıtlamaları var"
+    },
+
+    # 5. Adult ürün
+    "adult_product": {
+        "column": "Adult Product",
+        "condition": "== True OR == 1",
+        "neden": "Adult kategori — wholesale uygunsuz"
+    },
+
+    # 6. Toplam yeni teklif sayısı 1 veya altı (marka kendi satıyor, wholesale vermiyor)
+    "single_seller": {
+        "column": "New Offer Count: Current",
+        "condition": "<= 1",
+        "neden": "Tek satıcı var — marka muhtemelen sadece kendisi satıyor"
+    },
+
+    # 7. Buy Box hiç değişmemiş (frozen buybox — wholesale rekabeti yok)
+    "frozen_buybox": {
+        "column": "Buy Box: Winner Count 30 days",
+        "condition": "<= 1",
+        "neden": "30 günde Buy Box değişmemiş — rekabete kapalı"
+    },
+
+    # 8. IP şikayeti / kısıtlı kategori işareti (varsa)
+    "ip_flag": {
+        "column": "Return Rate",
+        "condition": "> 0.25",  # %25 üzeri iade oranı
+        "neden": "Yüksek iade oranı — ürün kalitesi veya IP riski"
+    },
+}
+```
+
+---
+
+## BÖLÜM 2 — SKORLAMA SİSTEMİ
+
+Hard filter'dan geçen ürünler aşağıdaki 8 kritere göre **0–100** arası skorlanır.
+Her kriter kendi ağırlığına göre toplam skora katkı sağlar.
+
+```python
+SCORING_CRITERIA = {
+
+    # --- TALEP & SATIŞ HIZI (Ağırlık: 25 puan) ---
+
+    "bsr_score": {
+        "columns": ["Sales Rank: Current", "Sales Rank: 90 days avg."],
+        "agirlik": 15,
+        "mantik": """
+            BSR ne kadar düşükse (iyi) o kadar yüksek puan.
+            Ayrıca: Current BSR < 90d avg ise trend iyileşiyor → bonus +5
+            BSR aralıkları (kategori bağımsız normalize edilir):
+                < 5.000     → 15 puan
+                5.000–25.000  → 12 puan
+                25.000–75.000 → 8 puan
+                75.000–150.000 → 4 puan
+                > 150.000    → 0 puan
+        """
+    },
+
+    "sales_velocity": {
+        "columns": ["Bought in past month", "Sales Rank: Drops last 30 days"],
+        "agirlik": 10,
+        "mantik": """
+            'Bought in past month' değeri varsa doğrudan kullan:
+                > 500  → 10 puan
+                200–500 → 7 puan
+                100–200 → 4 puan
+                < 100  → 2 puan
+            Yoksa 'Sales Rank: Drops last 30 days' ile tahmin et (her drop ~1 satış proxy).
+        """
+    },
+
+    # --- BUY BOX REKABETİ (Ağırlık: 30 puan) ---
+
+    "amazon_absence": {
+        "columns": ["Buy Box: % Amazon 30 days", "Buy Box: % Amazon 90 days"],
+        "agirlik": 15,
+        "mantik": """
+            Amazon'un Buy Box'ta olmadığı süre ne kadar uzunsa o kadar iyi:
+                % Amazon 30d == 0      → 15 puan
+                % Amazon 30d < 20      → 12 puan
+                % Amazon 30d < 50      → 7 puan
+                % Amazon 30d < 85      → 3 puan
+                (>85 zaten hard filter'da eleniyor)
+        """
+    },
+
+    "buybox_competition": {
+        "columns": [
+            "Buy Box: Winner Count 30 days",
+            "Buy Box Eligible Offer Counts: New FBA",
+            "Buy Box: Flipability 30 days"
+        ],
+        "agirlik": 15,
+        "mantik": """
+            Buy Box birden fazla satıcı arasında dönüyorsa wholesale için yer var:
+            Winner Count 30d:
+                >= 5   → 10 puan
+                3–4    → 7 puan
+                2      → 4 puan
+                1      → 0 puan
+            New FBA Eligible Count:
+                >= 4   → +3 puan
+                2–3    → +2 puan
+            Flipability 30d > 0.3 ise → +2 bonus puan
+        """
+    },
+
+    # --- FİYAT & MARJİN (Ağırlık: 20 puan) ---
+
+    "price_stability": {
+        "columns": [
+            "Buy Box: Current",
+            "Buy Box: 90 days avg.",
+            "Buy Box: Standard Deviation 90 days",
+            "List Price: Current"
+        ],
+        "agirlik": 10,
+        "mantik": """
+            Fiyat stabilitesi wholesale için kritik — sürekli düşen fiyatlar marjı öldürür.
+            Std Dev / Avg fiyat oranı (CoV):
+                CoV < 0.05  → 10 puan (çok stabil)
+                CoV < 0.10  → 7 puan
+                CoV < 0.20  → 4 puan
+                CoV >= 0.20 → 1 puan (volatil)
+        """
+    },
+
+    "price_level": {
+        "columns": ["Buy Box: Current", "List Price: Current"],
+        "agirlik": 10,
+        "mantik": """
+            Fiyat seviyesi marj potansiyelini belirler (Keepa cent → dolar için /100):
+                >= $50  → 10 puan
+                $30–50  → 8 puan
+                $20–30  → 5 puan
+                $10–20  → 3 puan
+            List Price ile Buy Box arasındaki fark > %15 ise → +2 bonus puan (marj alanı var)
+        """
+    },
+
+    # --- MARKA & ÜRÜN KALİTESİ (Ağırlık: 15 puan) ---
+
+    "review_quality": {
+        "columns": [
+            "Reviews: Rating",
+            "Reviews: Rating Count",
+            "Reviews: Rating Count - 90 days avg."
+        ],
+        "agirlik": 10,
+        "mantik": """
+            Rating:
+                >= 4.5  → 5 puan
+                4.0–4.5 → 3 puan
+                3.5–4.0 → 1 puan
+                < 3.5   → 0 puan
+            Rating Count:
+                > 1000  → 5 puan
+                500–1000 → 3 puan
+                100–500 → 2 puan
+                < 100   → 0 puan
+            90d yorum artışı > 0 ise → +2 bonus (aktif ürün)
+        """
+    },
+
+    "offer_health": {
+        "columns": [
+            "New Offer Count: Current",
+            "New Offer Count: 90 days avg.",
+            "Buy Box Eligible Offer Counts: New FBM"
+        ],
+        "agirlik": 5,
+        "mantik": """
+            Makul sayıda satıcı = sağlıklı pazar:
+                New Offer Count 3–10 → 5 puan (ideal)
+                11–20               → 3 puan (kalabalık ama olur)
+                > 20                → 1 puan (çok kalabalık, marj zor)
+                < 3                 → 1 puan (pazar yok veya kısıtlı)
+        """
+    },
+
+    # --- TREND BONUS (maks. +10 bonus puan) ---
+
+    "trend_bonus": {
+        "columns": [
+            "Sales Rank: 30 days drop %",
+            "Sales Rank: 90 days drop %",
+            "90 days change % monthly sold",
+            "Buy Box: 90 days OOS"
+        ],
+        "agirlik": 10,
+        "mantik": """
+            BSR drop % pozitifse (sıralama iyileşiyor):
+                30d drop > 10%  → +3 puan
+            Monthly sold 90d change pozitifse:
+                > 20%  → +3 puan
+                > 5%   → +1 puan
+            OOS (stok dışı) süresi 90d > %20 ise → +4 puan (talep > arz, fırsat)
+        """
+    },
+}
+
+TOPLAM_MAX_PUAN = 100  # (15+10+15+15+10+10+10+5+10 = 100)
+```
+
+---
+
+## BÖLÜM 3 — SINIFLANDIRMA EŞİKLERİ
+
+```python
+CLASSIFICATION_THRESHOLDS = {
+    "WHOLESALE_UYGUN":  {"min_score": 65, "label": "✅ Wholesale Uygun"},
+    "TEKRAR_KONTROL":   {"min_score": 40, "label": "⚠️ Tekrar Kontrol"},
+    "ELENDI_SCORE":     {"min_score": 0,  "label": "❌ Elendi (Düşük Skor)"},
+}
+
+# Not: Hard filter'da elenenlere skor hesaplanmaz, direkt ELENDI damgası vurulur.
+```
+
+---
+
+## BÖLÜM 4 — PYTHON KOD YAPISI
+
+```python
+import pandas as pd
+import numpy as np
+
+def load_keepa_csv(filepath: str) -> pd.DataFrame:
+    """Keepa CSV'sini yükler, fiyat sütunlarını cent'ten dolara çevirir."""
+    df = pd.read_csv(filepath, sep='\t')  # Keepa tab-separated kullanır
+    price_cols = [c for c in df.columns if any(
+        x in c for x in ['Buy Box', 'Amazon:', 'New:', 'Used:', 'List Price']
+    ) and any(x in c for x in ['Current', 'avg.', 'Lowest', 'Highest'])]
+    for col in price_cols:
+        df[col] = pd.to_numeric(df[col], errors='coerce') / 100
+    return df
+
+
+def apply_hard_filters(df: pd.DataFrame) -> pd.DataFrame:
+    """Hard filtreleri uygular, ELENDI olanları işaretler."""
+    df['kategori'] = 'PENDING'
+    df['eleme_nedeni'] = ''
+
+    masks = {
+        "Amazon BB dominant >85%":
+            df.get('Buy Box: % Amazon 30 days', pd.Series(0, index=df.index)).fillna(0) > 85,
+        "BSR yok veya >300k":
+            df.get('Sales Rank: Current', pd.Series(np.nan, index=df.index)).isna() |
+            (df.get('Sales Rank: Current', pd.Series(999999, index=df.index)) > 300000),
+        "Fiyat <$10":
+            df.get('Buy Box: Current', pd.Series(0, index=df.index)).fillna(0) < 10,
+        "HazMat":
+            df.get('Is HazMat', pd.Series(False, index=df.index)).fillna(False).astype(bool),
+        "Adult Product":
+            df.get('Adult Product', pd.Series(False, index=df.index)).fillna(False).astype(bool),
+        "Tek satıcı ≤1":
+            df.get('New Offer Count: Current', pd.Series(0, index=df.index)).fillna(0) <= 1,
+        "Frozen Buy Box":
+            df.get('Buy Box: Winner Count 30 days', pd.Series(0, index=df.index)).fillna(0) <= 1,
+        "Yüksek iade oranı >%25":
+            df.get('Return Rate', pd.Series(0, index=df.index)).fillna(0) > 0.25,
+    }
+
+    for neden, mask in masks.items():
+        df.loc[mask & (df['kategori'] == 'PENDING'), 'eleme_nedeni'] += neden + '; '
+        df.loc[mask, 'kategori'] = 'ELENDI'
+
+    return df
+
+
+def score_product(row: pd.Series) -> float:
+    """Tek bir ürünü 0-100 arası skorlar."""
+    score = 0.0
+
+    # --- BSR Skoru (maks 15) ---
+    bsr = row.get('Sales Rank: Current', np.nan)
+    bsr_90 = row.get('Sales Rank: 90 days avg.', np.nan)
+    if pd.notna(bsr):
+        if bsr < 5000:       score += 15
+        elif bsr < 25000:    score += 12
+        elif bsr < 75000:    score += 8
+        elif bsr < 150000:   score += 4
+        if pd.notna(bsr_90) and bsr < bsr_90: score += 3  # trend bonus
+
+    # --- Satış Hızı (maks 10) ---
+    bought = row.get('Bought in past month', np.nan)
+    if pd.notna(bought):
+        if bought > 500:     score += 10
+        elif bought > 200:   score += 7
+        elif bought > 100:   score += 4
+        else:                score += 2
+
+    # --- Amazon Yokluğu (maks 15) ---
+    amz_pct = row.get('Buy Box: % Amazon 30 days', 100)
+    amz_pct = 100 if pd.isna(amz_pct) else amz_pct
+    if amz_pct == 0:         score += 15
+    elif amz_pct < 20:       score += 12
+    elif amz_pct < 50:       score += 7
+    elif amz_pct < 85:       score += 3
+
+    # --- Buy Box Rekabeti (maks 15) ---
+    winners = row.get('Buy Box: Winner Count 30 days', 0) or 0
+    fba_count = row.get('Buy Box Eligible Offer Counts: New FBA', 0) or 0
+    flipability = row.get('Buy Box: Flipability 30 days', 0) or 0
+    if winners >= 5:         score += 10
+    elif winners >= 3:       score += 7
+    elif winners == 2:       score += 4
+    if fba_count >= 4:       score += 3
+    elif fba_count >= 2:     score += 2
+    if flipability > 0.3:    score += 2
+
+    # --- Fiyat Stabilitesi (maks 10) ---
+    bb_cur = row.get('Buy Box: Current', np.nan)
+    bb_90avg = row.get('Buy Box: 90 days avg.', np.nan)
+    bb_std = row.get('Buy Box: Standard Deviation 90 days', np.nan)
+    if pd.notna(bb_90avg) and bb_90avg > 0 and pd.notna(bb_std):
+        cov = (bb_std / 100) / bb_90avg  # std keepa'da cent olabilir
+        if cov < 0.05:   score += 10
+        elif cov < 0.10: score += 7
+        elif cov < 0.20: score += 4
+        else:            score += 1
+
+    # --- Fiyat Seviyesi (maks 10) ---
+    if pd.notna(bb_cur):
+        if bb_cur >= 50:     score += 10
+        elif bb_cur >= 30:   score += 8
+        elif bb_cur >= 20:   score += 5
+        else:                score += 3
+        list_price = row.get('List Price: Current', np.nan)
+        if pd.notna(list_price) and list_price > 0:
+            if (list_price - bb_cur) / list_price > 0.15: score += 2
+
+    # --- Review Kalitesi (maks 10) ---
+    rating = row.get('Reviews: Rating', np.nan)
+    rev_count = row.get('Reviews: Rating Count', 0) or 0
+    rev_90 = row.get('Reviews: Rating Count - 90 days avg.', 0) or 0
+    if pd.notna(rating):
+        if rating >= 4.5:    score += 5
+        elif rating >= 4.0:  score += 3
+        elif rating >= 3.5:  score += 1
+    if rev_count > 1000:     score += 5
+    elif rev_count > 500:    score += 3
+    elif rev_count > 100:    score += 2
+    if pd.notna(rev_90) and rev_90 > rev_count * 0.01: score += 2
+
+    # --- Teklif Sağlığı (maks 5) ---
+    offer_count = row.get('New Offer Count: Current', 0) or 0
+    if 3 <= offer_count <= 10:   score += 5
+    elif offer_count <= 20:      score += 3
+    elif offer_count > 20:       score += 1
+    else:                        score += 1
+
+    # --- Trend Bonus (maks 10) ---
+    bsr_drop_30 = row.get('Sales Rank: 30 days drop %', 0) or 0
+    sold_change = row.get('90 days change % monthly sold', 0) or 0
+    oos_90 = row.get('Buy Box: 90 days OOS', 0) or 0
+    if bsr_drop_30 > 10:     score += 3
+    if sold_change > 20:     score += 3
+    elif sold_change > 5:    score += 1
+    if oos_90 > 20:          score += 4
+
+    return min(score, 100)
+
+
+def classify(df: pd.DataFrame) -> pd.DataFrame:
+    """Skorlamayı çalıştırır ve final kategori atar."""
+    pending = df['kategori'] == 'PENDING'
+    df.loc[pending, 'wholesale_skor'] = df[pending].apply(score_product, axis=1)
+
+    df.loc[pending & (df['wholesale_skor'] >= 65), 'kategori'] = 'WHOLESALE_UYGUN'
+    df.loc[pending & (df['wholesale_skor'] >= 40) & (df['wholesale_skor'] < 65), 'kategori'] = 'TEKRAR_KONTROL'
+    df.loc[pending & (df['wholesale_skor'] < 40), 'kategori'] = 'ELENDI'
+
+    return df
+
+
+def export_results(df: pd.DataFrame, output_path: str):
+    """Sonuçları kategorilere göre ayrı sheet'lerde Excel'e yazar."""
+    key_cols = [
+        'Title', 'Brand', 'ASIN',
+        'Buy Box: Current', 'Sales Rank: Current', 'Bought in past month',
+        'Reviews: Rating', 'Reviews: Rating Count',
+        'Buy Box: % Amazon 30 days', 'Buy Box: Winner Count 30 days',
+        'New Offer Count: Current', 'Buy Box: 90 days OOS',
+        'wholesale_skor', 'kategori', 'eleme_nedeni'
+    ]
+    existing_cols = [c for c in key_cols if c in df.columns]
+
+    with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
+        for kategori in ['WHOLESALE_UYGUN', 'TEKRAR_KONTROL', 'ELENDI']:
+            subset = df[df['kategori'] == kategori][existing_cols].sort_values(
+                'wholesale_skor', ascending=False, na_position='last'
+            )
+            subset.to_excel(writer, sheet_name=kategori, index=False)
+
+
+def run_pipeline(input_csv: str, output_excel: str):
+    df = load_keepa_csv(input_csv)
+    df = apply_hard_filters(df)
+    df = classify(df)
+    export_results(df, output_excel)
+    print(f"Tamamlandı:")
+    for kat in ['WHOLESALE_UYGUN', 'TEKRAR_KONTROL', 'ELENDI']:
+        print(f"  {kat}: {(df['kategori'] == kat).sum()} ürün")
+```
+
+---
+
+## BÖLÜM 5 — KULLANIM
+
+```bash
+# Bağımlılıklar
+pip install pandas openpyxl numpy
+
+# Çalıştırma
+python wholesale_filter.py --input keepa_export.csv --output sonuclar.xlsx
+```
+
+---
+
+## BÖLÜM 6 — ÖNEMLİ NOTLAR
+
+| Konu | Not |
+|------|-----|
+| Keepa fiyat formatı | Fiyatlar **cent** cinsinden saklanır → /100 ile dolar yapılır |
+| Keepa ayırıcı | CSV değil **tab-separated** (sep='\t') kullanılır |
+| Amazon BB eşiği | %85 hard filter. %50–85 arası scoring'de cezalandırılır |
+| BSR kategorisi | Kategori bazlı normalize edilmesi önerilir (ileride eklenebilir) |
+| OOS verisi | `Buy Box: 90 days OOS` değeri yüzdedir (0–100) |
+| Skor eşikleri | 65+ uygun, 40–64 kontrol, <40 elendi — iş akışına göre ayarlanabilir |
+
+---
+
+*Bu doküman yazılım hafızası için oluşturulmuştur. Tüm sütun isimleri tam Keepa şablonuna karşılık gelir.*
