@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 
-const UPLOADS_DIR = join(
-  process.env.PIPELINE_DIR ?? 'C:/Users/tunah/OneDrive/Desktop/brand-outreach-tool',
-  'uploads'
-);
 const WORKER_URL = process.env.WORKER_URL ?? 'http://127.0.0.1:8000';
 
 // GET /api/keepa — kullanıcının tüm keepa ürünleri
@@ -73,24 +67,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Job oluşturulamadı' }, { status: 500 });
     }
 
-    // Dosyayı kaydet
-    const ext = file.name.split('.').pop() ?? 'csv';
-    const filePath = join(UPLOADS_DIR, `keepa_${job.id}.${ext}`);
+    // Forward file directly to Railway worker
     const bytes = await file.arrayBuffer();
-    try {
-      await mkdir(UPLOADS_DIR, { recursive: true });
-      await writeFile(filePath, Buffer.from(bytes));
-    } catch (fsErr) {
-      console.error('File save error:', fsErr);
-      await supabase.from('enrichment_jobs').update({ status: 'failed' }).eq('id', job.id);
-      return NextResponse.json({ error: 'Dosya kaydedilemedi' }, { status: 500 });
-    }
+    const workerForm = new FormData();
+    workerForm.append('file', new Blob([bytes], { type: file.type }), file.name);
+    workerForm.append('job_id', job.id);
+    workerForm.append('user_id', user.id);
 
-    // Python worker'a gönder (async)
-    fetch(`${WORKER_URL}/keepa-analyze-async`, {
+    fetch(`${WORKER_URL}/upload-and-keepa-analyze`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ job_id: job.id, file_path: filePath, user_id: user.id }),
+      body: workerForm,
     }).catch(err => {
       console.error('Worker keepa dispatch error:', err.message);
       supabase.from('enrichment_jobs')
