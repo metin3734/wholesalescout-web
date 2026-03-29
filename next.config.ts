@@ -13,6 +13,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Increase body size limit for large CSV/Excel uploads (Keepa files can be 10MB+)
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+  },
   async headers() {
     return [
       {

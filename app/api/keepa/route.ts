@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
 
+// Allow large Keepa file uploads (13MB+ possible)
+export const maxDuration = 60;
+
 const WORKER_URL = process.env.WORKER_URL ?? 'http://127.0.0.1:8000';
 
 // GET /api/keepa — kullanıcının tüm keepa ürünleri

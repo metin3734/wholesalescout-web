@@ -319,18 +319,34 @@ export default function DashboardPage() {
   useEffect(() => { if (!processingJob) return; const t = setInterval(loadBrands, 8000); return () => clearInterval(t); }, [processingJob, loadBrands]);
   useEffect(() => { if (!processingJob) return; const t = setInterval(() => loadKeepa(selectedKeepaJobId), 8000); return () => clearInterval(t); }, [processingJob, loadKeepa, selectedKeepaJobId]);
 
-  /* ── Submit file (tab'a göre marka veya keepa endpoint'ine gönderir) ── */
+  /* ── Keepa dosyası tespiti (CSV/XLSX header'larına bakarak) ── */
+  async function detectIsKeepa(file: File): Promise<boolean> {
+    // Keepa dosyası adında "Keepa" veya "ASIN" geçiyorsa → Keepa
+    if (/keepa/i.test(file.name)) return true;
+    // CSV ise ilk satırı oku
+    if (file.name.match(/\.csv$/i)) {
+      const text = await file.text();
+      const firstLine = text.split('\n')[0]?.toLowerCase() ?? '';
+      return firstLine.includes('asin') || firstLine.includes('bsr') || firstLine.includes('buybox');
+    }
+    return false;
+  }
+
+  /* ── Submit file: dosya tipini otomatik algıla, doğru endpoint'e yönlendir ── */
   async function submitFile(file: File) {
     if (!file.name.match(/\.(csv|xlsx|xls|tsv|txt)$/i)) { setError('CSV veya Excel dosyası gerekli.'); return; }
     setError('');
     setUploading(true);
-    const endpoint = activeTab === 'keepa' ? '/api/keepa' : '/api/jobs';
-    const form = new FormData(); form.append('file', file);
     try {
+      const isKeepa = await detectIsKeepa(file);
+      const endpoint = isKeepa ? '/api/keepa' : '/api/jobs';
+      // Switch main tab based on detected type
+      setActiveTab(isKeepa ? 'keepa' : 'brands');
+      const form = new FormData(); form.append('file', file);
       const r = await fetch(endpoint, { method:'POST', body:form });
       const d = await r.json();
       if (!r.ok) setError(d.error ?? 'Upload failed');
-      else { await loadJobs(); if (activeTab === 'keepa') await loadKeepa(); }
+      else { await loadJobs(); if (isKeepa) await loadKeepa(); }
     } catch { setError('Network error.'); } finally { setUploading(false); }
   }
 
@@ -445,65 +461,42 @@ export default function DashboardPage() {
             </div>
             {/* Body */}
             <div style={{ flex:1, padding:'1.25rem 1.4rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
-              {/* Tab toggle */}
-              <div style={{ display:'flex', background:'#f1f5f9', borderRadius:'9px', padding:'3px' }}>
-                <button onClick={() => setActiveTab('brands')} style={{ flex:1, padding:'0.42rem', borderRadius:'7px', border:'none', background: activeTab==='brands'?'#fff':'transparent', boxShadow: activeTab==='brands'?'0 1px 3px rgba(0,0,0,0.1)':'none', fontSize:'0.76rem', fontWeight: activeTab==='brands'?700:500, color: activeTab==='brands'?'#0f172a':'#64748b', cursor:'pointer' }}>
-                  Brand Search
-                </button>
-                <button onClick={() => setActiveTab('keepa')} style={{ flex:1, padding:'0.42rem', borderRadius:'7px', border:'none', background: activeTab==='keepa'?'#fff':'transparent', boxShadow: activeTab==='keepa'?'0 1px 3px rgba(0,0,0,0.1)':'none', fontSize:'0.76rem', fontWeight: activeTab==='keepa'?700:500, color: activeTab==='keepa'?'#0f172a':'#64748b', cursor:'pointer' }}>
-                  Keepa Analysis
-                </button>
+              {/* Brand name textarea — her zaman görünür */}
+              <div>
+                <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#475569', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Marka İsimleri</label>
+                <textarea
+                  value={pastedBrands}
+                  onChange={(e) => setPastedBrands(e.target.value)}
+                  placeholder={'Nike\nAdidas\nPuma\n(her satıra bir marka)'}
+                  rows={5}
+                  style={{ width:'100%', resize:'none', border:'1px solid #e2e8f0', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#1e293b', background:'#f8fafc', boxSizing:'border-box', lineHeight:1.5 }}
+                  onFocus={e => (e.target.style.borderColor='#3b82f6')}
+                  onBlur={e => (e.target.style.borderColor='#e2e8f0')}
+                />
+                {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#64748b', marginTop:'0.25rem' }}>{pasteLineCount} marka girildi</div>}
               </div>
-
-              {activeTab === 'brands' && (
-                <div>
-                  <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#475569', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Brand Names</label>
-                  <textarea
-                    value={pastedBrands}
-                    onChange={(e) => setPastedBrands(e.target.value)}
-                    placeholder={'Nike\nAdidas\nPuma'}
-                    rows={6}
-                    style={{ width:'100%', resize:'none', border:'1px solid #e2e8f0', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#1e293b', background:'#f8fafc', boxSizing:'border-box', lineHeight:1.5 }}
-                    onFocus={e => (e.target.style.borderColor='#3b82f6')}
-                    onBlur={e => (e.target.style.borderColor='#e2e8f0')}
-                  />
-                  {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#64748b', marginTop:'0.25rem' }}>{pasteLineCount} brands entered</div>}
-                </div>
-              )}
-
-              {activeTab === 'keepa' && (
-                <div style={{ padding:'0.85rem', background:'#eff6ff', borderRadius:'9px', border:'1px solid #bfdbfe' }}>
-                  <div style={{ fontSize:'0.75rem', fontWeight:700, color:'#1d4ed8', marginBottom:'0.2rem' }}>Keepa Export CSV / XLSX</div>
-                  <div style={{ fontSize:'0.68rem', color:'#475569' }}>ASIN kolonu otomatik algılanır</div>
-                </div>
-              )}
 
               <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
                 <div style={{ flex:1, height:'1px', background:'#e2e8f0' }} />
-                <span style={{ fontSize:'0.65rem', color:'#94a3b8' }}>or upload file</span>
+                <span style={{ fontSize:'0.65rem', color:'#94a3b8' }}>veya liste yükle</span>
                 <div style={{ flex:1, height:'1px', background:'#e2e8f0' }} />
               </div>
 
-              {/* Drop zone */}
+              {/* Drop zone — hem marka listesi hem Keepa dosyası kabul eder */}
               <div
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; if (f) { submitFile(f); setShowUploadPanel(false); } }}
                 onClick={() => fileRef.current?.click()}
-                style={{ border:`2px dashed ${dragOver ? '#3b82f6' : '#e2e8f0'}`, borderRadius:'10px', padding:'1.75rem 1rem', textAlign:'center', cursor:'pointer', background: dragOver ? '#eff6ff' : '#f8fafc', transition:'all 0.15s' }}
+                style={{ border:`2px dashed ${dragOver ? '#3b82f6' : '#e2e8f0'}`, borderRadius:'10px', padding:'1.5rem 1rem', textAlign:'center', cursor:'pointer', background: dragOver ? '#eff6ff' : '#f8fafc', transition:'all 0.15s' }}
               >
                 <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls,.tsv,.txt" onChange={(e) => { const f = e.target.files?.[0]; if (f) { submitFile(f); setShowUploadPanel(false); } e.target.value=''; }} style={{ display:'none' }} />
-                <div style={{ fontSize:'1.6rem', marginBottom:'0.45rem' }}>📂</div>
-                <div style={{ fontSize:'0.8rem', color:'#64748b' }}>Drop CSV / Excel or <span style={{ color:'#2563eb', fontWeight:600 }}>browse</span></div>
-                <div style={{ fontSize:'0.63rem', color:'#94a3b8', marginTop:'0.2rem' }}>.csv, .xlsx, .xls, .tsv</div>
+                <div style={{ fontSize:'1.5rem', marginBottom:'0.4rem' }}>📂</div>
+                <div style={{ fontSize:'0.78rem', color:'#64748b' }}>Sürükle & bırak veya <span style={{ color:'#2563eb', fontWeight:600 }}>dosya seç</span></div>
+                <div style={{ fontSize:'0.62rem', color:'#94a3b8', marginTop:'0.2rem' }}>Marka listesi (CSV/Excel) veya Keepa Export — otomatik algılanır</div>
               </div>
 
               {error && <div style={{ padding:'0.65rem 0.8rem', background:'#fef2f2', border:'1px solid #fecaca', borderRadius:'8px', fontSize:'0.72rem', color:'#dc2626' }}>⚠ {error}</div>}
-              {workerOffline && (
-                <div style={{ padding:'0.65rem 0.8rem', background:'#fef2f2', border:'1px solid #fecaca', borderRadius:'8px', fontSize:'0.68rem', color:'#b91c1c', fontWeight:500 }}>
-                  ⚠ Worker offline — <code style={{ fontSize:'0.6rem' }}>uvicorn worker:app --port 8000</code>
-                </div>
-              )}
 
               {processingJob && (
                 <div style={{ background:'#eff6ff', border:'1px solid #bfdbfe', borderRadius:'9px', padding:'0.75rem 0.9rem' }}>
@@ -514,20 +507,20 @@ export default function DashboardPage() {
                   <div style={{ height:'4px', background:'#bfdbfe', borderRadius:'999px', overflow:'hidden' }}>
                     <div style={{ height:'100%', width:`${processingJob.total_brands ? Math.round((processingJob.processed_brands/processingJob.total_brands)*100) : 0}%`, background:'#2563eb', borderRadius:'999px', transition:'width 0.4s' }} />
                   </div>
-                  <div style={{ fontSize:'0.63rem', color:'#3b82f6', marginTop:'0.25rem', textAlign:'right' }}>{processingJob.processed_brands} / {processingJob.total_brands || '?'} brands</div>
+                  <div style={{ fontSize:'0.63rem', color:'#3b82f6', marginTop:'0.25rem', textAlign:'right' }}>{processingJob.processed_brands} / {processingJob.total_brands || '?'} işlendi</div>
                 </div>
               )}
             </div>
             {/* Footer */}
             <div style={{ padding:'1rem 1.4rem', borderTop:'1px solid #f1f5f9' }}>
               <button
-                onClick={() => { if (activeTab === 'brands' && pastedBrands.trim()) { submitPasted(); setShowUploadPanel(false); } else fileRef.current?.click(); }}
+                onClick={() => { if (pastedBrands.trim()) { submitPasted(); setShowUploadPanel(false); } else fileRef.current?.click(); }}
                 disabled={uploading}
                 style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.5rem', padding:'0.72rem', background: uploading?'#94a3b8':'linear-gradient(135deg,#2563eb,#1d4ed8)', color:'#fff', border:'none', borderRadius:'9px', fontSize:'0.85rem', fontWeight:700, cursor: uploading?'not-allowed':'pointer', boxShadow: uploading?'none':'0 2px 10px rgba(37,99,235,0.35)' }}
               >
                 {uploading
-                  ? <><span style={{ width:12, height:12, border:'2px solid rgba(255,255,255,0.4)', borderTopColor:'#fff', borderRadius:'50%', animation:'spin 0.7s linear infinite', display:'inline-block' }} /> Processing…</>
-                  : activeTab === 'keepa' ? '📊 Analyze Keepa Data' : <><Ic.Search /> Find Leads {pasteLineCount > 0 ? `(${pasteLineCount})` : ''}</>
+                  ? <><span style={{ width:12, height:12, border:'2px solid rgba(255,255,255,0.4)', borderTopColor:'#fff', borderRadius:'50%', animation:'spin 0.7s linear infinite', display:'inline-block' }} /> İşleniyor…</>
+                  : pastedBrands.trim() ? <><Ic.Search /> Marka Araştır ({pasteLineCount})</> : <><Ic.Search /> Araştır / Dosya Yükle</>
                 }
               </button>
             </div>
