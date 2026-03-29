@@ -82,16 +82,16 @@ export default function SettingsPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', maxWidth: '680px' }}>
 
       {/* Profile */}
-      <Section title="Profile">
-        <Field label="Display name" hint="Shown in your dashboard and exports.">
+      <Section title="Profil">
+        <Field label="Görünen Ad" hint="Dashboard ve dışa aktarımlarınızda gösterilir.">
           <input
             style={inputStyle}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Your name"
+            placeholder="Adınız"
           />
         </Field>
-        <Field label="Email address" hint="Your login email — contact support to change.">
+        <Field label="E-posta Adresi" hint="Giriş e-postanız — değiştirmek için destek ile iletişime geçin.">
           <input
             style={{ ...inputStyle, background: '#f8fafc', color: '#94a3b8', cursor: 'not-allowed' }}
             value={profile.email ?? ''}
@@ -101,21 +101,21 @@ export default function SettingsPage() {
       </Section>
 
       {/* Plan */}
-      <Section title="Current Plan">
-        <Field label="Plan" hint="Upgrade or downgrade at any time.">
+      <Section title="Mevcut Plan">
+        <Field label="Plan" hint="İstediğiniz zaman yükseltin veya düşürün.">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span style={{ display: 'inline-flex', padding: '0.3rem 0.75rem', background: '#dbeafe', color: '#1d4ed8', borderRadius: '999px', fontWeight: 700, fontSize: '0.75rem' }}>
               Free
             </span>
             <button
               style={{ padding: '0.3rem 0.75rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '7px', fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer' }}
-              onClick={() => alert('Stripe checkout — coming soon')}
+              onClick={() => alert('Stripe ödeme — yakında')}
             >
               Upgrade
             </button>
           </div>
         </Field>
-        <Field label="Usage this month" hint="Resets on the 1st of each month.">
+        <Field label="Bu Ayki Kullanım" hint="Her ayın 1'inde sıfırlanır.">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{ flex: 1, height: '6px', background: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
               <div style={{
@@ -133,8 +133,8 @@ export default function SettingsPage() {
       </Section>
 
       {/* Notifications */}
-      <Section title="Notifications">
-        <Field label="Email notifications" hint="Receive an email when a job finishes.">
+      <Section title="Bildirimler">
+        <Field label="E-posta Bildirimleri" hint="Bir iş tamamlandığında e-posta alın.">
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}>
             <div
               onClick={() => setNotifyEmail(!notifyEmail)}
@@ -164,7 +164,7 @@ export default function SettingsPage() {
             <span style={{ fontSize: '0.78rem', color: '#475569' }}>Send email on job completion</span>
           </label>
         </Field>
-        <Field label="Browser notifications" hint="Get notified while the tab is in focus.">
+        <Field label="Tarayıcı Bildirimleri" hint="Sekme açıkken bildirim alın.">
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}>
             <div
               onClick={() => setNotifyComplete(!notifyComplete)}
@@ -197,30 +197,30 @@ export default function SettingsPage() {
       </Section>
 
       {/* API keys */}
-      <Section title="API Configuration">
-        <Field label="Worker URL" hint="FastAPI worker endpoint. Only change if self-hosting.">
+      <Section title="API Yapılandırması">
+        <Field label="Worker URL" hint="FastAPI worker uç noktası. Yalnızca kendi sunucunuzda barındırıyorsanız değiştirin.">
           <input
             style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.75rem' }}
             defaultValue={process.env.NEXT_PUBLIC_WORKER_URL ?? 'http://127.0.0.1:8000'}
             readOnly
           />
         </Field>
-        <Field label="Export format" hint="Default format when downloading enriched results.">
+        <Field label="Dışa Aktarma Formatı" hint="Zenginleştirilmiş sonuçları indirirken varsayılan format.">
           <select style={{ ...inputStyle, cursor: 'pointer' }}>
-            <option value="xlsx">Excel (.xlsx) — recommended</option>
+            <option value="xlsx">Excel (.xlsx) — önerilen</option>
             <option value="csv">CSV (.csv)</option>
           </select>
         </Field>
       </Section>
 
       {/* Danger zone */}
-      <Section title="Danger Zone">
-        <Field label="Delete account" hint="Permanently delete your account and all data. This cannot be undone.">
+      <Section title="Tehlikeli Bölge">
+        <Field label="Hesabı Sil" hint="Hesabınızı ve tüm verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.">
           <button
             style={{ padding: '0.45rem 1rem', background: '#fff', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '7px', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
             onClick={() => {
-              if (confirm('Are you sure? This will permanently delete your account and all enriched data.')) {
-                alert('Account deletion — contact support@wholesalescout.com');
+              if (confirm('Emin misiniz? Bu işlem hesabınızı ve tüm zenginleştirilmiş verilerinizi kalıcı olarak silecektir.')) {
+                alert('Hesap silme — support@wholesalescout.com ile iletişime geçin');
               }
             }}
           >
@@ -245,7 +245,7 @@ export default function SettingsPage() {
             transition: 'background 0.2s',
           }}
         >
-          {saved ? '✓ Saved' : 'Save Changes'}
+          {saved ? '✓ Kaydedildi' : 'Değişiklikleri Kaydet'}
         </button>
       </div>
 
