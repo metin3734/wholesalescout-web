@@ -99,6 +99,8 @@ export default function MyLeadsPage() {
   const [selectedIds, setSelectedIds]   = useState<Set<string>>(new Set());
   const [deletingIds, setDeletingIds]   = useState<Set<string>>(new Set());
   const [inspectedBrand, setInspectedBrand] = useState<Brand | null>(null);
+  const [queueing, setQueueing]         = useState(false);
+  const [queueMsg, setQueueMsg]         = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -172,6 +174,35 @@ export default function MyLeadsPage() {
     if (inspectedBrand?.id === id) setInspectedBrand(null);
   }
 
+  async function addToQueue() {
+    const ids = Array.from(selectedIds);
+    const withEmail = ids.filter(id => brands.find(b => b.id === id)?.wholesale_email);
+    if (withEmail.length === 0) {
+      setQueueMsg('Seçili markaların hiçbirinde email adresi yok.');
+      setTimeout(() => setQueueMsg(null), 3500);
+      return;
+    }
+    setQueueing(true);
+    try {
+      const resp = await fetch('/api/email-queue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ brand_ids: withEmail }),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setQueueMsg(`✓ ${data.added ?? withEmail.length} email kuyruğa eklendi`);
+      } else {
+        setQueueMsg('Kuyruğa eklenemedi. Tekrar deneyin.');
+      }
+    } catch {
+      setQueueMsg('Bağlantı hatası.');
+    } finally {
+      setQueueing(false);
+      setTimeout(() => setQueueMsg(null), 3500);
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'200px', color:'#94a3b8', fontSize:'0.85rem' }}>
@@ -205,12 +236,21 @@ export default function MyLeadsPage() {
           <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', flexShrink:0 }}>
             <span style={{ fontWeight:700, fontSize:'0.83rem', color:'#0f172a' }}>{filtered.length} lead</span>
             {someSelected && (
-              <button
-                onClick={deleteSelected}
-                style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.2rem 0.55rem', background:'#fef2f2', color:'#b91c1c', border:'1px solid #fecaca', borderRadius:'6px', fontSize:'0.68rem', fontWeight:600, cursor:'pointer' }}
-              >
-                <Ic.Trash /> {selectedIds.size} Sil
-              </button>
+              <>
+                <button
+                  onClick={addToQueue}
+                  disabled={queueing}
+                  style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.2rem 0.55rem', background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', borderRadius:'6px', fontSize:'0.68rem', fontWeight:600, cursor:'pointer', opacity: queueing ? 0.6 : 1 }}
+                >
+                  📧 {queueing ? 'Ekleniyor…' : `${selectedIds.size} Kuyruğa Ekle`}
+                </button>
+                <button
+                  onClick={deleteSelected}
+                  style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.2rem 0.55rem', background:'#fef2f2', color:'#b91c1c', border:'1px solid #fecaca', borderRadius:'6px', fontSize:'0.68rem', fontWeight:600, cursor:'pointer' }}
+                >
+                  <Ic.Trash /> {selectedIds.size} Sil
+                </button>
+              </>
             )}
           </div>
 
@@ -440,6 +480,13 @@ export default function MyLeadsPage() {
           </div>
         )}
       </div>
+
+      {/* ── Queue Toast ── */}
+      {queueMsg && (
+        <div style={{ position:'fixed', bottom:'1.5rem', left:'50%', transform:'translateX(-50%)', background: queueMsg.startsWith('✓') ? '#0f172a' : '#fef2f2', color: queueMsg.startsWith('✓') ? '#fff' : '#b91c1c', padding:'0.55rem 1.2rem', borderRadius:'8px', fontSize:'0.8rem', fontWeight:600, boxShadow:'0 4px 20px rgba(0,0,0,0.15)', zIndex:3000, whiteSpace:'nowrap', animation:'fadeIn 0.2s ease' }}>
+          {queueMsg}
+        </div>
+      )}
 
     {/* ── BRAND INSPECTOR ── */}
     {inspectedBrand && (
