@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 interface Transaction {
   id: string;
-  type: 'purchase' | 'usage' | 'refund' | 'bonus';h
+  type: 'purchase' | 'usage' | 'refund' | 'bonus';
   amount: number;
   description: string;
   created_at: string;
@@ -18,9 +18,9 @@ interface CreditsData {
 }
 
 const TYPE_CFG: Record<string, { color: string; bg: string; sign: string; label: string }> = {
-  purchase: { color: '#15803d', bg: '#f0fdf4', sign: '+', label: 'Satın Alma' },
-  usage:    { color: '#b45309', bg: '#fffbeb', sign: '−', label: 'Kullanıldı' },
-  refund:   { color: '#0369a1', bg: '#f0f9ff', sign: '+', label: 'İade' },
+  purchase: { color: '#15803d', bg: '#f0fdf4', sign: '+', label: 'Purchase' },
+  usage:    { color: '#b45309', bg: '#fffbeb', sign: '−', label: 'Used' },
+  refund:   { color: '#0369a1', bg: '#f0f9ff', sign: '+', label: 'Refund' },
   bonus:    { color: '#7c3aed', bg: '#f5f3ff', sign: '+', label: 'Bonus' },
 };
 
@@ -33,6 +33,7 @@ const PLAN_PRICES = [
 export default function CreditsPage() {
   const [data, setData] = useState<CreditsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -45,10 +46,31 @@ export default function CreditsPage() {
 
   useEffect(() => { load(); }, [load]);
 
+  const handleCheckout = async (planName: string) => {
+    setCheckoutLoading(planName);
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planName }),
+      });
+      const json = await res.json();
+      if (json.url) {
+        window.location.href = json.url;
+      } else {
+        alert(json.error || 'Failed to create checkout session');
+      }
+    } catch {
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '200px', color: '#94a3b8', fontSize: '0.85rem' }}>
-        Yükleniyor…
+        Loading…
       </div>
     );
   }
@@ -68,24 +90,25 @@ export default function CreditsPage() {
         {/* Credit balance */}
         <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '12px', padding: '1.4rem 1.5rem', color: '#fff' }}>
           <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, marginBottom: '0.6rem' }}>
-            Kredi Bakiyesi
+            Credit Balance
           </div>
           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#f8fafc', lineHeight: 1 }}>
             {balance.toLocaleString()}
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>kalan kredi</div>
+          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>credits remaining</div>
           <button
             style={{ marginTop: '1rem', padding: '0.45rem 1rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '7px', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
-            onClick={() => alert('Stripe ödeme — yakında')}
+            onClick={() => handleCheckout('Starter')}
+            disabled={checkoutLoading !== null}
           >
-            + Kredi Satın Al
+            {checkoutLoading === 'Starter' ? 'Redirecting…' : '+ Buy Credits'}
           </button>
         </div>
 
         {/* Monthly usage */}
         <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '1.4rem 1.5rem' }}>
           <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, marginBottom: '0.6rem' }}>
-            Aylık Kullanım
+            Monthly Usage
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.3rem', marginBottom: '0.75rem' }}>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{used}</span>
@@ -100,14 +123,14 @@ export default function CreditsPage() {
               transition: 'width 0.4s',
             }} />
           </div>
-          <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>{usedPct}% aylık plan kullanıldı</div>
+          <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>{usedPct}% of monthly plan used</div>
         </div>
       </div>
 
       {/* Upgrade plans */}
       <div>
         <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.65rem' }}>
-          Planı Yükselt
+          Upgrade Plan
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem' }}>
           {PLAN_PRICES.map((p) => (
@@ -123,21 +146,22 @@ export default function CreditsPage() {
             >
               {p.popular && (
                 <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: '#3b82f6', color: '#fff', fontSize: '0.6rem', fontWeight: 700, padding: '0.15rem 0.6rem', borderRadius: '999px', whiteSpace: 'nowrap' }}>
-                  EN POPÜLER
+                  MOST POPULAR
                 </div>
               )}
               <div style={{ fontWeight: 700, fontSize: '0.9rem', color: p.popular ? '#f8fafc' : '#0f172a', marginBottom: '0.25rem' }}>{p.name}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.15rem', marginBottom: '0.35rem' }}>
                 <span style={{ fontSize: '1.6rem', fontWeight: 800, color: p.popular ? '#fff' : '#0f172a' }}>${p.price}</span>
-                <span style={{ fontSize: '0.7rem', color: p.popular ? '#64748b' : '#94a3b8' }}>/ay</span>
+                <span style={{ fontSize: '0.7rem', color: p.popular ? '#64748b' : '#94a3b8' }}>/mo</span>
               </div>
-              <div style={{ fontSize: '0.72rem', color: p.popular ? '#93c5fd' : '#64748b', marginBottom: '0.15rem' }}>{p.credits} brands/aynth</div>
-              <div style={{ fontSize: '0.68rem', color: p.popular ? '#475569' : '#94a3b8', marginBottom: '0.85rem' }}>{p.per} ek maliyet</div>
+              <div style={{ fontSize: '0.72rem', color: p.popular ? '#93c5fd' : '#64748b', marginBottom: '0.15rem' }}>{p.credits} brands/month</div>
+              <div style={{ fontSize: '0.68rem', color: p.popular ? '#475569' : '#94a3b8', marginBottom: '0.85rem' }}>{p.per} extra</div>
               <button
-                style={{ width: '100%', padding: '0.45rem', background: p.popular ? '#2563eb' : '#f8fafc', color: p.popular ? '#fff' : '#0f172a', border: p.popular ? 'none' : '1px solid #e2e8f0', borderRadius: '7px', fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer' }}
-                onClick={() => alert('Stripe ödeme — yakında')}
+                style={{ width: '100%', padding: '0.45rem', background: p.popular ? '#2563eb' : '#f8fafc', color: p.popular ? '#fff' : '#0f172a', border: p.popular ? 'none' : '1px solid #e2e8f0', borderRadius: '7px', fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer', opacity: checkoutLoading ? 0.7 : 1 }}
+                onClick={() => handleCheckout(p.name)}
+                disabled={checkoutLoading !== null}
               >
-                {p.name}
+                {checkoutLoading === p.name ? 'Redirecting…' : `Upgrade to ${p.name}`}
               </button>
             </div>
           ))}
@@ -147,20 +171,20 @@ export default function CreditsPage() {
       {/* Transaction history */}
       <div>
         <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.65rem' }}>
-          İşlem Geçmişi
+          Transaction History
         </h2>
 
         {txs.length === 0 ? (
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '2.5rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.82rem' }}>
-            Henüz işlem yok
+            No transactions yet
           </div>
         ) : (
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
-                  {['Tarih', 'Açıklama', 'Tür', 'Tutar'].map((h) => (
-                    <th key={h} style={{ padding: '0.55rem 1rem', textAlign: h === 'Tutar' ? 'right' : 'left', fontWeight: 600, color: '#94a3b8', fontSize: '0.63rem', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #f1f5f9' }}>
+                  {['Date', 'Description', 'Type', 'Amount'].map((h) => (
+                    <th key={h} style={{ padding: '0.55rem 1rem', textAlign: h === 'Amount' ? 'right' : 'left', fontWeight: 600, color: '#94a3b8', fontSize: '0.63rem', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #f1f5f9' }}>
                       {h}
                     </th>
                   ))}
@@ -193,4 +217,4 @@ export default function CreditsPage() {
       </div>
     </div>
   );
-}
+      }
