@@ -17,6 +17,23 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    // ── Beta kapasitesi kontrolü ───────────────────────────────────────────────
+    try {
+      const betaRes = await fetch('/api/auth/beta-check');
+      const beta = await betaRes.json();
+      if (!beta.available) {
+        setError('Beta erişimi doldu. Şu an yeni kayıt kabul etmiyoruz.');
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // Kontrol başarısız olursa devam etme
+      setError('Sunucu hatası. Lütfen tekrar deneyin.');
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient();
     const { error } = await supabase.auth.signUp({
       email,
@@ -55,7 +72,7 @@ export default function SignupPage() {
       }}>
         <h1 style={{ fontWeight: 700, fontSize: '1.4rem', marginBottom: '0.5rem' }}>Create your account</h1>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-          10 brands free. No credit card required.
+          Kapalı beta — sınırlı erişim.
         </p>
 
         {error && (
