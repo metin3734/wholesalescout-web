@@ -551,17 +551,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── TAB TOGGLE ── */}
-      <div style={{ display:'flex', alignItems:'center', gap:'0', background:'#f2f3ff', borderRadius:'10px', padding:'3px', alignSelf:'flex-start', marginBottom:'2rem' }}>
-        <button onClick={() => setActiveTab('brands')} style={{ padding:'0.38rem 1.1rem', borderRadius:'8px', border:'none', background: activeTab==='brands'?'#fff':'transparent', boxShadow: activeTab==='brands'?'0 1px 3px rgba(0,0,0,0.08)':'none', fontSize:'0.76rem', fontWeight: activeTab==='brands'?700:500, color: activeTab==='brands'?'#131b2e':'#57657a', cursor:'pointer', transition:'all 0.15s', whiteSpace:'nowrap' }}>
-          Brand Searches {brands.length > 0 && <span style={{ opacity:0.5, fontSize:'0.65rem' }}>({brands.length})</span>}
-        </button>
-
-      </div>
-
       <div style={{ display:'flex', flexDirection:'column', gap:'0' }}>
 
-      {activeTab === 'brands' && <>
+      {true && <>
 
       {/* ── KPI CARDS (Precision Ledger style) ── */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:'1.5rem', marginBottom:'2.5rem' }}>
@@ -799,7 +791,7 @@ export default function DashboardPage() {
 
 
 
-      </> /* end activeTab === 'brands' */}
+      </> /* end brands section */}
 
       {/* ── KEEPA TABLE ── */}
       {activeTab === 'keepa' && (
