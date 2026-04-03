@@ -25,9 +25,10 @@ const TYPE_CFG: Record<string, { color: string; bg: string; sign: string; label:
 };
 
 const PLAN_PRICES = [
-  { name: 'Starter', price: 19, credits: 100, per: '$0.25/brand', color: '#2563eb' },
-  { name: 'Pro',     price: 49, credits: 500, per: '$0.20/brand', color: '#7c3aed', popular: true },
-  { name: 'Elite',   price: 99, credits: 2000, per: '$0.15/brand', color: '#0f172a' },
+  { name: 'Starter', price: 49,   credits: 800,   per: '$0.061/marka', badge: null,          dark: false },
+  { name: 'Growth',  price: 199,  credits: 4000,  per: '$0.050/marka', badge: null,          dark: false },
+  { name: 'Pro',     price: 499,  credits: 12000, per: '$0.042/marka', badge: 'EN POPÜLER',  dark: true  },
+  { name: 'Agency',  price: 1399, credits: 40000, per: '$0.035/marka', badge: 'EN İYİ DEĞER', dark: false },
 ];
 
 export default function CreditsPage() {
@@ -95,24 +96,24 @@ export default function CreditsPage() {
           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#f8fafc', lineHeight: 1 }}>
             {balance.toLocaleString()}
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>credits remaining</div>
+          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>kredi kaldı</div>
           <button
             style={{ marginTop: '1rem', padding: '0.45rem 1rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '7px', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
-            onClick={() => handleCheckout('Starter')}
+            onClick={() => handleCheckout('Growth')}
             disabled={checkoutLoading !== null}
           >
-            {checkoutLoading === 'Starter' ? 'Redirecting…' : '+ Buy Credits'}
+            {checkoutLoading === 'Growth' ? 'Yönlendiriliyor…' : '+ Kredi Satın Al'}
           </button>
         </div>
 
         {/* Monthly usage */}
         <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '1.4rem 1.5rem' }}>
           <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, marginBottom: '0.6rem' }}>
-            Monthly Usage
+            Kullanım
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.3rem', marginBottom: '0.75rem' }}>
-            <span style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{used}</span>
-            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>/ {limit === 999999 ? '∞' : limit}</span>
+            <span style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{used.toLocaleString()}</span>
+            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>marka arandı</span>
           </div>
           <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.4rem' }}>
             <div style={{
@@ -123,45 +124,52 @@ export default function CreditsPage() {
               transition: 'width 0.4s',
             }} />
           </div>
-          <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>{usedPct}% of monthly plan used</div>
+          <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Toplam {balance.toLocaleString()} kredinizin {usedPct}% kullanıldı</div>
         </div>
       </div>
 
-      {/* Upgrade plans */}
+      {/* Credit packages */}
       <div>
-        <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.65rem' }}>
-          Upgrade Plan
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+          <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', margin: 0 }}>
+            Kredi Satın Al
+          </h2>
+          <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>Tek seferlik ödeme · Abonelik yok</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.65rem' }}>
           {PLAN_PRICES.map((p) => (
             <div
               key={p.name}
               style={{
-                background: p.popular ? '#0f172a' : '#fff',
+                background: p.dark ? '#0f172a' : '#fff',
                 borderRadius: '10px',
-                border: p.popular ? '2px solid #3b82f6' : '1px solid #e2e8f0',
+                border: p.dark ? '2px solid #3b82f6' : p.badge ? '2px solid #e2e8f0' : '1px solid #e2e8f0',
                 padding: '1.1rem 1.2rem',
                 position: 'relative',
               }}
             >
-              {p.popular && (
-                <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: '#3b82f6', color: '#fff', fontSize: '0.6rem', fontWeight: 700, padding: '0.15rem 0.6rem', borderRadius: '999px', whiteSpace: 'nowrap' }}>
-                  MOST POPULAR
+              {p.badge && (
+                <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: p.dark ? '#3b82f6' : '#f59e0b', color: '#fff', fontSize: '0.55rem', fontWeight: 700, padding: '0.15rem 0.55rem', borderRadius: '999px', whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>
+                  {p.badge}
                 </div>
               )}
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: p.popular ? '#f8fafc' : '#0f172a', marginBottom: '0.25rem' }}>{p.name}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.15rem', marginBottom: '0.35rem' }}>
-                <span style={{ fontSize: '1.6rem', fontWeight: 800, color: p.popular ? '#fff' : '#0f172a' }}>${p.price}</span>
-                <span style={{ fontSize: '0.7rem', color: p.popular ? '#64748b' : '#94a3b8' }}>/mo</span>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: p.dark ? '#f8fafc' : '#0f172a', marginBottom: '0.5rem' }}>{p.name}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.1rem', marginBottom: '0.4rem' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: p.dark ? '#93c5fd' : '#64748b' }}>$</span>
+                <span style={{ fontSize: '1.7rem', fontWeight: 800, color: p.dark ? '#fff' : '#0f172a', lineHeight: 1 }}>{p.price.toLocaleString()}</span>
               </div>
-              <div style={{ fontSize: '0.72rem', color: p.popular ? '#93c5fd' : '#64748b', marginBottom: '0.15rem' }}>{p.credits} brands/month</div>
-              <div style={{ fontSize: '0.68rem', color: p.popular ? '#475569' : '#94a3b8', marginBottom: '0.85rem' }}>{p.per} extra</div>
+              <div style={{ fontSize: '0.72rem', color: p.dark ? '#93c5fd' : '#2563eb', fontWeight: 600, marginBottom: '0.2rem' }}>
+                {p.credits.toLocaleString()} marka kredisi
+              </div>
+              <div style={{ fontSize: '0.65rem', color: p.dark ? '#475569' : '#94a3b8', marginBottom: '0.9rem' }}>
+                {p.per} · tek seferlik
+              </div>
               <button
-                style={{ width: '100%', padding: '0.45rem', background: p.popular ? '#2563eb' : '#f8fafc', color: p.popular ? '#fff' : '#0f172a', border: p.popular ? 'none' : '1px solid #e2e8f0', borderRadius: '7px', fontWeight: 600, fontSize: '0.75rem', cursor: 'pointer', opacity: checkoutLoading ? 0.7 : 1 }}
+                style={{ width: '100%', padding: '0.45rem', background: p.dark ? '#2563eb' : '#f8fafc', color: p.dark ? '#fff' : '#0f172a', border: p.dark ? 'none' : '1px solid #e2e8f0', borderRadius: '7px', fontWeight: 600, fontSize: '0.72rem', cursor: checkoutLoading ? 'not-allowed' : 'pointer', opacity: checkoutLoading ? 0.6 : 1, transition: 'opacity 0.2s' }}
                 onClick={() => handleCheckout(p.name)}
                 disabled={checkoutLoading !== null}
               >
-                {checkoutLoading === p.name ? 'Redirecting…' : `Upgrade to ${p.name}`}
+                {checkoutLoading === p.name ? 'Yönlendiriliyor…' : 'Satın Al'}
               </button>
             </div>
           ))}
@@ -171,12 +179,12 @@ export default function CreditsPage() {
       {/* Transaction history */}
       <div>
         <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', marginBottom: '0.65rem' }}>
-          Transaction History
+          İşlem Geçmişi
         </h2>
 
         {txs.length === 0 ? (
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '2.5rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.82rem' }}>
-            No transactions yet
+            Henüz işlem yok
           </div>
         ) : (
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>

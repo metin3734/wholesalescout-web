@@ -5,9 +5,10 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const PLANS: Record<string, { price: number; credits: number }> = {
-    Starter: { price: 1900, credits: 100 },
-    Pro:     { price: 4900, credits: 500 },
-    Elite:   { price: 9900, credits: 2000 },
+    Starter: { price:   4900, credits:   800 },
+    Growth:  { price:  19900, credits:  4000 },
+    Pro:     { price:  49900, credits: 12000 },
+    Agency:  { price: 139900, credits: 40000 },
 };
 
 export async function POST(req: Request) {
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
               line_items: [{
                         price_data: {
                                     currency: 'usd',
-                                    product_data: { name: `WholesaleScout ${plan} - ${cfg.credits} Credits` },
+                                    product_data: { name: `WholesaleScout ${plan} — ${cfg.credits.toLocaleString()} Brand Credits` },
                                     unit_amount: cfg.price,
                         },
                         quantity: 1,
