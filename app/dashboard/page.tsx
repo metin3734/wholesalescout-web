@@ -556,9 +556,7 @@ export default function DashboardPage() {
         <button onClick={() => setActiveTab('brands')} style={{ padding:'0.38rem 1.1rem', borderRadius:'8px', border:'none', background: activeTab==='brands'?'#fff':'transparent', boxShadow: activeTab==='brands'?'0 1px 3px rgba(0,0,0,0.08)':'none', fontSize:'0.76rem', fontWeight: activeTab==='brands'?700:500, color: activeTab==='brands'?'#131b2e':'#57657a', cursor:'pointer', transition:'all 0.15s', whiteSpace:'nowrap' }}>
           Brand Searches {brands.length > 0 && <span style={{ opacity:0.5, fontSize:'0.65rem' }}>({brands.length})</span>}
         </button>
-        <button onClick={() => setActiveTab('keepa')} style={{ padding:'0.38rem 1.1rem', borderRadius:'8px', border:'none', background: activeTab==='keepa'?'#fff':'transparent', boxShadow: activeTab==='keepa'?'0 1px 3px rgba(0,0,0,0.08)':'none', fontSize:'0.76rem', fontWeight: activeTab==='keepa'?700:500, color: activeTab==='keepa'?'#131b2e':'#57657a', cursor:'pointer', transition:'all 0.15s', whiteSpace:'nowrap' }}>
-          Keepa Analysis {keepaProducts.length > 0 && <span style={{ opacity:0.5, fontSize:'0.65rem' }}>({keepaProducts.length})</span>}
-        </button>
+
       </div>
 
       <div style={{ display:'flex', flexDirection:'column', gap:'0' }}>
@@ -738,13 +736,27 @@ export default function DashboardPage() {
                         </td>
                         {/* Viability Score */}
                         <td style={{ padding:'1.25rem 1.5rem' }}>
-                          <div style={{ width:'128px' }}>
-                            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.3rem' }}>
+                          <div style={{ width:'140px' }}>
+                            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.25rem' }}>
+                              <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:600, textTransform:'uppercase' }}>Brand</span>
                               <span style={{ fontSize:'0.75rem', fontWeight:900, color:scoreColor }}>{score}/100</span>
                             </div>
-                            <div style={{ width:'100%', height:'6px', background:'#eaedff', borderRadius:'999px', overflow:'hidden' }}>
-                              <div style={{ height:'100%', width:`${score}%`, background:scoreColor, borderRadius:'999px', transition:'width 0.4s' }} />
+                            <div style={{ width:'100%', height:'4px', background:'#eaedff', borderRadius:'999px', marginBottom:'0.6rem' }}>
+                              <div style={{ height:'100%', width:`${score}%`, background:scoreColor, transition:'width 0.4s' }} />
                             </div>
+                            {b.keepa_score != null && (
+                              <>
+                                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.25rem' }}>
+                                  <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:600, textTransform:'uppercase' }}>Keepa</span>
+                                  <span style={{ fontSize:'0.6rem', fontWeight:700, padding:'0.1rem 0.4rem', borderRadius:'4px', color: b.keepa_score >= 65 ? '#009668' : b.keepa_score >= 40 ? '#b45309' : '#ba1a1a', background: b.keepa_score >= 65 ? '#f0fdf4' : b.keepa_score >= 40 ? '#fffbeb' : '#fff5f5' }}>
+                                    {b.keepa_score >= 65 ? '✅ Uygun' : b.keepa_score >= 40 ? '⚠️ Kontrol' : '❌ Elendi'}
+                                  </span>
+                                </div>
+                                <div style={{ width:'100%', height:'4px', background:'#eaedff', borderRadius:'999px' }}>
+                                  <div style={{ height:'100%', width:`${b.keepa_score}%`, background: b.keepa_score >= 65 ? '#009668' : b.keepa_score >= 40 ? '#f59e0b' : '#ba1a1a', transition:'width 0.4s' }} />
+                                </div>
+                              </>
+                            )}
                           </div>
                         </td>
                         {/* Status */}
