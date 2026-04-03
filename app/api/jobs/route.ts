@@ -55,6 +55,40 @@ export async function POST(req: NextRequest) {
       totalBrands = Math.max(0, lines - 1);
     }
 
+    // ── Kredi Ön Kontrolü ────────────────────────────────────────────────────
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('credits_balance')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError) {
+      console.error('Profile fetch error:', profileError.message);
+      return NextResponse.json({ error: 'Profil bilgisi alınamadı' }, { status: 500 });
+    }
+
+    const balance = profile?.credits_balance ?? 0;
+
+    // Hiç kredi yoksa engelle
+    if (balance <= 0) {
+      return NextResponse.json({
+        error: 'Yetersiz kredi. Lütfen kredi satın alın.',
+        code: 'INSUFFICIENT_CREDITS',
+        balance,
+      }, { status: 402 });
+    }
+
+    // CSV'de tam sayı biliyoruz — yetmezse engelle
+    if (totalBrands > 0 && balance < totalBrands) {
+      return NextResponse.json({
+        error: `Yetersiz kredi. ${totalBrands} marka için ${totalBrands} kredi gerekiyor, bakiyeniz: ${balance}.`,
+        code: 'INSUFFICIENT_CREDITS',
+        required: totalBrands,
+        balance,
+      }, { status: 402 });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     // Create job in Supabase
     const { data: job, error: insertError } = await supabase
       .from('enrichment_jobs')
