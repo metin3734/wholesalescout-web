@@ -53,10 +53,10 @@ export default function SignupPage() {
           border: '1px solid var(--border)', padding: '2rem',
         }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📧</div>
-          <h2 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>Check your email</h2>
+          <h2 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>E-postanızı kontrol edin</h2>
           <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem' }}>
-            We sent a confirmation link to <strong>{email}</strong>.
-            Click it to activate your account.
+            <strong>{email}</strong> adresine bir onay linki gönderdik.
+            Hesabınızı etkinleştirmek için linke tıklayın.
           </p>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function SignupPage() {
         border: '1px solid var(--border)', padding: '2rem',
         boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
       }}>
-        <h1 style={{ fontWeight: 700, fontSize: '1.4rem', marginBottom: '0.5rem' }}>Create your account</h1>
+        <h1 style={{ fontWeight: 700, fontSize: '1.4rem', marginBottom: '0.5rem' }}>Hesap Oluştur</h1>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
           Kapalı beta — sınırlı erişim.
         </p>
@@ -88,7 +88,7 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.375rem' }}>
-              Work email
+              E-posta
             </label>
             <input
               type="email" value={email} onChange={e => setEmail(e.target.value)} required
@@ -103,7 +103,7 @@ export default function SignupPage() {
           </div>
           <div>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.375rem' }}>
-              Password
+              Şifre
             </label>
             <input
               type="password" value={password} onChange={e => setPassword(e.target.value)} required
@@ -126,14 +126,14 @@ export default function SignupPage() {
               marginTop: '0.25rem',
             }}
           >
-            {loading ? 'Creating account…' : 'Create free account'}
+            {loading ? 'Hesap oluşturuluyor…' : 'Hesap Oluştur'}
           </button>
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>
-          Already have an account?{' '}
+          Zaten hesabınız var mı?{' '}
           <Link href="/auth/login" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
-            Sign in
+            Giriş Yap
           </Link>
         </p>
       </div>
