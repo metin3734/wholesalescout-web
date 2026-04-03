@@ -338,15 +338,11 @@ export default function DashboardPage() {
     setError('');
     setUploading(true);
     try {
-      const isKeepa = await detectIsKeepa(file);
-      const endpoint = isKeepa ? '/api/keepa' : '/api/jobs';
-      // Switch main tab based on detected type
-      setActiveTab(isKeepa ? 'keepa' : 'brands');
       const form = new FormData(); form.append('file', file);
-      const r = await fetch(endpoint, { method:'POST', body:form });
+      const r = await fetch('/api/jobs', { method:'POST', body:form });
       const d = await r.json();
       if (!r.ok) setError(d.error ?? 'Upload failed');
-      else { await loadJobs(); if (isKeepa) await loadKeepa(); }
+      else { await loadJobs(); }
     } catch { setError('Network error.'); } finally { setUploading(false); }
   }
 
@@ -634,7 +630,7 @@ export default function DashboardPage() {
               <table style={{ width:'100%', borderCollapse:'collapse', textAlign:'left' }}>
                 <thead>
                   <tr style={{ background:'rgba(242,243,255,0.6)' }}>
-                    {['MARKA ADI', 'DOMAIN & SOSYAL', 'İLETİŞİM E-POSTASI', 'AMAZON / ASIN', 'UYGUNLUK SKORU', 'DURUM', ''].map(h => (
+                    {['MARKA ADI', 'DOMAIN & SOSYAL', 'İLETİŞİM E-POSTASI', 'TELEFON', 'AMAZON / ASIN', 'UYGUNLUK SKORU', 'DURUM', ''].map(h => (
                       <th key={h} style={{ padding:'1rem 1.5rem', fontSize:'0.59rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
                     ))}
                   </tr>
@@ -704,6 +700,16 @@ export default function DashboardPage() {
                             </div>
                           ) : (processingJob && b.qualification_status !== 'inactive') ? (
                             <span style={{ fontSize:'0.72rem', color:'#76777d', fontStyle:'italic' }}>Aranıyor...</span>
+                          ) : (
+                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
+                          )}
+                        </td>
+                        {/* Phone */}
+                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                          {b.phone ? (
+                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#131b2e', textDecoration:'none', whiteSpace:'nowrap' }}>
+                              📞 {b.phone}
+                            </a>
                           ) : (
                             <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
                           )}
