@@ -615,6 +615,34 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ── CANLI İŞLEM BANNER'I ── */}
+      {processingJob && (() => {
+        const total = processingJob.total_brands || brands.length || 1;
+        const done  = brands.filter(b => b.status === 'done').length;
+        const pct   = Math.round((done / total) * 100);
+        return (
+          <div style={{ background:'linear-gradient(135deg,#1e3a8a,#2563eb)', borderRadius:'12px', padding:'1rem 1.5rem', marginBottom:'1rem', display:'flex', alignItems:'center', gap:'1.25rem' }}>
+            <span style={{ width:18, height:18, borderRadius:'50%', border:'3px solid rgba(255,255,255,0.35)', borderTopColor:'#fff', animation:'spin 0.8s linear infinite', display:'inline-block', flexShrink:0 }} />
+            <div style={{ flex:1 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.4rem' }}>
+                <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>
+                  AI Agent Çalışıyor — Markalar araştırılıyor…
+                </span>
+                <span style={{ fontSize:'0.75rem', fontWeight:700, color:'rgba(255,255,255,0.8)' }}>
+                  {done} / {total} tamamlandı
+                </span>
+              </div>
+              <div style={{ width:'100%', height:'6px', background:'rgba(255,255,255,0.2)', borderRadius:'999px', overflow:'hidden' }}>
+                <div style={{ height:'100%', width:`${pct}%`, background:'#fff', borderRadius:'999px', transition:'width 0.6s ease' }} />
+              </div>
+              <div style={{ fontSize:'0.65rem', color:'rgba(255,255,255,0.6)', marginTop:'0.3rem' }}>
+                Tablo otomatik güncelleniyor • Sayfayı kapatabilirsiniz, işlem arka planda devam eder
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ── DATA TABLE (Precision Ledger style) ── */}
       <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(198,198,205,0.15)', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
         {brands.length === 0 && !processingJob ? (
@@ -677,6 +705,16 @@ export default function DashboardPage() {
                               <p style={{ fontSize:'0.67rem', color:'#76777d', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
                                 {b.location || (b.qualification_status ? `Status: ${b.qualification_status}` : (b.distributor ? `Via ${b.distributor}` : '—'))}
                               </p>
+                              {b.contact_form_url && (
+                                <a href={b.contact_form_url} target="_blank" rel="noreferrer"
+                                  onClick={e => e.stopPropagation()}
+                                  title="Contact sayfasına git"
+                                  style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', marginTop:'0.3rem', fontSize:'0.59rem', fontWeight:700, color:'#497cff', background:'rgba(73,124,255,0.08)', border:'1px solid rgba(73,124,255,0.25)', padding:'0.15rem 0.45rem', borderRadius:'4px', textDecoration:'none', whiteSpace:'nowrap', lineHeight:1.4 }}
+                                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background='rgba(73,124,255,0.18)'; }}
+                                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background='rgba(73,124,255,0.08)'; }}>
+                                  ✉ İletişim Formu
+                                </a>
+                              )}
                             </div>
                           </div>
                         </td>
@@ -709,8 +747,11 @@ export default function DashboardPage() {
                                 <Ic.Copy />
                               </button>
                             </div>
-                          ) : processingJob ? (
-                            <span style={{ fontSize:'0.72rem', color:'#76777d', fontStyle:'italic' }}>Searching for email...</span>
+                          ) : processingJob && b.status !== 'done' ? (
+                            <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
+                              <span style={{ width:8, height:8, borderRadius:'50%', border:'2px solid #497cff', borderTopColor:'transparent', animation:'spin 0.75s linear infinite', display:'inline-block', flexShrink:0 }} />
+                              <span style={{ fontSize:'0.72rem', color:'#497cff', fontWeight:600 }}>Araştırılıyor…</span>
+                            </div>
                           ) : (
                             <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
                           )}
