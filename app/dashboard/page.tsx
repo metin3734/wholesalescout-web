@@ -606,8 +606,8 @@ export default function DashboardPage() {
 
       {/* ── CANLI İŞLEM BANNER'I ── */}
       {processingJob && (() => {
-        const total = processingJob.total_brands || brands.length || 1;
-        const done  = brands.filter(b => b.status === 'done').length;
+        const total = processingJob.total_brands || 1;
+        const done  = processingJob.processed_brands || 0;
         const pct   = Math.round((done / total) * 100);
         return (
           <div style={{ background:'linear-gradient(135deg,#1e3a8a,#2563eb)', borderRadius:'12px', padding:'1rem 1.5rem', marginBottom:'1rem', display:'flex', alignItems:'center', gap:'1.25rem' }}>
