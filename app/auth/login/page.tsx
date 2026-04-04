@@ -41,9 +41,9 @@ function LoginForm() {
         border: '1px solid var(--border)', padding: '2rem',
         boxShadow: '0 1px 6px rgba(0,0,0,0.06)',
       }}>
-        <h1 style={{ fontWeight: 700, fontSize: '1.4rem', marginBottom: '0.5rem' }}>Welcome back</h1>
+        <h1 style={{ fontWeight: 700, fontSize: '1.4rem', marginBottom: '0.5rem' }}>Tekrar hoş geldiniz</h1>
         <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-          Sign in to your WholesaleScout account
+          WholesaleScout hesabınıza giriş yapın
         </p>
 
         {error && (
@@ -68,17 +68,17 @@ function LoginForm() {
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
-          Continue with Google
+          Google ile devam et
         </button>
 
         <div style={{ textAlign: 'center', color: 'var(--muted-foreground)', fontSize: '0.8rem', marginBottom: '1.25rem' }}>
-          or
+          veya
         </div>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.375rem' }}>
-              Email
+              E-posta
             </label>
             <input
               type="email" value={email} onChange={e => setEmail(e.target.value)} required
@@ -93,9 +93,9 @@ function LoginForm() {
           </div>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.375rem' }}>
-              <label style={{ fontSize: '0.875rem', fontWeight: 600 }}>Password</label>
+              <label style={{ fontSize: '0.875rem', fontWeight: 600 }}>Şifre</label>
               <Link href="/auth/forgot-password" style={{ fontSize: '0.8rem', color: 'var(--primary)', textDecoration: 'none' }}>
-                Forgot?
+                Unuttum?
               </Link>
             </div>
             <input
@@ -119,14 +119,14 @@ function LoginForm() {
               marginTop: '0.25rem',
             }}
           >
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? 'Giriş yapılıyor…' : 'Giriş Yap'}
           </button>
         </form>
 
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--muted-foreground)' }}>
-          No account?{' '}
+          Hesabınız yok mu?{' '}
           <Link href="/auth/signup" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
-            Sign up free
+            Kayıt Ol
           </Link>
         </p>
       </div>

@@ -2,27 +2,31 @@ import Link from 'next/link';
 
 /* ─── Data ─────────────────────────────────────────────────────────── */
 const FEATURES = [
-  { icon: 'language',       title: 'Domain Discovery',        desc: 'Match brand names to official corporate domains with 90%+ accuracy. 4-tier fallback: DNS → Brave → DDG → SerpAPI.' },
-  { icon: 'alternate_email',title: 'Wholesale Email Finder',  desc: 'Skip generic info@ addresses. Get real wholesale@, trade@, and B2B sales emails scraped from official brand sites.' },
-  { icon: 'badge',          title: 'LinkedIn Decision Maker', desc: 'Automatically surface Heads of Wholesale, Buyers, and Sales Directors with title and LinkedIn profile link.' },
-  { icon: 'shield',         title: 'Brand Qualification',     desc: 'Pre-filter brands as Qualified / Marginal / Inactive. Flag distributors, resellers, and fraud-risk accounts automatically.' },
-  { icon: 'cloud_upload',   title: 'Keepa CSV Support',       desc: 'Auto-detect Keepa exports alongside regular brand lists. 28 product metrics analyzed per ASIN.' },
-  { icon: 'download',       title: 'Color-Coded Export',      desc: 'Download a fully enriched Excel file (green = verified, yellow = partial) ready for immediate outreach.' },
+  { icon: 'language',       title: 'Domain Keşfi',              desc: 'Marka adlarını resmi kurumsal domainlerle %90+ doğrulukla eşleştirir. 4 kademeli yedekleme: DNS → Brave → DDG → SerpAPI.' },
+  { icon: 'alternate_email',title: 'Toptan E-posta Bulucu',     desc: 'Genel info@ adreslerini atla. Resmi marka sitelerinden kazınan gerçek wholesale@, trade@ ve B2B satış e-postalarını al.' },
+  { icon: 'badge',          title: 'LinkedIn Karar Vericiler',  desc: 'Toptan Satış Müdürleri, Alıcılar ve Satış Direktörlerini unvan ve LinkedIn profil linki ile otomatik olarak bulur.' },
+  { icon: 'shield',         title: 'Marka Değerlendirme',       desc: 'Markaları Uygun / Kontrol Gerekli / Elendi olarak önceden filtreler. Distribütörleri, bayileri ve sahte hesapları otomatik işaretler.' },
+  { icon: 'cloud_upload',   title: 'Keepa CSV Desteği',         desc: 'Keepa dışa aktarmalarını ve normal marka listelerini otomatik algılar. ASIN başına 28 ürün metriği analiz edilir.' },
+  { icon: 'download',       title: 'Renkli Kodlu Dışa Aktarma', desc: 'Tam zenginleştirilmiş Excel dosyasını indir (yeşil = doğrulanmış, sarı = kısmi) — hemen outreach için hazır.' },
 ];
 
 const PLANS = [
-  { name: 'Free',    price: '$0',  period: '/mo', cta: 'Get Started',   href: '/auth/signup',            featured: false, features: ['10 brand scans / mo', 'Domain discovery', 'Basic email finder', 'CSV export'] },
-  { name: 'Starter', price: '$19', period: '/mo', cta: 'Select Starter',href: '/auth/signup?plan=starter',featured: false, features: ['100 brand scans / mo', 'Keepa CSV support', 'LinkedIn finder', 'Brand qualification'] },
-  { name: 'Pro',     price: '$49', period: '/mo', cta: 'Go Pro',         href: '/auth/signup?plan=pro',   featured: true,  features: ['500 brand scans / mo', 'Wholesale score (0–100)', 'Fraud detection', 'Outreach templates', 'Priority pipeline'] },
-  { name: 'Agency',  price: '$99', period: '/mo', cta: 'Contact Sales',  href: '/auth/signup?plan=agency',featured: false, features: ['Unlimited scans', 'Team sub-accounts (5)', 'Custom API access', 'White-label export', 'Dedicated support'] },
+  { name: 'Starter', price: '$49',   credits: '800 Kredi',   cta: 'Başla',          href: '/dashboard/credits', featured: false,
+    features: ['800 marka taraması', 'Domain keşfi', 'E-posta bulucu', 'CSV dışa aktarma'] },
+  { name: 'Growth',  price: '$199',  credits: '4.000 Kredi', cta: 'Growth Seç',     href: '/dashboard/credits', featured: false,
+    features: ['4.000 marka taraması', 'Keepa CSV desteği', 'LinkedIn bulucu', 'Marka değerlendirme'] },
+  { name: 'Pro',     price: '$499',  credits: '12.000 Kredi',cta: 'Pro\'ya Geç',    href: '/dashboard/credits', featured: true,
+    features: ['12.000 marka taraması', 'Toptan skor (0–100)', 'Sahte tespit', 'Outreach şablonları', 'Öncelikli pipeline'] },
+  { name: 'Agency',  price: '$1.399',credits: '40.000 Kredi',cta: 'Agency Seç',    href: '/dashboard/credits', featured: false,
+    features: ['40.000 marka taraması', 'Tam API erişimi', 'Beyaz etiket dışa aktarma', 'Özel destek'] },
 ];
 
 const FAQS = [
-  { q: 'How accurate is the contact data?',           a: 'Domain discovery achieves 90%+ success. Emails are scraped directly from brand websites — no pattern-guessing, no fake addresses.' },
-  { q: 'What is the Keepa Wholesale Score?',          a: '28 Keepa metrics per ASIN analyzed — Buy Box %, BSR trend, seller count, monthly sales — produce a 0–100 score. ≥65 = WHOLESALE_UYGUN, 40–64 = TEKRAR_KONTROL, <40 = ELENDI.' },
-  { q: 'How is it different from Hunter.io?',         a: 'Hunter.io finds generic emails. WholesaleScout is wholesale-specific: verified wholesale contacts, fraud flags, Keepa profitability, LinkedIn decision makers.' },
-  { q: 'Does it work for brands outside the US?',     a: 'Yes. Supports international TLDs (.co.uk, .com.au, .de, .ca, etc.). Keepa analysis focuses on Amazon US marketplace.' },
-  { q: 'Can I cancel my subscription anytime?',       a: 'Yes. Cancel from Credits & Plans at any time — no questions asked. Your data remains until end of the billing period.' },
+  { q: 'İletişim verilerinin doğruluk oranı nedir?',       a: 'Domain keşfi %90+ başarı sağlar. E-postalar doğrudan marka web sitelerinden kazınır — tahmin yok, sahte adres yok.' },
+  { q: 'Keepa Toptan Skoru nedir?',                        a: 'ASIN başına 28 Keepa metriği analiz edilir — Buy Box %, BSR trendi, satıcı sayısı, aylık satışlar — 0-100 arasında bir skor üretilir. ≥65 = WHOLESALE_UYGUN, 40–64 = TEKRAR_KONTROL, <40 = ELENDI.' },
+  { q: 'Hunter.io\'dan farkı nedir?',                      a: 'Hunter.io genel e-postalar bulur. WholesaleScout toptan satışa özeldir: doğrulanmış toptan kişiler, sahte bayrak, Keepa karlılığı, LinkedIn karar vericiler.' },
+  { q: 'ABD dışındaki markalar için çalışıyor mu?',        a: 'Evet. Uluslararası alan adlarını destekler (.co.uk, .com.au, .de, .ca vb.). Keepa analizi Amazon ABD pazarına odaklanır.' },
+  { q: 'Krediler ne zaman düşer?',                         a: 'Krediler yalnızca başarıyla işlenen aktif markalar için düşer. İnaktif veya elenen markalar kredi tüketmez.' },
 ];
 
 /* ─── Page ─────────────────────────────────────────────────────────── */
@@ -45,15 +49,15 @@ export default function HomePage() {
           </Link>
 
           <div style={{ display: 'flex', gap: 32, fontSize: 14, fontWeight: 500 }}>
-            {[['Features','#features'],['Keepa','#keepa'],['Pricing','#pricing'],['FAQ','#faq']].map(([l,h]) => (
+            {[['Özellikler','#features'],['Keepa','#keepa'],['Fiyatlar','#pricing'],['SSS','#faq']].map(([l,h]) => (
               <a key={l} href={h} style={{ color: '#64748b', textDecoration: 'none' }}>{l}</a>
             ))}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Link href="/auth/login" style={{ fontSize: 14, fontWeight: 500, color: '#64748b', textDecoration: 'none' }}>Login</Link>
+            <Link href="/auth/login" style={{ fontSize: 14, fontWeight: 500, color: '#64748b', textDecoration: 'none' }}>Giriş Yap</Link>
             <Link href="/auth/signup" style={{ background: '#2563eb', color: '#fff', padding: '8px 18px', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
-              Start Free Trial
+              Erişim Talep Et
             </Link>
           </div>
         </div>
@@ -68,25 +72,25 @@ export default function HomePage() {
             {/* Left */}
             <div>
               <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>
-                Amazon FBA Wholesale Research
+                Amazon FBA Toptan Satış Araştırması
               </span>
               <h1 style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 52, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0f172a', marginBottom: 20 }}>
-                Find wholesale contacts{' '}
-                <span style={{ color: '#2563eb' }}>10x faster</span>{' '}
-                with AI.
+                Toptan kişileri{' '}
+                <span style={{ color: '#2563eb' }}>10 kat daha hızlı</span>{' '}
+                bul.
               </h1>
               <p style={{ fontSize: 18, color: '#64748b', lineHeight: 1.7, marginBottom: 32, maxWidth: 460 }}>
-                Upload your brand list or Keepa CSV. WholesaleScout finds verified domains,
-                decision-maker emails, and LinkedIn profiles in minutes — not hours.
+                Marka listenizi veya Keepa CSV&apos;nizi yükleyin. WholesaleScout dakikalar içinde
+                doğrulanmış domainleri, karar verici e-postalarını ve LinkedIn profillerini bulur.
               </p>
               <div style={{ display: 'flex', gap: 12 }}>
-                <Link href="/auth/signup" style={{ background: '#2563eb', color: '#fff', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  Start for free
+                <Link href="/auth/login" style={{ background: '#2563eb', color: '#fff', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  Dashboard&apos;a Git
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
                 </Link>
-                <Link href="/dashboard" style={{ background: '#fff', color: '#374151', border: '1px solid #d1d5db', padding: '14px 24px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>dashboard</span>
-                  Dashboard
+                <Link href="#features" style={{ background: '#fff', color: '#374151', border: '1px solid #d1d5db', padding: '14px 24px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>info</span>
+                  Nasıl Çalışır?
                 </Link>
               </div>
             </div>
@@ -98,12 +102,12 @@ export default function HomePage() {
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#f87171' }} />
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#fbbf24' }} />
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#34d399' }} />
-                <span style={{ marginLeft: 10, color: '#64748b', fontSize: 11, fontWeight: 500 }}>WholesaleScout — Lead Discovery</span>
+                <span style={{ marginLeft: 10, color: '#64748b', fontSize: 11, fontWeight: 500 }}>WholesaleScout — Lead Keşfi</span>
               </div>
               <div style={{ padding: 20 }}>
                 {/* Stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 14 }}>
-                  {[{ n: '247', l: 'Brands Analyzed' }, { n: '89%', l: 'Email Found' }, { n: '184', l: 'LinkedIn' }].map(s => (
+                  {[{ n: '247', l: 'Analiz Edilen Marka' }, { n: '89%', l: 'E-posta Bulundu' }, { n: '184', l: 'LinkedIn' }].map(s => (
                     <div key={s.l} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: '12px 10px', textAlign: 'center' }}>
                       <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 22, fontWeight: 800, color: '#2563eb' }}>{s.n}</div>
                       <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{s.l}</div>
@@ -129,11 +133,11 @@ export default function HomePage() {
                 {/* Bottom stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderLeft: '3px solid #10b981', borderRadius: 8, padding: '10px 12px' }}>
-                    <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Wholesale Emails</div>
+                    <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Toptan E-postalar</div>
                     <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 20, fontWeight: 800, color: '#2563eb' }}>218</div>
                   </div>
                   <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderLeft: '3px solid #2563eb', borderRadius: 8, padding: '10px 12px' }}>
-                    <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Decision Makers</div>
+                    <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Karar Vericiler</div>
                     <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 20, fontWeight: 800, color: '#2563eb' }}>147</div>
                   </div>
                 </div>
@@ -145,7 +149,7 @@ export default function HomePage() {
         {/* STATS BAR */}
         <section style={{ background: '#0f172a', padding: '40px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
-            {[['90%+','Domain Discovery Rate'],['10x','Faster Than Manual'],['11','Enrichment Stages'],['28','Keepa Metrics']].map(([v,l]) => (
+            {[['%90+','Domain Keşif Oranı'],['10x','Manuel\'den Daha Hızlı'],['11','Zenginleştirme Aşaması'],['28','Keepa Metriği']].map(([v,l]) => (
               <div key={l}>
                 <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 32, fontWeight: 800, color: '#fff', marginBottom: 4 }}>{v}</div>
                 <div style={{ fontSize: 13, color: '#64748b' }}>{l}</div>
@@ -158,31 +162,31 @@ export default function HomePage() {
         <section style={{ background: '#fff', padding: '80px 24px' }}>
           <div style={{ maxWidth: 780, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 16, color: '#0f172a' }}>
-              Manual research is killing your ROI.
+              Manuel araştırma gelirinizi eritiyor.
             </h2>
             <p style={{ fontSize: 17, color: '#64748b', lineHeight: 1.7, marginBottom: 40 }}>
-              The average Amazon wholesale seller wastes <strong style={{ color: '#0f172a' }}>40+ hours per month</strong> googling
-              brand websites and guessing contact emails. That&apos;s revenue left on the table every single month.
+              Ortalama bir Amazon toptan satış yapıcısı, marka web sitelerini google&#39;layıp iletişim e-postalarını tahmin etmek için ayda{' '}
+              <strong style={{ color: '#0f172a' }}>40+ saat</strong> harcıyor. Bu, her ay masada bırakılan gelir demektir.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, textAlign: 'left' }}>
               <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: 16, padding: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <span className="material-symbols-outlined" style={{ color: '#ef4444', fontSize: 22, fontVariationSettings: "'FILL' 1" }}>error</span>
-                  <strong style={{ color: '#0f172a', fontSize: 15 }}>The Manual Way</strong>
+                  <strong style={{ color: '#0f172a', fontSize: 15 }}>Manuel Yöntem</strong>
                 </div>
                 <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
-                  Google brand → Find website → Hunt for Contact page → Guess email pattern.
-                  Repeat 200 times. 40+ hours wasted. 20% accuracy.
+                  Markayı Google&#39;la → Web sitesini bul → İletişim sayfasını ara → E-posta kalıbını tahmin et.
+                  200 kez tekrarla. 40+ saat heba. %20 doğruluk.
                 </p>
               </div>
               <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 16, padding: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <span className="material-symbols-outlined" style={{ color: '#16a34a', fontSize: 22, fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                  <strong style={{ color: '#0f172a', fontSize: 15 }}>The WholesaleScout Way</strong>
+                  <strong style={{ color: '#0f172a', fontSize: 15 }}>WholesaleScout Yöntemi</strong>
                 </div>
                 <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
-                  Upload CSV → Get verified wholesale emails, LinkedIn decision makers,
-                  and Keepa scores automatically. 10 minutes. 90%+ accuracy.
+                  CSV yükle → Doğrulanmış toptan e-postalar, LinkedIn karar vericiler
+                  ve Keepa skorları otomatik gelsin. 10 dakika. %90+ doğruluk.
                 </p>
               </div>
             </div>
@@ -193,12 +197,12 @@ export default function HomePage() {
         <section id="features" style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ marginBottom: 56 }}>
-              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Features</span>
+              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Özellikler</span>
               <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#0f172a' }}>
-                Advanced tools for serious Amazon sellers.
+                Ciddi Amazon satıcıları için gelişmiş araçlar.
               </h2>
               <p style={{ fontSize: 16, color: '#64748b', maxWidth: 500 }}>
-                An 11-stage enrichment pipeline that goes from brand name to actionable contact data.
+                Marka adından aksiyona hazır iletişim verisine ulaşan 11 aşamalı zenginleştirme pipeline&apos;ı.
               </p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
@@ -221,7 +225,6 @@ export default function HomePage() {
 
             {/* Mockup */}
             <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 16, padding: 24 }}>
-              {/* Card 1 */}
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, marginBottom: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                   <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>Columbia Sportswear</span>
@@ -231,23 +234,21 @@ export default function HomePage() {
                   <div style={{ height: '100%', width: '87%', background: '#10b981', borderRadius: 999 }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>
-                  <span>Score: 87/100</span><span>Amazon BB%: 0%</span>
+                  <span>Skor: 87/100</span><span>Amazon BB%: 0%</span>
                 </div>
               </div>
-              {/* Card 2 */}
               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, marginBottom: 16, opacity: 0.6, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>Generic Brand Co.</span>
+                  <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>Genel Marka A.Ş.</span>
                   <span style={{ background: '#ef4444', color: '#fff', borderRadius: 999, padding: '3px 12px', fontSize: 11, fontWeight: 700 }}>ELENDI</span>
                 </div>
                 <div style={{ height: 6, background: '#f1f5f9', borderRadius: 999, marginBottom: 8, overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: '22%', background: '#ef4444', borderRadius: 999 }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>
-                  <span>Score: 22/100</span><span>Amazon BB%: 78%</span>
+                  <span>Skor: 22/100</span><span>Amazon BB%: 78%</span>
                 </div>
               </div>
-              {/* Category counts */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
                 {[
                   { label: 'WHOLESALE_UYGUN', bg: '#f0fdf4', border: '#bbf7d0', text: '#16a34a', count: '147' },
@@ -264,19 +265,19 @@ export default function HomePage() {
 
             {/* Text */}
             <div>
-              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 18 }}>Keepa Integration</span>
+              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 18 }}>Keepa Entegrasyonu</span>
               <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 16, color: '#0f172a' }}>
-                Intelligent brand viability scoring.
+                Akıllı marka uygunluk skorlaması.
               </h2>
               <p style={{ fontSize: 16, color: '#64748b', lineHeight: 1.7, marginBottom: 28 }}>
-                We analyze 28 Keepa metrics per ASIN — Buy Box %, BSR trend, seller count, monthly
-                sales — to give you a <strong style={{ color: '#0f172a' }}>Wholesale Score (0–100)</strong> before you send a single email.
+                ASIN başına 28 Keepa metriğini analiz ederiz — Buy Box %, BSR trendi, satıcı sayısı, aylık
+                satışlar — tek bir e-posta göndermeden önce <strong style={{ color: '#0f172a' }}>Toptan Skor (0–100)</strong> sunarız.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 18, marginBottom: 28 }}>
                 {[
-                  { t: 'Hard Filter Elimination', d: 'HazMat, adult products, high return rates, and Amazon-dominated listings auto-eliminated.' },
-                  { t: 'Buy Box Analysis',         d: 'Flag listings where Amazon wins the Buy Box 30%+ of the time.' },
-                  { t: 'Strategy Tagging',          d: 'Each product tagged: bestseller, rising, low_competition, margin_focus, stable_buybox.' },
+                  { t: 'Sert Filtre Eliminasyonu', d: 'HazMat, yetişkin ürünleri, yüksek iade oranları ve Amazon\'un domine ettiği listeler otomatik elenir.' },
+                  { t: 'Buy Box Analizi',           d: 'Amazon\'un zamanın %30\'undan fazlasında Buy Box kazandığı listeler işaretlenir.' },
+                  { t: 'Strateji Etiketleme',       d: 'Her ürün etiketlenir: bestseller, yükselen, düşük_rekabet, margin_odaklı, stabil_buybox.' },
                 ].map(item => (
                   <li key={item.t} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                     <span className="material-symbols-outlined" style={{ color: '#10b981', fontSize: 20, marginTop: 2, flexShrink: 0, fontVariationSettings: "'FILL' 1" }}>check_circle</span>
@@ -287,8 +288,8 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/auth/signup" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#2563eb', color: '#fff', padding: '13px 24px', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-                Try Keepa Analysis
+              <Link href="/auth/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#2563eb', color: '#fff', padding: '13px 24px', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+                Keepa Analizini Dene
                 <span className="material-symbols-outlined" style={{ fontSize: 15 }}>arrow_forward</span>
               </Link>
             </div>
@@ -299,14 +300,14 @@ export default function HomePage() {
         <section style={{ background: '#0f172a', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 56 }}>
-              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', marginBottom: 10 }}>Your workflow, supercharged.</h2>
-              <p style={{ fontSize: 16, color: '#64748b' }}>Three steps to your next major brand account.</p>
+              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', marginBottom: 10 }}>İş akışınızı güçlendirin.</h2>
+              <p style={{ fontSize: 16, color: '#64748b' }}>Bir sonraki büyük marka hesabına giden üç adım.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 40, textAlign: 'center' }}>
               {[
-                { n: '01', t: 'Upload Your Brand List',  d: 'Drag and drop a CSV or paste brand names. Auto-detects Keepa exports and regular brand lists.' },
-                { n: '02', t: 'AI Pipeline Runs',         d: '11-stage pipeline: domains, verified emails, LinkedIn contacts, brand scores — all automated.' },
-                { n: '03', t: 'Download & Outreach',      d: 'Export enriched leads and start sending professional wholesale pitches immediately.' },
+                { n: '01', t: 'Marka Listenizi Yükleyin',  d: 'CSV sürükleyip bırakın veya marka adlarını yapıştırın. Keepa dışa aktarmaları ve normal marka listelerini otomatik algılar.' },
+                { n: '02', t: 'AI Pipeline Çalışır',        d: '11 aşamalı pipeline: domainler, doğrulanmış e-postalar, LinkedIn kişileri, marka skorları — tamamen otomatik.' },
+                { n: '03', t: 'İndir ve Outreach Başlat',   d: 'Zenginleştirilmiş leadleri dışa aktarın ve hemen profesyonel toptan teklifler göndermeye başlayın.' },
               ].map(s => (
                 <div key={s.n}>
                   <div style={{ width: 64, height: 64, background: '#2563eb', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 0 24px rgba(37,99,235,0.4)' }}>
@@ -324,8 +325,8 @@ export default function HomePage() {
         <section id="pricing" style={{ background: '#fff', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 52 }}>
-              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#0f172a' }}>Simple, scalable pricing.</h2>
-              <p style={{ fontSize: 16, color: '#64748b' }}>Choose the plan that fits your business. No hidden fees.</p>
+              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#0f172a' }}>Tek seferlik kredi paketi.</h2>
+              <p style={{ fontSize: 16, color: '#64748b' }}>Aylık abonelik yok. Kullandığın kadar öde. Gizli ücret yok.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, alignItems: 'start' }}>
               {PLANS.map(p => (
@@ -340,14 +341,15 @@ export default function HomePage() {
                 }}>
                   {p.featured && (
                     <div style={{ background: '#10b981', color: '#fff', textAlign: 'center', padding: '7px 0', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                      Most Popular
+                      En Popüler
                     </div>
                   )}
                   <div style={{ padding: 24 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: p.featured ? '#93c5fd' : '#94a3b8', marginBottom: 10 }}>{p.name}</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: p.featured ? '#93c5fd' : '#94a3b8', marginBottom: 6 }}>{p.name}</div>
+                    <div style={{ fontSize: 12, color: p.featured ? '#bfdbfe' : '#64748b', marginBottom: 10 }}>{p.credits}</div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 20 }}>
                       <span style={{ fontFamily: "'Manrope',sans-serif", fontSize: 38, fontWeight: 800, color: p.featured ? '#fff' : '#0f172a' }}>{p.price}</span>
-                      <span style={{ fontSize: 13, color: p.featured ? '#93c5fd' : '#94a3b8' }}>{p.period}</span>
+                      <span style={{ fontSize: 13, color: p.featured ? '#93c5fd' : '#94a3b8' }}>tek seferlik</span>
                     </div>
                     <ul style={{ listStyle: 'none', padding: 0, marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {p.features.map(f => (
@@ -377,16 +379,15 @@ export default function HomePage() {
         <section style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', padding: '64px 24px' }}>
           <div style={{ maxWidth: 760, margin: '0 auto' }}>
             <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 14 }}>
-              What is Amazon FBA Wholesale and How Does WholesaleScout Help?
+              Amazon FBA Toptan Satış Nedir ve WholesaleScout Nasıl Yardımcı Olur?
             </h2>
             <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.75, marginBottom: 14 }}>
-              <strong style={{ color: '#0f172a' }}>Amazon FBA wholesale</strong> is a business model where sellers
-              purchase products in bulk directly from brand owners, then sell on Amazon using Fulfillment by Amazon.
-              Unlike private label, wholesale sellers source established brands with proven demand.
+              <strong style={{ color: '#0f172a' }}>Amazon FBA toptan satışı</strong>, satıcıların ürünleri doğrudan marka sahiplerinden toplu olarak satın alıp Amazon Fulfillment by Amazon aracılığıyla sattığı bir iş modelidir.
+              Özel etiketin aksine, toptan satıcılar kanıtlanmış talebe sahip yerleşik markaları kaynak gösterir.
             </p>
             <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.75 }}>
-              WholesaleScout&apos;s 11-stage AI pipeline automates the hardest part: finding verified wholesale contacts,
-              LinkedIn decision makers, and Keepa product profitability scores. A complete contact database in minutes, not weeks.
+              WholesaleScout&#39;un 11 aşamalı AI pipeline&#39;ı en zor kısmı otomatikleştirir: doğrulanmış toptan kişileri,
+              LinkedIn karar vericileri ve Keepa ürün karlılık skorlarını bulur. Dakikalar içinde eksiksiz iletişim veritabanı.
             </p>
           </div>
         </section>
@@ -395,7 +396,7 @@ export default function HomePage() {
         <section id="faq" style={{ background: '#fff', padding: '80px 24px' }}>
           <div style={{ maxWidth: 760, margin: '0 auto' }}>
             <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 32, fontWeight: 800, letterSpacing: '-0.02em', textAlign: 'center', marginBottom: 40, color: '#0f172a' }}>
-              Frequently Asked Questions
+              Sıkça Sorulan Sorular
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {FAQS.map((f, i) => (
@@ -415,18 +416,17 @@ export default function HomePage() {
         <section style={{ background: '#2563eb', padding: '80px 24px' }}>
           <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
             <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 42, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', marginBottom: 16 }}>
-              Start finding wholesale contacts today.
+              Toptan kişileri bulmaya bugün başla.
             </h2>
             <p style={{ fontSize: 17, color: '#93c5fd', marginBottom: 36, lineHeight: 1.6 }}>
-              Join Amazon FBA sellers scaling their wholesale businesses with automated brand research.
-              Free to start — no credit card required.
+              Otomatik marka araştırmasıyla toptan işlerini büyüten Amazon FBA satıcılarına katıl.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <Link href="/auth/signup" style={{ background: '#fff', color: '#2563eb', padding: '14px 32px', borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
-                Get Started Free
+              <Link href="/auth/login" style={{ background: '#fff', color: '#2563eb', padding: '14px 32px', borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
+                Dashboard&apos;a Git
               </Link>
-              <Link href="/auth/login" style={{ border: '2px solid rgba(255,255,255,0.3)', color: '#fff', padding: '14px 28px', borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: 'none' }}>
-                Sign In
+              <Link href="#pricing" style={{ border: '2px solid rgba(255,255,255,0.3)', color: '#fff', padding: '14px 28px', borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: 'none' }}>
+                Fiyatları Gör
               </Link>
             </div>
           </div>
@@ -445,13 +445,13 @@ export default function HomePage() {
               <span style={{ fontFamily: "'Manrope',sans-serif", fontWeight: 800, fontSize: 15, color: '#fff' }}>WholesaleScout</span>
             </div>
             <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.7, maxWidth: 220 }}>
-              Precision research tools for Amazon FBA wholesale sellers.
+              Amazon FBA toptan satış yapıcıları için hassas araştırma araçları.
             </p>
           </div>
           {[
-            { heading: 'Product',   links: [['Features','#features'],['Keepa Analysis','#keepa'],['Pricing','#pricing'],['Dashboard','/dashboard']] },
-            { heading: 'Use Cases', links: [['Amazon FBA Wholesale','#'],['Brand Outreach','#'],['Lead Generation','#'],['B2B Research','#']] },
-            { heading: 'Account',   links: [['Sign Up','/auth/signup'],['Sign In','/auth/login'],['Dashboard','/dashboard'],['Credits','/dashboard/credits']] },
+            { heading: 'Ürün',       links: [['Özellikler','#features'],['Keepa Analizi','#keepa'],['Fiyatlar','#pricing'],['Dashboard','/dashboard']] },
+            { heading: 'Kullanım',   links: [['Amazon FBA Toptan','#'],['Marka Outreach','#'],['Lead Üretimi','#'],['B2B Araştırma','#']] },
+            { heading: 'Hesap',      links: [['Kayıt Ol','/auth/signup'],['Giriş Yap','/auth/login'],['Dashboard','/dashboard'],['Krediler','/dashboard/credits']] },
           ].map(col => (
             <div key={col.heading}>
               <h4 style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', marginBottom: 16 }}>{col.heading}</h4>
@@ -466,8 +466,8 @@ export default function HomePage() {
           ))}
         </div>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', borderTop: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{ fontSize: 12, color: '#334155' }}>© {new Date().getFullYear()} WholesaleScout. Built for Amazon FBA wholesale sellers.</p>
-          <span style={{ fontSize: 12, color: '#334155' }}>All systems operational</span>
+          <p style={{ fontSize: 12, color: '#334155' }}>© {new Date().getFullYear()} WholesaleScout. Amazon FBA toptan satış yapıcıları için üretildi.</p>
+          <span style={{ fontSize: 12, color: '#334155' }}>Tüm sistemler çalışıyor</span>
         </div>
       </footer>
     </div>

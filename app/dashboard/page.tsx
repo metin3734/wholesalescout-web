@@ -338,15 +338,11 @@ export default function DashboardPage() {
     setError('');
     setUploading(true);
     try {
-      const isKeepa = await detectIsKeepa(file);
-      const endpoint = isKeepa ? '/api/keepa' : '/api/jobs';
-      // Switch main tab based on detected type
-      setActiveTab(isKeepa ? 'keepa' : 'brands');
       const form = new FormData(); form.append('file', file);
-      const r = await fetch(endpoint, { method:'POST', body:form });
+      const r = await fetch('/api/jobs', { method:'POST', body:form });
       const d = await r.json();
       if (!r.ok) setError(d.error ?? 'Upload failed');
-      else { await loadJobs(); if (isKeepa) await loadKeepa(); }
+      else { await loadJobs(); }
     } catch { setError('Network error.'); } finally { setUploading(false); }
   }
 
@@ -541,35 +537,27 @@ export default function DashboardPage() {
             <div style={{ display:'flex', alignItems:'center', gap:'0.45rem', padding:'0.38rem 0.9rem', background:'rgba(0,150,104,0.05)', border:'1px solid rgba(0,150,104,0.12)', borderRadius:'10px' }}>
               <div style={{ width:7, height:7, borderRadius:'50%', background: processingJob ? '#3b82f6' : '#009668', animation: processingJob ? 'pulse 1.4s ease-in-out infinite' : 'none', flexShrink:0 }} />
               <span style={{ fontSize:'0.7rem', fontWeight:600, color: processingJob ? '#1d4ed8' : '#009668' }}>
-                {processingJob ? `Processing ${processingJob.processed_brands}/${processingJob.total_brands || '?'}` : 'AI Agent: Active'}
+                {processingJob ? `İşleniyor ${processingJob.processed_brands}/${processingJob.total_brands || '?'}` : 'AI Agent: Aktif'}
               </span>
             </div>
             <button onClick={() => setShowUploadPanel(true)} style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', padding:'0.55rem 1.2rem', background:'#00174b', color:'#fff', border:'none', borderRadius:'12px', fontSize:'0.8rem', fontWeight:700, cursor:'pointer', boxShadow:'0 2px 8px rgba(0,23,75,0.2)' }}>
-              + New Research
+              + Yeni Araştırma
             </button>
           </div>
         </div>
       </div>
 
-      {/* ── TAB TOGGLE ── */}
-      <div style={{ display:'flex', alignItems:'center', gap:'0', background:'#f2f3ff', borderRadius:'10px', padding:'3px', alignSelf:'flex-start', marginBottom:'2rem' }}>
-        <button onClick={() => setActiveTab('brands')} style={{ padding:'0.38rem 1.1rem', borderRadius:'8px', border:'none', background: activeTab==='brands'?'#fff':'transparent', boxShadow: activeTab==='brands'?'0 1px 3px rgba(0,0,0,0.08)':'none', fontSize:'0.76rem', fontWeight: activeTab==='brands'?700:500, color: activeTab==='brands'?'#131b2e':'#57657a', cursor:'pointer', transition:'all 0.15s', whiteSpace:'nowrap' }}>
-          Brand Searches {brands.length > 0 && <span style={{ opacity:0.5, fontSize:'0.65rem' }}>({brands.length})</span>}
-        </button>
-
-      </div>
-
       <div style={{ display:'flex', flexDirection:'column', gap:'0' }}>
 
-      {activeTab === 'brands' && <>
+      {true && <>
 
       {/* ── KPI CARDS (Precision Ledger style) ── */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:'1.5rem', marginBottom:'2.5rem' }}>
         {([
-          { label:'Total Brands Found', accent:'#00174b', value: stats.total.toLocaleString(), badge: brands.length > 0 ? `+${Math.max(0, brands.length - Math.floor(brands.length * 0.86))} this session` : null, extra: null },
-          { label:'Direct Emails',      accent:'#497cff', value: stats.emailFound.toLocaleString(), badge: stats.total > 0 ? `${Math.round(stats.emailFound / stats.total * 100)}% Rate` : null, extra: null },
-          { label:'Domains Validated',  accent:'#57657a', value: stats.domainOk.toLocaleString(), badge: null, extra:'verified' },
-          { label:'Avg. Viability Score', accent:'#009668', value: brands.length > 0 ? (brands.reduce((s, b) => s + (b.confidence_score ?? 0), 0) / brands.length).toFixed(1) : '—', badge: null, extra:'/100' },
+          { label:'Toplam Marka', accent:'#00174b', value: stats.total.toLocaleString(), badge: brands.length > 0 ? `+${Math.max(0, brands.length - Math.floor(brands.length * 0.86))} bu oturum` : null, extra: null },
+          { label:'Bulunan E-posta',    accent:'#497cff', value: stats.emailFound.toLocaleString(), badge: stats.total > 0 ? `${Math.round(stats.emailFound / stats.total * 100)}% Oran` : null, extra: null },
+          { label:'Doğrulanan Domain', accent:'#57657a', value: stats.domainOk.toLocaleString(), badge: null, extra:'verified' },
+          { label:'Ort. Uygunluk Skoru', accent:'#009668', value: brands.length > 0 ? (brands.reduce((s, b) => s + (b.confidence_score ?? 0), 0) / brands.length).toFixed(1) : '—', badge: null, extra:'/100' },
         ] as { label:string; accent:string; value:string; badge:string|null; extra:string|null }[]).map(card => (
           <div key={card.label} style={{ background:'#fff', padding:'1.5rem', borderRadius:'12px', borderBottom:`4px solid ${card.accent}`, boxShadow:'0 1px 4px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', justifyContent:'space-between', minHeight:'128px' }}>
             <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>{card.label}</p>
@@ -589,7 +577,8 @@ export default function DashboardPage() {
         <div style={{ display:'flex', alignItems:'center', gap:'0.2rem', padding:'4px', background:'#f2f3ff', borderRadius:'12px' }}>
           {(['All', ...LEAD_STATUSES] as string[]).map(s => {
             const isActive = filterStatus === s;
-            const label = s === 'All' ? 'All Leads' : s;
+            const labelMap: Record<string, string> = { All: 'Tümü', New: 'Yeni', Contacted: 'İletişim Kuruldu', Successful: 'Başarılı', Risk: 'Risk' };
+            const label = labelMap[s] ?? s;
             return (
               <button key={s} onClick={() => { setFilterStatus(s); setBrandPage(0); }}
                 style={{ padding:'0.38rem 1rem', borderRadius:'8px', border:'none', background: isActive ? '#fff' : 'transparent', boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.07)' : 'none', fontSize:'0.72rem', fontWeight:700, color: isActive ? '#497cff' : '#57657a', cursor:'pointer', transition:'all 0.12s', whiteSpace:'nowrap' }}>
@@ -602,15 +591,15 @@ export default function DashboardPage() {
         <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           <div style={{ position:'relative' }}>
             <span style={{ position:'absolute', left:'0.6rem', top:'50%', transform:'translateY(-50%)', color:'#76777d', pointerEvents:'none', display:'flex' }}><Ic.Search /></span>
-            <input value={search} onChange={e => { setSearch(e.target.value); setBrandPage(0); }} placeholder="Search brands…"
+            <input value={search} onChange={e => { setSearch(e.target.value); setBrandPage(0); }} placeholder="Marka ara…"
               style={{ paddingLeft:'2rem', paddingRight:'0.75rem', paddingTop:'0.45rem', paddingBottom:'0.45rem', border:'1px solid rgba(198,198,205,0.4)', borderRadius:'10px', fontSize:'0.73rem', outline:'none', background:'#fff', color:'#131b2e', width:'200px', boxSizing:'border-box' }}
               onFocus={e => (e.target.style.borderColor='#497cff')} onBlur={e => (e.target.style.borderColor='rgba(198,198,205,0.4)')} />
           </div>
           <button onClick={copyAllEmails} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fff', border:'1px solid rgba(198,198,205,0.35)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#131b2e', cursor:'pointer' }}>
-            <Ic.Copy /> Copy Emails
+            <Ic.Copy /> E-postaları Kopyala
           </button>
           <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fff', border:'1px solid rgba(198,198,205,0.35)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#131b2e', cursor:'pointer' }}>
-            <Ic.Download /> Export CSV
+            <Ic.Download /> CSV İndir
           </button>
         </div>
       </div>
@@ -648,19 +637,19 @@ export default function DashboardPage() {
         {brands.length === 0 && !processingJob ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2.5rem', marginBottom:'0.8rem' }}>🔍</div>
-            <div style={{ fontWeight:800, color:'#131b2e', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>No leads yet</div>
-            <div style={{ color:'#76777d', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Click "New Research" to upload brands or paste brand names</div>
+            <div style={{ fontWeight:800, color:'#131b2e', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
+            <div style={{ color:'#76777d', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Marka yüklemek için "Yeni Araştırma" butonuna tıkla</div>
             <button onClick={() => setShowUploadPanel(true)} style={{ padding:'0.6rem 1.5rem', background:'#00174b', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer' }}>
-              + New Research
+              + Yeni Araştırma
             </button>
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ padding:'3rem', textAlign:'center' }}>
             <div style={{ fontSize:'2rem', marginBottom:'0.5rem' }}>😶</div>
-            <div style={{ color:'#57657a', fontSize:'0.8rem', fontWeight:500 }}>No brands match this filter.</div>
+            <div style={{ color:'#57657a', fontSize:'0.8rem', fontWeight:500 }}>Bu filtreye uygun marka yok.</div>
             <button onClick={() => { setFilterCategory('all'); setFilterStatus('All'); setSearch(''); setBrandPage(0); }}
               style={{ marginTop:'0.75rem', padding:'0.4rem 1rem', background:'#eaedff', color:'#497cff', border:'none', borderRadius:'8px', fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>
-              Clear Filters
+              Filtreleri Temizle
             </button>
           </div>
         ) : (
@@ -669,7 +658,7 @@ export default function DashboardPage() {
               <table style={{ width:'100%', borderCollapse:'collapse', textAlign:'left' }}>
                 <thead>
                   <tr style={{ background:'rgba(242,243,255,0.6)' }}>
-                    {['BRAND NAME', 'DOMAIN & SOCIALS', 'CONTACT EMAIL', 'AMAZON / ASIN', 'VIABILITY SCORE', 'STATUS', ''].map(h => (
+                    {['MARKA ADI', 'DOMAIN & SOSYAL', 'İLETİŞİM E-POSTASI', 'TELEFON', 'AMAZON / ASIN', 'UYGUNLUK SKORU', 'DURUM', ''].map(h => (
                       <th key={h} style={{ padding:'1rem 1.5rem', fontSize:'0.59rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
                     ))}
                   </tr>
@@ -703,7 +692,7 @@ export default function DashboardPage() {
                                 {qualBadge && <span style={{ fontSize:'0.56rem', background:qualBadge.bg, color:qualBadge.color, padding:'0.1rem 0.4rem', borderRadius:'3px', fontWeight:900, textTransform:'uppercase', letterSpacing:'0.05em', flexShrink:0 }}>{qualBadge.label}</span>}
                               </p>
                               <p style={{ fontSize:'0.67rem', color:'#76777d', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
-                                {b.location || (b.qualification_status ? `Status: ${b.qualification_status}` : (b.distributor ? `Via ${b.distributor}` : '—'))}
+                                {b.location || (b.qualification_status ? ({ qualified: 'Uygun', marginal: 'Sınırda', inactive: 'Elendi' }[b.qualification_status] ?? b.qualification_status) : (b.distributor ? `Via ${b.distributor}` : '—'))}
                               </p>
                               {b.contact_form_url && (
                                 <a href={b.contact_form_url} target="_blank" rel="noreferrer"
@@ -747,11 +736,21 @@ export default function DashboardPage() {
                                 <Ic.Copy />
                               </button>
                             </div>
-                          ) : processingJob && b.status !== 'done' ? (
+                          ) : (processingJob && b.qualification_status !== 'inactive') ? (
                             <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                               <span style={{ width:8, height:8, borderRadius:'50%', border:'2px solid #497cff', borderTopColor:'transparent', animation:'spin 0.75s linear infinite', display:'inline-block', flexShrink:0 }} />
                               <span style={{ fontSize:'0.72rem', color:'#497cff', fontWeight:600 }}>Araştırılıyor…</span>
                             </div>
+                          ) : (
+                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
+                          )}
+                        </td>
+                        {/* Phone */}
+                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                          {b.phone ? (
+                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#131b2e', textDecoration:'none', whiteSpace:'nowrap' }}>
+                              📞 {b.phone}
+                            </a>
                           ) : (
                             <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
                           )}
@@ -840,7 +839,7 @@ export default function DashboardPage() {
 
 
 
-      </> /* end activeTab === 'brands' */}
+      </> /* end brands section */}
 
       {/* ── KEEPA TABLE ── */}
       {activeTab === 'keepa' && (
