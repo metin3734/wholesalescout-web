@@ -285,7 +285,16 @@ export default function DashboardPage() {
 
   /* ── Data loading ── */
   const loadBrands = useCallback(async () => {
-    try { const r = await fetch('/api/brands'); if (r.ok) setBrands(await r.json()); } catch { /* ignore */ }
+    try {
+      const r = await fetch('/api/brands');
+      if (r.ok) {
+        const data = await r.json();
+        setBrands(data);
+        // Pagination koruma: mevcut sayfa toplam sayfayı aşıyorsa son sayfaya git
+        const maxPage = Math.max(0, Math.ceil(data.length / BRAND_PAGE_SIZE) - 1);
+        setBrandPage(prev => prev > maxPage ? maxPage : prev);
+      }
+    } catch { /* network error — mevcut veriyi koru */ }
   }, []);
 
   const loadJobs = useCallback(async () => {
@@ -604,6 +613,17 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ── WORKER OFFLINE UYARISI ── */}
+      {workerOffline && (
+        <div style={{ background:'linear-gradient(135deg,#dc2626,#ef4444)', borderRadius:'12px', padding:'0.9rem 1.5rem', marginBottom:'0.75rem', display:'flex', alignItems:'center', gap:'1rem' }}>
+          <span style={{ fontSize:'1.2rem' }}>⚠️</span>
+          <div style={{ flex:1 }}>
+            <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>AI Agent Çevrimdışı</span>
+            <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.75)', marginLeft:'0.5rem' }}>İşlem sunucusuna ulaşılamıyor. Yeni araştırma başlatılamaz. Lütfen birkaç dakika bekleyin.</span>
+          </div>
+        </div>
+      )}
+
       {/* ── CANLI İŞLEM BANNER'I ── */}
       {processingJob && (() => {
         const total = processingJob.total_brands || 1;
@@ -736,13 +756,13 @@ export default function DashboardPage() {
                                 <Ic.Copy />
                               </button>
                             </div>
-                          ) : (processingJob && b.qualification_status !== 'inactive') ? (
+                          ) : (processingJob && b.job_id === processingJob.id && b.qualification_status !== 'inactive') ? (
                             <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                               <span style={{ width:8, height:8, borderRadius:'50%', border:'2px solid #497cff', borderTopColor:'transparent', animation:'spin 0.75s linear infinite', display:'inline-block', flexShrink:0 }} />
                               <span style={{ fontSize:'0.72rem', color:'#497cff', fontWeight:600 }}>Araştırılıyor…</span>
                             </div>
                           ) : (
-                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
+                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>E-posta bulunamadı</span>
                           )}
                         </td>
                         {/* Phone */}
