@@ -444,6 +444,7 @@ export default function HomePage() {
               </div>
               <span style={{ fontFamily: "'Manrope',sans-serif", fontWeight: 800, fontSize: 15, color: '#fff' }}>WholesaleScout</span>
             </div>
+            <p style={{ fontSize: 11, color: '#64748b', fontFamily: 'monospace', marginBottom: 8 }}>wholesale-scout.com</p>
             <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.7, maxWidth: 220 }}>
               Amazon FBA toptan satış yapıcıları için hassas araştırma araçları.
             </p>
@@ -466,7 +467,7 @@ export default function HomePage() {
           ))}
         </div>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px', borderTop: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{ fontSize: 12, color: '#334155' }}>© {new Date().getFullYear()} WholesaleScout. Amazon FBA toptan satış yapıcıları için üretildi.</p>
+          <p style={{ fontSize: 12, color: '#334155' }}>© {new Date().getFullYear()} WholesaleScout — wholesale-scout.com | Amazon FBA toptan satış yapıcıları için üretildi.</p>
           <span style={{ fontSize: 12, color: '#334155' }}>Tüm sistemler çalışıyor</span>
         </div>
       </footer>

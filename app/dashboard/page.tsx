@@ -550,7 +550,10 @@ export default function DashboardPage() {
           <span style={{ color:'#497cff' }}>Lead Discovery</span>
         </nav>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:'1rem', flexWrap:'wrap' }}>
-          <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#131b2e', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Lead Discovery</h2>
+          <div>
+            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#131b2e', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Lead Discovery</h2>
+            <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:500 }}>OSINT + AI pipeline · Real-time enrichment · wholesale-scout.com</span>
+          </div>
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
             <div style={{ display:'flex', alignItems:'center', gap:'0.45rem', padding:'0.38rem 0.9rem', background:'rgba(0,150,104,0.05)', border:'1px solid rgba(0,150,104,0.12)', borderRadius:'10px' }}>
               <div style={{ width:7, height:7, borderRadius:'50%', background: processingJob ? '#3b82f6' : '#009668', animation: processingJob ? 'pulse 1.4s ease-in-out infinite' : 'none', flexShrink:0 }} />

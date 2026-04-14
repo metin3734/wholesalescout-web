@@ -70,8 +70,8 @@ export default async function DashboardLayout({
               <div style={{ color: '#f1f5f9', fontWeight: 800, fontSize: '0.88rem', letterSpacing: '-0.02em', lineHeight: 1 }}>
                 WholesaleScout
               </div>
-              <div style={{ color: '#334155', fontSize: '0.62rem', fontWeight: 500, marginTop: '0.15rem' }}>
-                B2B Brand Intelligence
+              <div style={{ color: '#64748b', fontSize: '0.55rem', fontWeight: 500, marginTop: '0.15rem', fontFamily: 'monospace' }}>
+                wholesale-scout.com
               </div>
             </div>
           </Link>
