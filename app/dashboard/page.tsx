@@ -280,7 +280,16 @@ export default function DashboardPage() {
   const [showUploadPanel, setShowUploadPanel] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const processingJob = jobs.find((j) => j.status === 'processing' || j.status === 'pending') ?? null;
+  // ── Takılmış job tespiti: 2 saatten eski processing/pending job → stuck kabul et ──
+  // Worker çökmüş veya timeout olmuş olabilir — UI'ı kilitlememeli
+  const processingJob = jobs.find((j) => {
+    if (j.status !== 'processing' && j.status !== 'pending') return false;
+    const created = new Date(j.created_at).getTime();
+    const now = Date.now();
+    const TWO_HOURS = 2 * 60 * 60 * 1000;
+    if (now - created > TWO_HOURS) return false; // 2 saatten eski → stuck, gösterme
+    return true;
+  }) ?? null;
   const pasteLineCount = pastedBrands.split('\n').filter((l) => l.trim()).length;
 
   /* ── Data loading ── */

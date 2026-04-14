@@ -6,7 +6,7 @@ export const maxDuration = 60;
 
 const WORKER_URL = process.env.WORKER_URL ?? 'http://127.0.0.1:8000';
 
-// GET /api/jobs — list jobs for current user
+// GET /api/jobs — list jobs for current user + auto-cleanup stuck jobs
 export async function GET() {
   try {
     const supabase = await createClient();
@@ -24,6 +24,36 @@ export async function GET() {
       console.error('Jobs fetch error:', error.message);
       return NextResponse.json([]);
     }
+
+    // ── Auto-cleanup: 2 saatten eski processing/pending job'ları failed yap ──
+    // Worker crash veya timeout sonrası job'lar "processing" kalabiliyor
+    const TWO_HOURS_AGO = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+    const stuckJobs = (data ?? []).filter(
+      (j: { status: string; created_at: string }) =>
+        (j.status === 'processing' || j.status === 'pending') &&
+        j.created_at < TWO_HOURS_AGO
+    );
+    if (stuckJobs.length > 0) {
+      for (const sj of stuckJobs) {
+        await supabase
+          .from('enrichment_jobs')
+          .update({
+            status: 'failed',
+            error_message: 'Zaman aşımı: İşlem 2 saat içinde tamamlanamadı. Lütfen tekrar deneyin.',
+          })
+          .eq('id', sj.id);
+        console.log(`[Auto-cleanup] Stuck job ${sj.id} marked as failed (created: ${sj.created_at})`);
+      }
+      // Re-fetch after cleanup
+      const { data: freshData } = await supabase
+        .from('enrichment_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      return NextResponse.json(freshData ?? []);
+    }
+
     return NextResponse.json(data ?? []);
   } catch (err) {
     console.error('GET /api/jobs error:', err);
