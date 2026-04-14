@@ -288,8 +288,8 @@ export default function DashboardPage() {
     if (j.status !== 'processing' && j.status !== 'pending') return false;
     const created = new Date(j.created_at).getTime();
     const now = Date.now();
-    const TWO_HOURS = 2 * 60 * 60 * 1000;
-    if (now - created > TWO_HOURS) return false; // 2 saatten eski → stuck, gösterme
+    const THIRTY_MIN = 30 * 60 * 1000;
+    if (now - created > THIRTY_MIN) return false; // 30dk'dan eski → stuck, gösterme
     return true;
   }) ?? null;
   const pasteLineCount = pastedBrands.split('\n').filter((l) => l.trim()).length;
@@ -650,6 +650,17 @@ export default function DashboardPage() {
           <div style={{ flex:1 }}>
             <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>AI Agent Çevrimdışı</span>
             <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.75)', marginLeft:'0.5rem' }}>İşlem sunucusuna ulaşılamıyor. Yeni araştırma başlatılamaz. Lütfen birkaç dakika bekleyin.</span>
+          </div>
+        </div>
+      )}
+
+      {/* ── STUCK JOB UYARISI — processing ama banner yok (30dk+ eski) ── */}
+      {!processingJob && jobsLoaded && jobs.some(j => j.status === 'processing' || j.status === 'pending') && (
+        <div style={{ background:'linear-gradient(135deg,#d97706,#f59e0b)', borderRadius:'12px', padding:'0.9rem 1.5rem', marginBottom:'0.75rem', display:'flex', alignItems:'center', gap:'1rem' }}>
+          <span style={{ fontSize:'1.2rem' }}>⏱️</span>
+          <div style={{ flex:1 }}>
+            <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>İşlem zaman aşımına uğradı</span>
+            <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi. Mevcut sonuçlar aşağıda. Yeni araştırma başlatabilirsiniz.</span>
           </div>
         </div>
       )}
