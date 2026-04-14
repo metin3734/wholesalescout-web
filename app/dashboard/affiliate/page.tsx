@@ -19,7 +19,7 @@ export default function AffiliatePage() {
   const [copied, setKopyalandı] = useState(false);
   const refLink = typeof window !== 'undefined'
     ? `${window.location.origin}/signup?ref=YOUR_CODE`
-    : 'https://wholesalescout.com/signup?ref=YOUR_CODE';
+    : 'https://wholesale-scout.com/signup?ref=YOUR_CODE';
 
   function copyLink() {
     navigator.clipboard.writeText(refLink).then(() => {

@@ -220,7 +220,7 @@ export default function SettingsPage() {
             style={{ padding: '0.45rem 1rem', background: '#fff', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '7px', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer' }}
             onClick={() => {
               if (confirm('Emin misiniz? Bu işlem hesabınızı ve tüm zenginleştirilmiş verilerinizi kalıcı olarak silecektir.')) {
-                alert('Hesap silme — support@wholesalescout.com ile iletişime geçin');
+                alert('Hesap silme — support@wholesale-scout.com ile iletişime geçin');
               }
             }}
           >

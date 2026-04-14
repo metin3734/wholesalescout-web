@@ -33,8 +33,8 @@ export async function POST(req: Request) {
                         },
                         quantity: 1,
               }],
-              success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wholesalescout-web.vercel.app'}/dashboard/credits?paid=1`,
-              cancel_url:  `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wholesalescout-web.vercel.app'}/dashboard/credits`,
+              success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wholesale-scout.com'}/dashboard/credits?paid=1`,
+              cancel_url:  `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wholesale-scout.com'}/dashboard/credits`,
       });
 
       return NextResponse.json({ url: session.url });

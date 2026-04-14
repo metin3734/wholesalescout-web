@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'WholesaleScout' }],
   creator: 'WholesaleScout',
-  metadataBase: new URL('https://wholesalescout.com'),
+  metadataBase: new URL('https://wholesale-scout.com'),
   openGraph: {
     title: 'WholesaleScout — Automate Amazon FBA Wholesale Research',
     description: 'Turn a brand list into a fully enriched contact database in minutes.',
     type: 'website',
-    url: 'https://wholesalescout.com',
+    url: 'https://wholesale-scout.com',
     siteName: 'WholesaleScout',
   },
   twitter: {
