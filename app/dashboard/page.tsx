@@ -280,7 +280,30 @@ export default function DashboardPage() {
   const [selectedKeepaJobId, setSelectedKeepaJobId] = useState<string | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [showUploadPanel, setShowUploadPanel] = useState(false);
+  const [retrying, setRetrying] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Başarısız markaları tekrar tara
+  const retryFailedBrands = async () => {
+    const failedBrands = brands.filter(b =>
+      !b.wholesale_email && b.qualification_status !== 'inactive'
+    ).map(b => b.brand_name);
+    if (!failedBrands.length) { alert('Tekrar taranacak marka yok'); return; }
+    if (!confirm(`${failedBrands.length} marka tekrar taranacak. Devam?`)) return;
+    setRetrying(true);
+    try {
+      const r = await fetch('/api/jobs/retry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ brand_names: failedBrands }),
+      });
+      const data = await r.json();
+      if (!r.ok) { alert(data.error || 'Hata oluştu'); return; }
+      loadJobs();
+      loadBrands();
+    } catch { alert('Bağlantı hatası'); }
+    finally { setRetrying(false); }
+  };
 
   // ── Takılmış job tespiti: 2 saatten eski processing/pending job → stuck kabul et ──
   // Worker çökmüş veya timeout olmuş olabilir — UI'ı kilitlememeli
@@ -640,6 +663,12 @@ export default function DashboardPage() {
           <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fff', border:'1px solid rgba(198,198,205,0.35)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#131b2e', cursor:'pointer' }}>
             <Ic.Download /> CSV İndir
           </button>
+          {brands.some(b => !b.wholesale_email && b.qualification_status !== 'inactive') && !processingJob && (
+            <button onClick={retryFailedBrands} disabled={retrying}
+              style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fffbeb', border:'1px solid #fde68a', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#92400e', cursor:'pointer', opacity: retrying ? 0.6 : 1 }}>
+              🔄 {retrying ? 'Taranıyor...' : 'Başarısızları Tekrar Tara'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -660,8 +689,12 @@ export default function DashboardPage() {
           <span style={{ fontSize:'1.2rem' }}>⏱️</span>
           <div style={{ flex:1 }}>
             <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>İşlem zaman aşımına uğradı</span>
-            <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi. Mevcut sonuçlar aşağıda. Yeni araştırma başlatabilirsiniz.</span>
+            <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi.</span>
           </div>
+          <button onClick={retryFailedBrands} disabled={retrying}
+            style={{ padding:'0.5rem 1rem', background:'#fff', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
+            {retrying ? 'Taranıyor...' : '🔄 Tekrar Tara'}
+          </button>
         </div>
       )}
 
