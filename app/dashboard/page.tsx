@@ -281,27 +281,30 @@ export default function DashboardPage() {
   const [showMap, setShowMap] = useState(false);
   const [showUploadPanel, setShowUploadPanel] = useState(false);
   const [retrying, setRetrying] = useState(false);
+  const [showRetryConfirm, setShowRetryConfirm] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Başarısız marka sayısı
+  const failedBrandsList = brands.filter(b =>
+    !b.wholesale_email && b.qualification_status !== 'inactive'
+  ).map(b => b.brand_name);
 
   // Başarısız markaları tekrar tara
   const retryFailedBrands = async () => {
-    const failedBrands = brands.filter(b =>
-      !b.wholesale_email && b.qualification_status !== 'inactive'
-    ).map(b => b.brand_name);
-    if (!failedBrands.length) { alert('Tekrar taranacak marka yok'); return; }
-    if (!confirm(`${failedBrands.length} marka tekrar taranacak. Devam?`)) return;
+    if (!failedBrandsList.length) return;
+    setShowRetryConfirm(false);
     setRetrying(true);
     try {
       const r = await fetch('/api/jobs/retry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ brand_names: failedBrands }),
+        body: JSON.stringify({ brand_names: failedBrandsList }),
       });
       const data = await r.json();
-      if (!r.ok) { alert(data.error || 'Hata oluştu'); return; }
+      if (!r.ok) { setError(data.error || 'Hata oluştu'); return; }
       loadJobs();
       loadBrands();
-    } catch { alert('Bağlantı hatası'); }
+    } catch { setError('Bağlantı hatası'); }
     finally { setRetrying(false); }
   };
 
@@ -664,7 +667,7 @@ export default function DashboardPage() {
             <Ic.Download /> CSV İndir
           </button>
           {brands.some(b => !b.wholesale_email && b.qualification_status !== 'inactive') && !processingJob && (
-            <button onClick={retryFailedBrands} disabled={retrying}
+            <button onClick={() => setShowRetryConfirm(true)} disabled={retrying}
               style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fffbeb', border:'1px solid #fde68a', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#92400e', cursor:'pointer', opacity: retrying ? 0.6 : 1 }}>
               🔄 {retrying ? 'Taranıyor...' : 'Başarısızları Tekrar Tara'}
             </button>
@@ -691,7 +694,7 @@ export default function DashboardPage() {
             <span style={{ fontSize:'0.8rem', fontWeight:700, color:'#fff' }}>İşlem zaman aşımına uğradı</span>
             <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi.</span>
           </div>
-          <button onClick={retryFailedBrands} disabled={retrying}
+          <button onClick={() => setShowRetryConfirm(true)} disabled={retrying}
             style={{ padding:'0.5rem 1rem', background:'#fff', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
             {retrying ? 'Taranıyor...' : '🔄 Tekrar Tara'}
           </button>
@@ -1589,6 +1592,26 @@ export default function DashboardPage() {
             <div style={{ padding:'0.8rem 1.2rem', borderTop:'1px solid #f1f5f9', display:'flex', gap:'0.45rem' }}>
               <button onClick={() => { deleteBrand(inspectedBrand.id); }} style={{ flex:1, padding:'0.45rem', background:'#fff', color:'#ef4444', border:'1px solid #fecaca', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Sil</button>
               <button onClick={() => setInspectedBrand(null)} style={{ flex:1, padding:'0.45rem', background:'#0f172a', color:'#fff', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Kapat</button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── TEKRAR TARA ONAY MODAL ── */}
+      {showRetryConfirm && (
+        <>
+          <div onClick={() => setShowRetryConfirm(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.4)', zIndex:999 }} />
+          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#fff', borderRadius:'16px', padding:'2rem', width:'420px', maxWidth:'90vw', zIndex:1000, boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
+            <div style={{ fontSize:'1.5rem', marginBottom:'0.5rem' }}>🔄</div>
+            <h3 style={{ fontWeight:800, fontSize:'1.1rem', color:'#0f172a', margin:'0 0 0.5rem' }}>Başarısız Markaları Tekrar Tara</h3>
+            <p style={{ fontSize:'0.82rem', color:'#64748b', lineHeight:1.6, marginBottom:'1.25rem' }}>
+              <strong style={{ color:'#0f172a' }}>{failedBrandsList.length} marka</strong> için email bulunamadı. Bu markalar silinip tekrar taranacak. Her marka 1 kredi harcar.
+            </p>
+            <div style={{ display:'flex', gap:'0.5rem' }}>
+              <button onClick={() => setShowRetryConfirm(false)} style={{ flex:1, padding:'0.6rem', background:'#f8fafc', color:'#64748b', border:'1px solid #e2e8f0', borderRadius:'10px', fontWeight:600, fontSize:'0.8rem', cursor:'pointer' }}>Vazgeç</button>
+              <button onClick={retryFailedBrands} disabled={retrying} style={{ flex:1, padding:'0.6rem', background:'#d97706', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', opacity: retrying ? 0.6 : 1 }}>
+                {retrying ? 'Gönderiliyor...' : `${failedBrandsList.length} Markayı Tara`}
+              </button>
             </div>
           </div>
         </>
