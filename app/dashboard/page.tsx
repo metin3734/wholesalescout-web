@@ -59,6 +59,7 @@ interface Brand {
   qualification_status?: 'qualified' | 'marginal' | 'inactive';
   qualification_score?: number;
   qualification_signals?: string;
+  elimination_reason?: string;
   outreach_score?: number;
   outreach_approach?: string;
   outreach_recommendation?: string;
@@ -724,7 +725,9 @@ export default function DashboardPage() {
                                 {qualBadge && <span style={{ fontSize:'0.56rem', background:qualBadge.bg, color:qualBadge.color, padding:'0.1rem 0.4rem', borderRadius:'3px', fontWeight:900, textTransform:'uppercase', letterSpacing:'0.05em', flexShrink:0 }}>{qualBadge.label}</span>}
                               </p>
                               <p style={{ fontSize:'0.67rem', color:'#76777d', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
-                                {b.location || (b.qualification_status ? ({ qualified: 'Uygun', marginal: 'Sınırda', inactive: 'Elendi' }[b.qualification_status] ?? b.qualification_status) : (b.distributor ? `Via ${b.distributor}` : '—'))}
+                                {b.location || (b.qualification_status === 'inactive' && b.elimination_reason
+                                  ? b.elimination_reason.substring(0, 50) + (b.elimination_reason.length > 50 ? '…' : '')
+                                  : b.qualification_status ? ({ qualified: 'Uygun', marginal: 'Sınırda', inactive: 'Elendi' }[b.qualification_status] ?? b.qualification_status) : (b.distributor ? `Via ${b.distributor}` : '—'))}
                               </p>
                               {b.contact_form_url && (
                                 <a href={b.contact_form_url} target="_blank" rel="noreferrer"
@@ -774,7 +777,19 @@ export default function DashboardPage() {
                               <span style={{ fontSize:'0.72rem', color:'#497cff', fontWeight:600 }}>Araştırılıyor…</span>
                             </div>
                           ) : (
-                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>E-posta bulunamadı</span>
+                            <div style={{ maxWidth:'200px' }}>
+                              {b.elimination_reason ? (
+                                <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
+                                  <span style={{ fontSize:'0.65rem', fontWeight:700, color: b.qualification_status === 'inactive' ? '#dc2626' : '#d97706', display:'flex', alignItems:'center', gap:'0.25rem' }}>
+                                    {b.qualification_status === 'inactive' ? '⛔' : '⚠️'}
+                                    {b.qualification_status === 'inactive' ? 'Uygun Değil' : 'Belirsiz'}
+                                  </span>
+                                  <span style={{ fontSize:'0.58rem', color:'#64748b', lineHeight:'1.3' }}>{b.elimination_reason}</span>
+                                </div>
+                              ) : (
+                                <span style={{ color:'#c6c6cd', fontSize:'0.7rem' }}>E-posta bulunamadı</span>
+                              )}
+                            </div>
                           )}
                         </td>
                         {/* Phone */}
