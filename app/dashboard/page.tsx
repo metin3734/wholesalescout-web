@@ -259,6 +259,7 @@ function StatusDropdown({ brandId, current, onUpdate }: { brandId: string; curre
 /* ─── Main page ──────────────────────────────────────────── */
 export default function DashboardPage() {
   const [jobs, setJobs]     = useState<Job[]>([]);
+  const [jobsLoaded, setJobsLoaded] = useState(false);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [uploading, setUploading]   = useState(false);
   const [dragOver, setDragOver]     = useState(false);
@@ -313,6 +314,7 @@ export default function DashboardPage() {
       if (r.ok) {
         const data: Job[] = await r.json();
         setJobs(data);
+        setJobsLoaded(true);
         // Detect worker offline: if most recent job failed with worker error
         const latest = data[0];
         if (latest && latest.status === 'failed' && (latest as Job & { error_message?: string }).error_message?.includes('Worker unreachable')) {
@@ -332,11 +334,26 @@ export default function DashboardPage() {
     } catch { /* ignore */ }
   }, []);
 
-  useEffect(() => { loadJobs(); const t = setInterval(loadJobs, 10000); return () => clearInterval(t); }, [loadJobs]);
-  useEffect(() => { loadBrands(); }, [loadBrands]);
+  // ── Polling: jobs her zaman 10sn, brands processingJob varsa 8sn ──
+  // NOT: Sayfa değişip geri dönüldüğünde (credits→dashboard) component yeniden mount olur.
+  // Bu durumda state sıfırlanır ama polling hemen başlar → 1-2sn'de veri gelir.
+  // Worker arka planda çalışmaya devam eder, frontend sadece UI state'i kaybeder.
+  useEffect(() => {
+    // İlk yüklemede hemen çağır — sayfa geçişinde state kaybolmasını minimize et
+    loadJobs();
+    loadBrands();
+    const jobTimer = setInterval(loadJobs, 10000);
+    return () => clearInterval(jobTimer);
+  }, [loadJobs, loadBrands]);
   useEffect(() => { loadKeepa(selectedKeepaJobId); }, [loadKeepa, selectedKeepaJobId]);
-  useEffect(() => { if (!processingJob) return; const t = setInterval(loadBrands, 8000); return () => clearInterval(t); }, [processingJob, loadBrands]);
-  useEffect(() => { if (!processingJob) return; const t = setInterval(() => loadKeepa(selectedKeepaJobId), 8000); return () => clearInterval(t); }, [processingJob, loadKeepa, selectedKeepaJobId]);
+  useEffect(() => {
+    if (!processingJob) return;
+    // processingJob varsa brands ve keepa'yı da pollle
+    loadBrands(); // hemen bir kez çağır
+    const brandTimer = setInterval(loadBrands, 8000);
+    const keepaTimer = setInterval(() => loadKeepa(selectedKeepaJobId), 8000);
+    return () => { clearInterval(brandTimer); clearInterval(keepaTimer); };
+  }, [processingJob, loadBrands, loadKeepa, selectedKeepaJobId]);
 
   /* ── Keepa dosyası tespiti (CSV/XLSX header'larına bakarak) ── */
   async function detectIsKeepa(file: File): Promise<boolean> {
@@ -667,7 +684,14 @@ export default function DashboardPage() {
 
       {/* ── DATA TABLE (Precision Ledger style) ── */}
       <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(198,198,205,0.15)', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
-        {brands.length === 0 && !processingJob ? (
+        {brands.length === 0 && !processingJob && !jobsLoaded ? (
+          <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
+            <div style={{ fontSize:'2rem', marginBottom:'0.8rem' }}>
+              <span style={{ display:'inline-block', width:24, height:24, borderRadius:'50%', border:'3px solid #e2e8f0', borderTopColor:'#3b82f6', animation:'spin 0.8s linear infinite' }} />
+            </div>
+            <div style={{ fontWeight:700, color:'#64748b', fontSize:'0.85rem' }}>Veriler yükleniyor…</div>
+          </div>
+        ) : brands.length === 0 && !processingJob ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2.5rem', marginBottom:'0.8rem' }}>🔍</div>
             <div style={{ fontWeight:800, color:'#131b2e', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
