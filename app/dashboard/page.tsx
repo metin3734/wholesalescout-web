@@ -778,17 +778,33 @@ export default function DashboardPage() {
                         {/* Amazon / ASIN */}
                         <td style={{ padding:'1.25rem 1.5rem' }} onClick={e => e.stopPropagation()}>
                           {b.keepa_asin ? (
-                            <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
+                            <div style={{ display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                               <a href={b.keepa_amazon_url ?? `https://www.amazon.com/dp/${b.keepa_asin}`} target="_blank" rel="noreferrer"
                                 style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.22rem 0.6rem', background:'#ff9900', color:'#fff', borderRadius:'6px', textDecoration:'none', fontSize:'0.68rem', fontWeight:800, fontFamily:'monospace', whiteSpace:'nowrap', width:'fit-content' }}>
                                 <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 11.5c0 5.52-4.48 10-10 10S1.5 17.02 1.5 11.5 5.98 1.5 11.5 1.5 21.5 5.98 21.5 11.5zm-10-7c-3.86 0-7 3.14-7 7 0 2.5 1.32 4.69 3.3 5.93.08.05.17.02.2-.07l.33-1.14c.03-.11-.01-.22-.1-.28C6.6 15.1 5.5 13.41 5.5 11.5c0-3.31 2.69-6 6-6s6 2.69 6 6c0 1.91-1.1 3.6-2.73 4.44-.09.06-.13.17-.1.28l.33 1.14c.03.09.12.12.2.07C17.18 16.19 18.5 14 18.5 11.5c0-3.86-3.14-7-7-7z"/></svg>
                                 {b.keepa_asin}
                               </a>
-                              {b.keepa_score != null && (
-                                <span style={{ fontSize:'0.63rem', fontWeight:700, color: b.keepa_score >= 65 ? '#009668' : b.keepa_score >= 40 ? '#497cff' : '#ba1a1a' }}>
-                                  Score: {Math.round(b.keepa_score)}/100
-                                </span>
-                              )}
+                              {b.keepa_score != null && (() => {
+                                const ks = b.keepa_score;
+                                const amzFit = ks >= 65 ? 'Uygun' : ks >= 40 ? 'Riskli' : 'Uygun Degil';
+                                const amzColor = ks >= 65 ? '#059669' : ks >= 40 ? '#d97706' : '#dc2626';
+                                const amzBg = ks >= 65 ? '#f0fdf4' : ks >= 40 ? '#fffbeb' : '#fef2f2';
+                                const amzBorder = ks >= 65 ? '#bbf7d0' : ks >= 40 ? '#fde68a' : '#fecaca';
+                                const amzIcon = ks >= 65 ? '✅' : ks >= 40 ? '⚠️' : '❌';
+                                const reason = ks >= 65 ? 'Talep yuksek, rekabet uygun' : ks >= 40 ? 'Rekabet veya marj riski var' : 'Dusuk talep veya yuksek risk';
+                                return (
+                                  <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
+                                    <div style={{ display:'flex', alignItems:'center', gap:'0.3rem' }}>
+                                      <span style={{ padding:'0.1rem 0.4rem', borderRadius:'4px', fontSize:'0.58rem', fontWeight:700, color: amzColor, background: amzBg, border:`1px solid ${amzBorder}`, whiteSpace:'nowrap' }}>{amzIcon} {amzFit}</span>
+                                      <span style={{ fontSize:'0.6rem', fontWeight:800, color: amzColor }}>{Math.round(ks)}</span>
+                                    </div>
+                                    <span style={{ fontSize:'0.54rem', color:'#94a3b8', lineHeight:'1.2' }}>{reason}</span>
+                                    {b.keepa_offer_count != null && (
+                                      <span style={{ fontSize:'0.54rem', color:'#64748b' }}>{b.keepa_offer_count} satici aktif</span>
+                                    )}
+                                  </div>
+                                );
+                              })()}
                             </div>
                           ) : (
                             <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
@@ -804,19 +820,26 @@ export default function DashboardPage() {
                             <div style={{ width:'100%', height:'4px', background:'#eaedff', borderRadius:'999px', marginBottom:'0.6rem' }}>
                               <div style={{ height:'100%', width:`${score}%`, background:scoreColor, transition:'width 0.4s' }} />
                             </div>
-                            {b.keepa_score != null && (
-                              <>
-                                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.25rem' }}>
-                                  <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:600, textTransform:'uppercase' }}>Keepa</span>
-                                  <span style={{ fontSize:'0.6rem', fontWeight:700, padding:'0.1rem 0.4rem', borderRadius:'4px', color: b.keepa_score >= 65 ? '#009668' : b.keepa_score >= 40 ? '#b45309' : '#ba1a1a', background: b.keepa_score >= 65 ? '#f0fdf4' : b.keepa_score >= 40 ? '#fffbeb' : '#fff5f5' }}>
-                                    {b.keepa_score >= 65 ? '✅ Uygun' : b.keepa_score >= 40 ? '⚠️ Kontrol' : '❌ Elendi'}
-                                  </span>
-                                </div>
-                                <div style={{ width:'100%', height:'4px', background:'#eaedff', borderRadius:'999px' }}>
-                                  <div style={{ height:'100%', width:`${b.keepa_score}%`, background: b.keepa_score >= 65 ? '#009668' : b.keepa_score >= 40 ? '#f59e0b' : '#ba1a1a', transition:'width 0.4s' }} />
-                                </div>
-                              </>
-                            )}
+                            {b.keepa_score != null && (() => {
+                              const ks = b.keepa_score;
+                              const amzLabel = ks >= 65 ? 'Amazon Uygun' : ks >= 40 ? 'Amazon Riskli' : 'Amazon Uygun Degil';
+                              const amzColor = ks >= 65 ? '#059669' : ks >= 40 ? '#d97706' : '#dc2626';
+                              const amzBg = ks >= 65 ? '#f0fdf4' : ks >= 40 ? '#fffbeb' : '#fef2f2';
+                              const amzBorder = ks >= 65 ? '#bbf7d0' : ks >= 40 ? '#fde68a' : '#fecaca';
+                              return (
+                                <>
+                                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.25rem', marginTop:'0.35rem' }}>
+                                    <span style={{ fontSize:'0.55rem', color:'#94a3b8', fontWeight:600, textTransform:'uppercase' }}>Amazon</span>
+                                    <span style={{ fontSize:'0.58rem', fontWeight:700, padding:'0.08rem 0.35rem', borderRadius:'4px', color: amzColor, background: amzBg, border:`1px solid ${amzBorder}`, whiteSpace:'nowrap' }}>
+                                      {amzLabel} {Math.round(ks)}%
+                                    </span>
+                                  </div>
+                                  <div style={{ width:'100%', height:'4px', background:'#eaedff', borderRadius:'999px' }}>
+                                    <div style={{ height:'100%', width:`${ks}%`, background: amzColor, transition:'width 0.4s', borderRadius:'999px' }} />
+                                  </div>
+                                </>
+                              );
+                            })()}
                           </div>
                         </td>
                         {/* Status */}
@@ -922,8 +945,8 @@ export default function DashboardPage() {
                       { label:'Satıcı',     w:'60px'  },
                       { label:'Satın/ay',   w:'70px'  },
                       { label:'Skor',       w:'90px'  },
-                      { label:'Kategori',   w:'110px' },
-                      { label:'Strateji',   w:'160px' },
+                      { label:'Uygunluk',   w:'130px' },
+                      { label:'Strateji / Sebep', w:'180px' },
                       { label:'İşlemler',   w:'110px' },
                     ].map(col => (
                       <th key={col.label} style={{ padding:'0.55rem 0.75rem', textAlign:'left', fontWeight:700, color:'#94a3b8', fontSize:'0.58rem', textTransform:'uppercase', letterSpacing:'0.06em', borderBottom:'2px solid #f1f5f9', whiteSpace:'nowrap', minWidth:col.w }}>
@@ -997,23 +1020,42 @@ export default function DashboardPage() {
                       </td>
                       {/* Kategori */}
                       <td style={{ padding:'0.5rem 0.75rem' }}>
-                        {p.kategori === 'WHOLESALE_UYGUN' ? (
-                          <span style={{ padding:'0.15rem 0.45rem', borderRadius:'5px', fontSize:'0.62rem', fontWeight:700, background:'#f0fdf4', color:'#166534', border:'1px solid #bbf7d0', whiteSpace:'nowrap' }}>✅ Uygun</span>
-                        ) : p.kategori === 'TEKRAR_KONTROL' ? (
-                          <span style={{ padding:'0.15rem 0.45rem', borderRadius:'5px', fontSize:'0.62rem', fontWeight:700, background:'#fffbeb', color:'#92400e', border:'1px solid #fde68a', whiteSpace:'nowrap' }}>⚠️ Kontrol</span>
-                        ) : (
-                          <span style={{ padding:'0.15rem 0.45rem', borderRadius:'5px', fontSize:'0.62rem', fontWeight:700, background:'#fef2f2', color:'#b91c1c', border:'1px solid #fecaca', whiteSpace:'nowrap' }}>❌ Elendi</span>
-                        )}
+                        {(() => {
+                          const isUygun = p.kategori === 'WHOLESALE_UYGUN';
+                          const isKontrol = p.kategori === 'TEKRAR_KONTROL';
+                          const label = isUygun ? '✅ Toptan Uygun' : isKontrol ? '⚠️ Incelenmeli' : '❌ Uygun Degil';
+                          const color = isUygun ? '#166534' : isKontrol ? '#92400e' : '#b91c1c';
+                          const bg = isUygun ? '#f0fdf4' : isKontrol ? '#fffbeb' : '#fef2f2';
+                          const border = isUygun ? '#bbf7d0' : isKontrol ? '#fde68a' : '#fecaca';
+                          const reason = isUygun
+                            ? (p.amazon_bb_pct === 0 ? 'Amazon satmiyor' : p.amazon_bb_pct != null && p.amazon_bb_pct < 30 ? 'Amazon payi dusuk' : 'Iyi satis metrikleri')
+                            : isKontrol
+                            ? (p.amazon_bb_pct != null && p.amazon_bb_pct > 50 ? 'Amazon payi yuksek' : p.offer_count != null && p.offer_count > 15 ? 'Cok satici var' : 'Marj riski olabilir')
+                            : (p.eleme_nedeni || (p.amazon_bb_pct != null && p.amazon_bb_pct > 85 ? 'Amazon domine ediyor' : p.bsr_current != null && p.bsr_current > 150000 ? 'Dusuk talep' : 'Dusuk skor'));
+                          return (
+                            <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
+                              <span style={{ padding:'0.12rem 0.4rem', borderRadius:'5px', fontSize:'0.6rem', fontWeight:700, background: bg, color, border:`1px solid ${border}`, whiteSpace:'nowrap', width:'fit-content' }}>{label}</span>
+                              <span style={{ fontSize:'0.52rem', color:'#64748b', lineHeight:'1.25' }}>{reason}</span>
+                            </div>
+                          );
+                        })()}
                       </td>
                       {/* Strateji */}
                       <td style={{ padding:'0.5rem 0.75rem', maxWidth:'160px' }}>
-                        {p.strateji_etiketleri ? (
-                          <div style={{ display:'flex', flexWrap:'wrap', gap:'0.18rem' }}>
-                            {p.strateji_etiketleri.split(',').filter(Boolean).slice(0, 3).map(s => (
-                              <span key={s} style={{ padding:'0.08rem 0.32rem', borderRadius:'3px', fontSize:'0.55rem', fontWeight:600, background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', whiteSpace:'nowrap' }}>{s.trim()}</span>
-                            ))}
-                          </div>
-                        ) : p.eleme_nedeni ? (
+                        {p.strateji_etiketleri ? (() => {
+                          let tags: string[] = [];
+                          try { tags = JSON.parse(p.strateji_etiketleri); } catch { tags = p.strateji_etiketleri.split(',').filter(Boolean); }
+                          return (
+                            <div style={{ display:'flex', flexDirection:'column', gap:'0.25rem' }}>
+                              <div style={{ display:'flex', flexWrap:'wrap', gap:'0.18rem' }}>
+                                {(Array.isArray(tags) ? tags : []).slice(0, 4).map(s => (
+                                  <span key={String(s)} style={{ padding:'0.08rem 0.32rem', borderRadius:'3px', fontSize:'0.55rem', fontWeight:600, background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', whiteSpace:'nowrap' }}>{String(s).trim()}</span>
+                                ))}
+                              </div>
+                              {p.eleme_nedeni && <span style={{ fontSize:'0.52rem', color:'#ef4444', lineHeight:'1.2' }}>{p.eleme_nedeni}</span>}
+                            </div>
+                          );
+                        })() : p.eleme_nedeni ? (
                           <span style={{ fontSize:'0.6rem', color:'#dc2626', fontStyle:'italic' }}>{p.eleme_nedeni}</span>
                         ) : <span style={{ color:'#94a3b8' }}>—</span>}
                       </td>
