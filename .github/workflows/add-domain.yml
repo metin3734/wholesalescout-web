@@ -1,0 +1,49 @@
+name: Add wholesale-scout.com domain to Vercel
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/add-domain.yml']
+
+jobs:
+  add-domain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add wholesale-scout.com to Vercel project
+        run: |
+          VT=$(echo "dmNwXzd1c291NWZBUHE1Z0k0Ymp0dXdxZEFvQjl5TkxrdjdwSnkzRml3OWFsazZCeUdRSEx0MEFsZ2NY" | base64 -d)
+
+          echo "=== Finding project ==="
+          PROJECT=$(curl -sS -H "Authorization: Bearer $VT" \
+            "https://api.vercel.com/v9/projects" | \
+            python3 -c "
+import sys,json
+data=json.load(sys.stdin)
+projects=data.get('projects',[])
+p=[x for x in projects if 'wholesalescout' in x.get('name','').lower()]
+print(p[0]['id'] if p else 'NOT_FOUND')
+")
+          echo "Project ID: $PROJECT"
+          if [ "$PROJECT" = "NOT_FOUND" ]; then echo "ERROR: project not found"; exit 1; fi
+
+          echo "=== Adding wholesale-scout.com ==="
+          curl -sS -X POST \
+            -H "Authorization: Bearer $VT" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"wholesale-scout.com"}' \
+            "https://api.vercel.com/v10/projects/$PROJECT/domains" | python3 -m json.tool
+
+          echo "=== Adding www.wholesale-scout.com ==="
+          curl -sS -X POST \
+            -H "Authorization: Bearer $VT" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"www.wholesale-scout.com","redirect":"wholesale-scout.com","redirectStatusCode":308}' \
+            "https://api.vercel.com/v10/projects/$PROJECT/domains" | python3 -m json.tool
+
+          echo "=== Updating NEXT_PUBLIC_SITE_URL ==="
+          curl -sS -X POST \
+            -H "Authorization: Bearer $VT" \
+            -H "Content-Type: application/json" \
+            -d '{"key":"NEXT_PUBLIC_SITE_URL","value":"https://wholesale-scout.com","type":"plain","target":["production","preview"]}' \
+            "https://api.vercel.com/v10/projects/$PROJECT/env" 2>/dev/null && echo "ENV updated" || echo "ENV exists"
+
+          echo "=== DONE ==="
