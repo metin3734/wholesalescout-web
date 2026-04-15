@@ -314,8 +314,8 @@ export default function DashboardPage() {
     if (j.status !== 'processing' && j.status !== 'pending') return false;
     const created = new Date(j.created_at).getTime();
     const now = Date.now();
-    const THIRTY_MIN = 30 * 60 * 1000;
-    if (now - created > THIRTY_MIN) return false; // 30dk'dan eski → stuck, gösterme
+    const TEN_MIN = 10 * 60 * 1000;
+    if (now - created > TEN_MIN) return false; // 10dk'dan eski → stuck, gösterme
     return true;
   }) ?? null;
   const pasteLineCount = pastedBrands.split('\n').filter((l) => l.trim()).length;

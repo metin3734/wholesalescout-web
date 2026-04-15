@@ -25,14 +25,14 @@ export async function GET() {
       return NextResponse.json([]);
     }
 
-    // ── Auto-cleanup: 30 dakikadan eski processing/pending job'ları failed yap ──
-    // Worker crash veya timeout sonrası job'lar "processing" kalabiliyor
-    // 2 saat çok uzun — müşteri saatlerce bekliyor. 30dk yeterli.
-    const THIRTY_MIN_AGO = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+    // ── Auto-cleanup: 10 dakikadan eski VE ilerleme olmayan job'ları failed yap ──
+    // Worker deploy/restart sırasında job'lar kaybolabiliyor.
+    // 30dk bile çok uzun — 0/X ilerleme + 10dk = kesinlikle stuck.
+    const TEN_MIN_AGO = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const stuckJobs = (data ?? []).filter(
       (j: { status: string; created_at: string }) =>
         (j.status === 'processing' || j.status === 'pending') &&
-        j.created_at < THIRTY_MIN_AGO
+        j.created_at < TEN_MIN_AGO
     );
     if (stuckJobs.length > 0) {
       for (const sj of stuckJobs) {
