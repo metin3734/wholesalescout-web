@@ -1,6 +1,7 @@
 # WholesaleScout — CLAUDE.md (Proje Anayasası)
-> Tek Doğru Kaynak. Tüm kararlar burada yaşar.
-> Güncelleme tarihi: 2026-03-08
+> Tek Dogru Kaynak. Tum kararlar burada yasaR.
+> Son guncelleme: 15 Nisan 2026
+> Domain: wholesale-scout.com
 
 ---
 
@@ -9,11 +10,13 @@
 | Alan | Değer |
 |------|-------|
 | **Ad** | WholesaleScout |
-| **Amaç** | CSV/Excel marka listesini ve Keepa verilerini analiz eden B2B SaaS (Amazon wholesale) |
-| **Hedef Kullanıcı** | Amazon satıcıları, marka iş birliği ajansları, B2B satış temsilcileri |
-| **Başarı Kriteri** | Yüklenen marka → web sitesi + iş emaili + iletişim formu (email yoksa) + sosyal + LinkedIn |
-| **Backend Klasörü** | `c:\Users\tunah\OneDrive\Desktop\brand-outreach-tool\` |
-| **Frontend Klasörü** | `c:\Users\tunah\OneDrive\Desktop\wholesalescout-web\` |
+| **Domain** | wholesale-scout.com |
+| **Amac** | CSV/Excel marka listesini ve Keepa verilerini analiz eden B2B SaaS (Amazon wholesale) |
+| **Hedef Kullanici** | Amazon saticilari, marka is birligi ajanslari, B2B satis temsilcileri |
+| **Basari Kriteri** | Yuklenen marka → web sitesi + is emaili + iletisim formu + sosyal + LinkedIn |
+| **Backend Repo** | github.com/metin3734/brand-outreach-tool (Railway auto-deploy) |
+| **Frontend Repo** | github.com/metin3734/wholesalescout-web (Vercel auto-deploy) |
+| **Supabase** | xinhfgvhmyrtlnayockk.supabase.co |
 
 ---
 
@@ -626,31 +629,73 @@ npx next build
 
 ---
 
-## 15. BİLİNEN AÇIK SORUNLAR
+## 15. BILINEN SORUNLAR
 
-| Sorun | Durum | Çözüm |
-|-------|-------|-------|
-| SMTP doğrulama (port 25) | ⚠️ Railway bloke | Alternatif: Hunter.io veya dışarıda SMTP sunucu |
-| page.tsx 30.000 satır | ⚠️ Çok büyük | Bileşenlere bölünmeli |
-| Keepa tab dashboard'da yok | ❌ Eksik | Görev #2-3 |
-| Settings kayıt API'si yok | ❌ Eksik | Görev #5 |
-| Affiliate backend yok | ❌ Eksik | Görev #8 |
-| Tailwind kullanılmıyor | ⚠️ Inline style | Yeni kodda Tailwind zorunlu |
-
----
-
-## 16. KULLANICI BİLGİSİ
-
-- **metintomar2@gmail.com** → sınırsız üyelik (brands_limit=999999, plan='elite')
+| Sorun | Oncelik | Durum |
+|-------|---------|-------|
+| Railway deploy = aktif job kaybi | YUKSEK | 10dk auto-cleanup + retry butonu ile hafifletildi |
+| page.tsx ~1600 satir | ORTA | Bileşenlere bölünmeli |
+| Cloudflare korumali siteler (MANSCAPED, Rothy's) | ORTA | KNOWN_EMAILS ile workaround |
+| Settings kayit API'si yok | DUSUK | Sadece UI var |
+| Affiliate backend yok | DUSUK | Mock data |
+| Tailwind kullanilmiyor (inline style) | DUSUK | Yeni kodda zorunlu |
 
 ---
 
-## 17. CHANGELOG
+## 16. GUVENLIK KURALLARI
 
-| Tarih | Değişiklik |
+1. **API Key'ler:** .env + Railway/Vercel env vars. Koda ASLA hard-code yazma.
+2. **GitHub Push Protection:** Token/secret iceren commit pushlanamaz — base64 bile olsa.
+3. **Supabase RLS:** Her tablo user_id bazli Row Level Security aktif.
+4. **CORS:** Worker sadece Vercel origin'den istek kabul eder.
+5. **Rate Limiting:** Brave 2000/ay, Apollo 10K/ay — kotayi asma.
+6. **SMTP ehlo:** wholesale-scout.com kullan — baska domain KULLANMA.
+7. **Credential Dosyasi:** wholesalescout-veri/KIMLIK-BILGILERI.txt — gitignore'da olmali.
+8. **Stripe:** Webhook secret dogrulamasi aktif. Test key'leri production'da KULLANMA.
+
+---
+
+## 17. KULLANICI BILGISI
+
+- **metintomar2@gmail.com** → sinirsouz uyelik (brands_limit=999999, plan='elite')
+- **contact@merchpaths.com** → 500 kredi yuklendi
+
+---
+
+## 18. API ROUTE'LAR (Guncel)
+
+| Route | Method | Islem |
+|-------|--------|-------|
+| `/api/brands` | GET | Kullanicinin tum markalari (max 200) |
+| `/api/brands/[id]` | PATCH | lead_status guncelle |
+| `/api/brands/[id]` | DELETE | Marka sil |
+| `/api/jobs` | GET | Job listesi + 10dk stuck auto-cleanup |
+| `/api/jobs` | POST | CSV yukle → Supabase job → Worker dispatch |
+| `/api/jobs/[id]` | DELETE | Job + cascade brands sil |
+| `/api/jobs/retry` | POST | Basarisiz markalari tekrar tara |
+| `/api/keepa` | GET/POST | Keepa product listesi / CSV yukle |
+| `/api/credits` | GET | Kredi bakiyesi + transaction history |
+| `/api/stripe/checkout` | POST | Stripe checkout session olustur |
+| `/api/stripe/webhook` | POST | Stripe webhook handler |
+
+---
+
+## 19. CHANGELOG
+
+| Tarih | Degisiklik |
 |-------|------------|
-| 2026-03-07 | İlk CLAUDE.md oluşturuldu |
-| 2026-03-07 | search_engine.py domain bulma güçlendirildi |
-| 2026-03-07 | contact_form_url özelliği eklendi |
-| 2026-03-07 | keepa_analyzer.py NaN/CA marketplace fix |
-| 2026-03-08 | CLAUDE.md kapsamlı güncelleme (tüm dosyalar + fonksiyonlar) |
+| 2026-03-07 | Ilk CLAUDE.md olusturuldu |
+| 2026-03-08 | Kapsamli guncelleme |
+| 2026-04-13 | Hunter.io kaldirildi, WHOIS/Wayback/CommonCrawl tier eklendi |
+| 2026-04-13 | Sonsuz dongu fix (future timeout + KNOWN_DOMAINS pre-scrape) |
+| 2026-04-14 | Domain wholesale-scout.com kaydi + DNS ayari |
+| 2026-04-14 | Keepa zengin belirtecler (Amazon Uygunluk Orani) |
+| 2026-04-14 | Stuck job auto-cleanup (10dk timeout) |
+| 2026-04-14 | Multi-email + coklu karar verici + LinkedIn profil URL |
+| 2026-04-15 | Gibberish tespit + KNOWN_DOMAINS koruma katmani |
+| 2026-04-15 | Email domain eslestirme fix (kok kelime match) |
+| 2026-04-15 | Junk email filtresi (WHOIS devre disi, placeholder/JS reddi) |
+| 2026-04-15 | 30+ DNS probe pattern + Brave Extended Search |
+| 2026-04-15 | Basarisizlari Tekrar Tara butonu + custom modal |
+| 2026-04-15 | 293 KNOWN_DOMAINS + 25 KNOWN_EMAILS |
+| 2026-04-15 | Elimination reason — musteri icin sebep gosterimi |
