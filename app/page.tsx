@@ -32,30 +32,30 @@ const FAQS = [
 /* ─── Page ─────────────────────────────────────────────────────────── */
 export default function HomePage() {
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#fff', color: '#0f172a' }}>
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#0f1b2d', color: '#e8f0fe' }}>
 
       {/* NAV */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-        background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid #e2e8f0',
+        background: 'rgba(6,13,26,0.9)', backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
             <div style={{ width: 34, height: 34, background: '#2563eb', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <span className="material-symbols-outlined" style={{ color: '#fff', fontSize: 18 }}>search</span>
             </div>
-            <span style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontWeight: 800, fontSize: 17, color: '#0f172a', letterSpacing: '-0.02em' }}>WholesaleScout</span>
+            <span style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontWeight: 800, fontSize: 17, color: '#e8f0fe', letterSpacing: '-0.02em' }}>WholesaleScout</span>
           </Link>
 
           <div style={{ display: 'flex', gap: 32, fontSize: 14, fontWeight: 500 }}>
             {[['Özellikler','#features'],['Keepa','#keepa'],['Fiyatlar','#pricing'],['SSS','#faq']].map(([l,h]) => (
-              <a key={l} href={h} style={{ color: '#64748b', textDecoration: 'none' }}>{l}</a>
+              <a key={l} href={h} style={{ color: '#5a7a98', textDecoration: 'none' }}>{l}</a>
             ))}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Link href="/auth/login" style={{ fontSize: 14, fontWeight: 500, color: '#64748b', textDecoration: 'none' }}>Giriş Yap</Link>
+            <Link href="/auth/login" style={{ fontSize: 14, fontWeight: 500, color: '#5a7a98', textDecoration: 'none' }}>Giriş Yap</Link>
             <Link href="/auth/signup" style={{ background: '#2563eb', color: '#fff', padding: '8px 18px', borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
               Erişim Talep Et
             </Link>
@@ -66,20 +66,20 @@ export default function HomePage() {
       <main style={{ paddingTop: 60 }}>
 
         {/* HERO */}
-        <section style={{ background: '#fff', padding: '80px 24px 72px' }}>
+        <section style={{ background: 'linear-gradient(180deg, #060d1a 0%, #0b1427 60%, #060d1a 100%)', padding: '90px 24px 80px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
             {/* Left */}
             <div>
-              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>
+              <span style={{ display: 'inline-block', background: 'rgba(59,130,246,0.15)', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>
                 Amazon FBA Toptan Satış Araştırması
               </span>
-              <h1 style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 52, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0f172a', marginBottom: 20 }}>
+              <h1 style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 52, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', color: '#e8f0fe', marginBottom: 20 }}>
                 Amazon FBA İşletmenizi{' '}
                 <span style={{ color: '#2563eb' }}>Gerçek Zamanlı Zeka (OSINT)</span>{' '}
                 ile Büyütün.
               </h1>
-              <p style={{ fontSize: 18, color: '#64748b', lineHeight: 1.7, marginBottom: 32, maxWidth: 460 }}>
+              <p style={{ fontSize: 18, color: '#5a7a98', lineHeight: 1.7, marginBottom: 32, maxWidth: 460 }}>
                 Dünya çapındaki toptancıları saniyeler içinde keşfedin, binlerce doğrulanmış
                 iletişim verisini tek tıkla otomatik e-posta kampanyalarına dönüştürün.
               </p>
@@ -88,7 +88,7 @@ export default function HomePage() {
                   Ücretsiz Müşteri Keşfine Başla
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
                 </Link>
-                <Link href="#features" style={{ background: '#fff', color: '#374151', border: '1px solid #d1d5db', padding: '14px 24px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Link href="#features" style={{ background: 'rgba(255,255,255,0.05)', color: '#7a9ab8', border: '1px solid rgba(255,255,255,0.1)', padding: '14px 24px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>info</span>
                   Nasıl Çalışır?
                 </Link>
@@ -96,19 +96,19 @@ export default function HomePage() {
             </div>
 
             {/* Right: mockup */}
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 16, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: '#0a1525', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
               {/* Window chrome */}
               <div style={{ background: '#1e293b', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#f87171' }} />
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#fbbf24' }} />
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#34d399' }} />
-                <span style={{ marginLeft: 10, color: '#64748b', fontSize: 11, fontWeight: 500 }}>WholesaleScout — Lead Keşfi</span>
+                <span style={{ marginLeft: 10, color: '#5a7a98', fontSize: 11, fontWeight: 500 }}>WholesaleScout — Lead Keşfi</span>
               </div>
               <div style={{ padding: 20 }}>
                 {/* Stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 14 }}>
                   {[{ n: '247', l: 'Analiz Edilen Marka' }, { n: '89%', l: 'E-posta Bulundu' }, { n: '184', l: 'LinkedIn' }].map(s => (
-                    <div key={s.l} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: '12px 10px', textAlign: 'center' }}>
+                    <div key={s.l} style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 10, padding: '12px 10px', textAlign: 'center' }}>
                       <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 22, fontWeight: 800, color: '#2563eb' }}>{s.n}</div>
                       <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{s.l}</div>
                     </div>
@@ -121,22 +121,22 @@ export default function HomePage() {
                     { name: 'Hydro Flask',         score: 78, color: '#3b82f6' },
                     { name: 'Stanley',              score: 65, color: '#3b82f6' },
                   ].map(r => (
-                    <div key={r.name} style={{ background: '#fff', border: '1px solid #f1f5f9', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 26, height: 26, borderRadius: 6, background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#2563eb', flexShrink: 0 }}>
+                    <div key={r.name} style={{ background: '#0a1525', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 26, height: 26, borderRadius: 6, background: 'rgba(59,130,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#2563eb', flexShrink: 0 }}>
                         {r.name[0]}
                       </div>
-                      <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: '#1e293b' }}>{r.name}</span>
+                      <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: '#c8daf0' }}>{r.name}</span>
                       <span style={{ background: r.color, color: '#fff', borderRadius: 5, padding: '2px 7px', fontSize: 11, fontWeight: 700 }}>{r.score}</span>
                     </div>
                   ))}
                 </div>
                 {/* Bottom stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderLeft: '3px solid #10b981', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '3px solid #10b981', borderRadius: 8, padding: '10px 12px' }}>
                     <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Toptan E-postalar</div>
                     <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 20, fontWeight: 800, color: '#2563eb' }}>218</div>
                   </div>
-                  <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderLeft: '3px solid #2563eb', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderLeft: '3px solid #2563eb', borderRadius: 8, padding: '10px 12px' }}>
                     <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 600, marginBottom: 2 }}>Karar Vericiler</div>
                     <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 20, fontWeight: 800, color: '#2563eb' }}>147</div>
                   </div>
@@ -147,34 +147,34 @@ export default function HomePage() {
         </section>
 
         {/* STATS BAR */}
-        <section style={{ background: '#0f172a', padding: '40px 24px' }}>
+        <section style={{ background: '#020810', padding: '40px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
             {[['%90+','Domain Keşif Oranı'],['10x','Manuel\'den Daha Hızlı'],['11','Zenginleştirme Aşaması'],['28','Keepa Metriği']].map(([v,l]) => (
               <div key={l}>
                 <div style={{ fontFamily: "'Manrope',sans-serif", fontSize: 32, fontWeight: 800, color: '#fff', marginBottom: 4 }}>{v}</div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>{l}</div>
+                <div style={{ fontSize: 13, color: '#5a7a98' }}>{l}</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* PROBLEM */}
-        <section style={{ background: '#fff', padding: '80px 24px' }}>
+        <section style={{ background: '#060d1a', padding: '80px 24px' }}>
           <div style={{ maxWidth: 780, margin: '0 auto', textAlign: 'center' }}>
-            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 16, color: '#0f172a' }}>
+            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 16, color: '#e8f0fe' }}>
               Manuel araştırma gelirinizi eritiyor.
             </h2>
-            <p style={{ fontSize: 17, color: '#64748b', lineHeight: 1.7, marginBottom: 40 }}>
+            <p style={{ fontSize: 17, color: '#5a7a98', lineHeight: 1.7, marginBottom: 40 }}>
               Ortalama bir Amazon toptan satış yapıcısı, marka web sitelerini google&#39;layıp iletişim e-postalarını tahmin etmek için ayda{' '}
-              <strong style={{ color: '#0f172a' }}>40+ saat</strong> harcıyor. Bu, her ay masada bırakılan gelir demektir.
+              <strong style={{ color: '#e8f0fe' }}>40+ saat</strong> harcıyor. Bu, her ay masada bırakılan gelir demektir.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, textAlign: 'left' }}>
               <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: 16, padding: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <span className="material-symbols-outlined" style={{ color: '#ef4444', fontSize: 22, fontVariationSettings: "'FILL' 1" }}>error</span>
-                  <strong style={{ color: '#0f172a', fontSize: 15 }}>Manuel Yöntem</strong>
+                  <strong style={{ color: '#e8f0fe', fontSize: 15 }}>Manuel Yöntem</strong>
                 </div>
-                <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
+                <p style={{ fontSize: 13, color: '#4a6880', lineHeight: 1.7 }}>
                   Markayı Google&#39;la → Web sitesini bul → İletişim sayfasını ara → E-posta kalıbını tahmin et.
                   200 kez tekrarla. 40+ saat heba. %20 doğruluk.
                 </p>
@@ -182,9 +182,9 @@ export default function HomePage() {
               <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 16, padding: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                   <span className="material-symbols-outlined" style={{ color: '#16a34a', fontSize: 22, fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                  <strong style={{ color: '#0f172a', fontSize: 15 }}>WholesaleScout Yöntemi</strong>
+                  <strong style={{ color: '#e8f0fe', fontSize: 15 }}>WholesaleScout Yöntemi</strong>
                 </div>
-                <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
+                <p style={{ fontSize: 13, color: '#4a6880', lineHeight: 1.7 }}>
                   CSV yükle → Doğrulanmış toptan e-postalar, LinkedIn karar vericiler
                   ve Keepa skorları otomatik gelsin. 10 dakika. %90+ doğruluk.
                 </p>
@@ -194,25 +194,25 @@ export default function HomePage() {
         </section>
 
         {/* FEATURES */}
-        <section id="features" style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', padding: '80px 24px' }}>
+        <section id="features" style={{ background: '#06101f', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ marginBottom: 56 }}>
-              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Özellikler</span>
-              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#0f172a' }}>
+              <span style={{ display: 'inline-block', background: 'rgba(59,130,246,0.15)', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Özellikler</span>
+              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#e8f0fe' }}>
                 Ciddi Amazon satıcıları için gelişmiş araçlar.
               </h2>
-              <p style={{ fontSize: 16, color: '#64748b', maxWidth: 500 }}>
+              <p style={{ fontSize: 16, color: '#5a7a98', maxWidth: 500 }}>
                 Marka adından aksiyona hazır iletişim verisine ulaşan 11 aşamalı zenginleştirme pipeline&apos;ı.
               </p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
               {FEATURES.map(f => (
-                <div key={f.title} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 14, padding: 28, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                  <div style={{ width: 44, height: 44, background: '#eff6ff', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
+                <div key={f.title} style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 14, padding: 28, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                  <div style={{ width: 44, height: 44, background: 'rgba(59,130,246,0.15)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
                     <span className="material-symbols-outlined" style={{ color: '#2563eb', fontSize: 22 }}>{f.icon}</span>
                   </div>
-                  <h3 style={{ fontFamily: "'Manrope',sans-serif", fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>{f.title}</h3>
-                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.7 }}>{f.desc}</p>
+                  <h3 style={{ fontFamily: "'Manrope',sans-serif", fontSize: 16, fontWeight: 700, color: '#e8f0fe', marginBottom: 8 }}>{f.title}</h3>
+                  <p style={{ fontSize: 13, color: '#5a7a98', lineHeight: 1.7 }}>{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -220,14 +220,14 @@ export default function HomePage() {
         </section>
 
         {/* KEEPA */}
-        <section id="keepa" style={{ background: '#fff', padding: '80px 24px' }}>
+        <section id="keepa" style={{ background: '#060d1a', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
             {/* Mockup */}
             <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 16, padding: 24 }}>
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, marginBottom: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+              <div style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 12, padding: 20, marginBottom: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>Columbia Sportswear</span>
+                  <span style={{ fontWeight: 700, color: '#e8f0fe', fontSize: 14 }}>Columbia Sportswear</span>
                   <span style={{ background: '#10b981', color: '#fff', borderRadius: 999, padding: '3px 12px', fontSize: 11, fontWeight: 700 }}>WHOLESALE_UYGUN</span>
                 </div>
                 <div style={{ height: 6, background: '#f1f5f9', borderRadius: 999, marginBottom: 8, overflow: 'hidden' }}>
@@ -237,9 +237,9 @@ export default function HomePage() {
                   <span>Skor: 87/100</span><span>Amazon BB%: 0%</span>
                 </div>
               </div>
-              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, marginBottom: 16, opacity: 0.6, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+              <div style={{ background: '#0a1525', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 12, padding: 20, marginBottom: 16, opacity: 0.6, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <span style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>Genel Marka A.Ş.</span>
+                  <span style={{ fontWeight: 700, color: '#e8f0fe', fontSize: 14 }}>Genel Marka A.Ş.</span>
                   <span style={{ background: '#ef4444', color: '#fff', borderRadius: 999, padding: '3px 12px', fontSize: 11, fontWeight: 700 }}>ELENDI</span>
                 </div>
                 <div style={{ height: 6, background: '#f1f5f9', borderRadius: 999, marginBottom: 8, overflow: 'hidden' }}>
@@ -265,13 +265,13 @@ export default function HomePage() {
 
             {/* Text */}
             <div>
-              <span style={{ display: 'inline-block', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 18 }}>Keepa Entegrasyonu</span>
-              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 16, color: '#0f172a' }}>
+              <span style={{ display: 'inline-block', background: 'rgba(59,130,246,0.15)', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 999, padding: '4px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 18 }}>Keepa Entegrasyonu</span>
+              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 16, color: '#e8f0fe' }}>
                 Akıllı marka uygunluk skorlaması.
               </h2>
-              <p style={{ fontSize: 16, color: '#64748b', lineHeight: 1.7, marginBottom: 28 }}>
+              <p style={{ fontSize: 16, color: '#5a7a98', lineHeight: 1.7, marginBottom: 28 }}>
                 ASIN başına 28 Keepa metriğini analiz ederiz — Buy Box %, BSR trendi, satıcı sayısı, aylık
-                satışlar — tek bir e-posta göndermeden önce <strong style={{ color: '#0f172a' }}>Toptan Skor (0–100)</strong> sunarız.
+                satışlar — tek bir e-posta göndermeden önce <strong style={{ color: '#e8f0fe' }}>Toptan Skor (0–100)</strong> sunarız.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 18, marginBottom: 28 }}>
                 {[
@@ -282,8 +282,8 @@ export default function HomePage() {
                   <li key={item.t} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                     <span className="material-symbols-outlined" style={{ color: '#10b981', fontSize: 20, marginTop: 2, flexShrink: 0, fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                     <div>
-                      <strong style={{ display: 'block', color: '#0f172a', fontSize: 14, marginBottom: 2 }}>{item.t}</strong>
-                      <span style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6 }}>{item.d}</span>
+                      <strong style={{ display: 'block', color: '#e8f0fe', fontSize: 14, marginBottom: 2 }}>{item.t}</strong>
+                      <span style={{ fontSize: 13, color: '#5a7a98', lineHeight: 1.6 }}>{item.d}</span>
                     </div>
                   </li>
                 ))}
@@ -297,11 +297,11 @@ export default function HomePage() {
         </section>
 
         {/* HOW IT WORKS */}
-        <section style={{ background: '#0f172a', padding: '80px 24px' }}>
+        <section style={{ background: '#020810', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 56 }}>
               <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', color: '#fff', marginBottom: 10 }}>İş akışınızı güçlendirin.</h2>
-              <p style={{ fontSize: 16, color: '#64748b' }}>Bir sonraki büyük marka hesabına giden üç adım.</p>
+              <p style={{ fontSize: 16, color: '#5a7a98' }}>Bir sonraki büyük marka hesabına giden üç adım.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 40, textAlign: 'center' }}>
               {[
@@ -314,7 +314,7 @@ export default function HomePage() {
                     <span style={{ fontFamily: "'Manrope',sans-serif", fontSize: 22, fontWeight: 800, color: '#fff' }}>{s.n}</span>
                   </div>
                   <h3 style={{ fontFamily: "'Manrope',sans-serif", fontSize: 17, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{s.t}</h3>
-                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7 }}>{s.d}</p>
+                  <p style={{ fontSize: 14, color: '#5a7a98', lineHeight: 1.7 }}>{s.d}</p>
                 </div>
               ))}
             </div>
@@ -322,11 +322,11 @@ export default function HomePage() {
         </section>
 
         {/* PRICING */}
-        <section id="pricing" style={{ background: '#fff', padding: '80px 24px' }}>
+        <section id="pricing" style={{ background: '#060d1a', padding: '80px 24px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 52 }}>
-              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#0f172a' }}>Tek seferlik kredi paketi.</h2>
-              <p style={{ fontSize: 16, color: '#64748b' }}>Aylık abonelik yok. Kullandığın kadar öde. Gizli ücret yok.</p>
+              <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10, color: '#e8f0fe' }}>Tek seferlik kredi paketi.</h2>
+              <p style={{ fontSize: 16, color: '#5a7a98' }}>Aylık abonelik yok. Kullandığın kadar öde. Gizli ücret yok.</p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, alignItems: 'start' }}>
               {PLANS.map(p => (
@@ -378,14 +378,14 @@ export default function HomePage() {
         {/* SEO BLOCK */}
         <section style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', padding: '64px 24px' }}>
           <div style={{ maxWidth: 760, margin: '0 auto' }}>
-            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 14 }}>
+            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 22, fontWeight: 800, color: '#e8f0fe', marginBottom: 14 }}>
               Amazon FBA Toptan Satış Nedir ve WholesaleScout Nasıl Yardımcı Olur?
             </h2>
-            <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.75, marginBottom: 14 }}>
-              <strong style={{ color: '#0f172a' }}>Amazon FBA toptan satışı</strong>, satıcıların ürünleri doğrudan marka sahiplerinden toplu olarak satın alıp Amazon Fulfillment by Amazon aracılığıyla sattığı bir iş modelidir.
+            <p style={{ fontSize: 15, color: '#5a7a98', lineHeight: 1.75, marginBottom: 14 }}>
+              <strong style={{ color: '#e8f0fe' }}>Amazon FBA toptan satışı</strong>, satıcıların ürünleri doğrudan marka sahiplerinden toplu olarak satın alıp Amazon Fulfillment by Amazon aracılığıyla sattığı bir iş modelidir.
               Özel etiketin aksine, toptan satıcılar kanıtlanmış talebe sahip yerleşik markaları kaynak gösterir.
             </p>
-            <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.75 }}>
+            <p style={{ fontSize: 15, color: '#5a7a98', lineHeight: 1.75 }}>
               WholesaleScout&#39;un 11 aşamalı AI pipeline&#39;ı en zor kısmı otomatikleştirir: doğrulanmış toptan kişileri,
               LinkedIn karar vericileri ve Keepa ürün karlılık skorlarını bulur. Dakikalar içinde eksiksiz iletişim veritabanı.
             </p>
@@ -393,19 +393,19 @@ export default function HomePage() {
         </section>
 
         {/* FAQ */}
-        <section id="faq" style={{ background: '#fff', padding: '80px 24px' }}>
+        <section id="faq" style={{ background: '#060d1a', padding: '80px 24px' }}>
           <div style={{ maxWidth: 760, margin: '0 auto' }}>
-            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 32, fontWeight: 800, letterSpacing: '-0.02em', textAlign: 'center', marginBottom: 40, color: '#0f172a' }}>
+            <h2 style={{ fontFamily: "'Manrope',system-ui,sans-serif", fontSize: 32, fontWeight: 800, letterSpacing: '-0.02em', textAlign: 'center', marginBottom: 40, color: '#e8f0fe' }}>
               Sıkça Sorulan Sorular
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {FAQS.map((f, i) => (
                 <details key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '18px 22px', cursor: 'pointer' }}>
-                  <summary style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 600, fontSize: 15, color: '#0f172a', listStyle: 'none', userSelect: 'none' }}>
+                  <summary style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 600, fontSize: 15, color: '#e8f0fe', listStyle: 'none', userSelect: 'none' }}>
                     <span>{f.q}</span>
                     <span className="material-symbols-outlined" style={{ color: '#94a3b8', fontSize: 20, flexShrink: 0, marginLeft: 16 }}>expand_more</span>
                   </summary>
-                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginTop: 12 }}>{f.a}</p>
+                  <p style={{ fontSize: 14, color: '#5a7a98', lineHeight: 1.7, marginTop: 12 }}>{f.a}</p>
                 </details>
               ))}
             </div>
@@ -422,7 +422,7 @@ export default function HomePage() {
               Otomatik marka araştırmasıyla toptan işlerini büyüten Amazon FBA satıcılarına katıl.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <Link href="/auth/login" style={{ background: '#fff', color: '#2563eb', padding: '14px 32px', borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
+              <Link href="/auth/login" style={{ background: '#0f1b2d', color: '#2563eb', padding: '14px 32px', borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
                 Dashboard&apos;a Git
               </Link>
               <Link href="#pricing" style={{ border: '2px solid rgba(255,255,255,0.3)', color: '#fff', padding: '14px 28px', borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: 'none' }}>
@@ -435,7 +435,7 @@ export default function HomePage() {
       </main>
 
       {/* FOOTER */}
-      <footer style={{ background: '#0f172a', borderTop: '1px solid #1e293b' }}>
+      <footer style={{ background: '#020810', borderTop: '1px solid #1e293b' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 24px 32px', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
@@ -444,7 +444,7 @@ export default function HomePage() {
               </div>
               <span style={{ fontFamily: "'Manrope',sans-serif", fontWeight: 800, fontSize: 15, color: '#fff' }}>WholesaleScout</span>
             </div>
-            <p style={{ fontSize: 11, color: '#64748b', fontFamily: 'monospace', marginBottom: 8 }}>wholesale-scout.com</p>
+            <p style={{ fontSize: 11, color: '#5a7a98', fontFamily: 'monospace', marginBottom: 8 }}>wholesale-scout.com</p>
             <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.7, maxWidth: 220 }}>
               Amazon FBA toptan satış yapıcıları için hassas araştırma araçları.
             </p>

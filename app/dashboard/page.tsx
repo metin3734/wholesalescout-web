@@ -181,7 +181,7 @@ function BrandTypeBadge({ type }: { type?: string }) {
   const cfg =
     type === 'brand'       ? { label:'✓ Marka',        bg:'#f0fdf4', color:'#166534', border:'#bbf7d0' } :
     type === 'distributor' ? { label:'⚠ Distribütör',  bg:'#fef3c7', color:'#92400e', border:'#fde68a' } :
-                             { label:'◆ Perakendeci',  bg:'#f1f5f9', color:'#475569', border:'#e2e8f0' };
+                             { label:'◆ Perakendeci',  bg:'#f1f5f9', color:'#7a90b0', border:'#e2e8f0' };
   return (
     <span style={{ padding:'0.1rem 0.4rem', borderRadius:'4px', fontSize:'0.6rem', fontWeight:700, background:cfg.bg, color:cfg.color, border:`1px solid ${cfg.border}`, whiteSpace:'nowrap' }}>
       {cfg.label}
@@ -241,11 +241,11 @@ function StatusDropdown({ brandId, current, onUpdate }: { brandId: string; curre
       {open && (
         <>
           <div style={{ position:'fixed', inset:0, zIndex:99 }} onClick={() => setOpen(false)} />
-          <div style={{ position:'absolute', top:'110%', left:0, zIndex:100, background:'#fff', border:'1px solid #e2e8f0', borderRadius:'7px', boxShadow:'0 4px 16px rgba(0,0,0,0.12)', minWidth:'130px', overflow:'hidden' }}>
+          <div style={{ position:'absolute', top:'110%', left:0, zIndex:100, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'7px', boxShadow:'0 4px 16px rgba(0,0,0,0.12)', minWidth:'130px', overflow:'hidden' }}>
             {LEAD_STATUSES.map((s) => {
               const c = LEAD_STATUS_CFG[s];
               return (
-                <button key={s} onClick={() => select(s)} style={{ display:'flex', alignItems:'center', gap:'0.45rem', width:'100%', padding:'0.45rem 0.7rem', background: s === val ? '#f8fafc' : '#fff', border:'none', cursor:'pointer', fontSize:'0.73rem', fontWeight: s === val ? 700 : 400, color:'#0f172a', textAlign:'left' }}>
+                <button key={s} onClick={() => select(s)} style={{ display:'flex', alignItems:'center', gap:'0.45rem', width:'100%', padding:'0.45rem 0.7rem', background: s === val ? '#f8fafc' : '#fff', border:'none', cursor:'pointer', fontSize:'0.73rem', fontWeight: s === val ? 700 : 400, color:'#e8f0fe', textAlign:'left' }}>
                   <span style={{ width:6, height:6, borderRadius:'50%', background:c.dot, flexShrink:0 }} />
                   {s}
                   {s === val && <span style={{ marginLeft:'auto', color:'#94a3b8', fontSize:'0.62rem' }}>✓</span>}
@@ -545,30 +545,30 @@ export default function DashboardPage() {
       {showUploadPanel && (
         <>
           <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.35)', zIndex:1900, backdropFilter:'blur(2px)' }} onClick={() => setShowUploadPanel(false)} />
-          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'380px', background:'#fff', zIndex:1901, boxShadow:'-4px 0 32px rgba(0,0,0,0.14)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
+          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'380px', background:'#0f1b2d', zIndex:1901, boxShadow:'-4px 0 32px rgba(0,0,0,0.14)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
             {/* Header */}
-            <div style={{ padding:'1.3rem 1.4rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div style={{ padding:'1.3rem 1.4rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
               <div>
-                <div style={{ fontWeight:800, fontSize:'1rem', color:'#0f172a' }}>New Research</div>
+                <div style={{ fontWeight:800, fontSize:'1rem', color:'#e8f0fe' }}>New Research</div>
                 <div style={{ fontSize:'0.72rem', color:'#94a3b8', marginTop:'0.1rem' }}>Upload brands or Keepa data</div>
               </div>
-              <button onClick={() => setShowUploadPanel(false)} style={{ background:'#f8fafc', border:'1px solid #e2e8f0', cursor:'pointer', color:'#64748b', fontSize:'0.9rem', padding:'0.3rem 0.55rem', borderRadius:'7px', lineHeight:1 }}>✕</button>
+              <button onClick={() => setShowUploadPanel(false)} style={{ background:'#0b1427', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', color:'#5a7090', fontSize:'0.9rem', padding:'0.3rem 0.55rem', borderRadius:'7px', lineHeight:1 }}>✕</button>
             </div>
             {/* Body */}
             <div style={{ flex:1, padding:'1.25rem 1.4rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
               {/* Brand name textarea — her zaman görünür */}
               <div>
-                <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#475569', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Marka İsimleri</label>
+                <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#7a90b0', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Marka İsimleri</label>
                 <textarea
                   value={pastedBrands}
                   onChange={(e) => setPastedBrands(e.target.value)}
                   placeholder={'Nike\nAdidas\nPuma\n(her satıra bir marka)'}
                   rows={5}
-                  style={{ width:'100%', resize:'none', border:'1px solid #e2e8f0', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#1e293b', background:'#f8fafc', boxSizing:'border-box', lineHeight:1.5 }}
+                  style={{ width:'100%', resize:'none', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#c8d8f0', background:'#0b1427', boxSizing:'border-box', lineHeight:1.5 }}
                   onFocus={e => (e.target.style.borderColor='#3b82f6')}
                   onBlur={e => (e.target.style.borderColor='#e2e8f0')}
                 />
-                {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#64748b', marginTop:'0.25rem' }}>{pasteLineCount} marka girildi</div>}
+                {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#5a7090', marginTop:'0.25rem' }}>{pasteLineCount} marka girildi</div>}
               </div>
 
               <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
@@ -587,14 +587,14 @@ export default function DashboardPage() {
               >
                 <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls,.tsv,.txt" onChange={(e) => { const f = e.target.files?.[0]; if (f) { submitFile(f); setShowUploadPanel(false); } e.target.value=''; }} style={{ display:'none' }} />
                 <div style={{ fontSize:'1.5rem', marginBottom:'0.4rem' }}>📂</div>
-                <div style={{ fontSize:'0.78rem', color:'#64748b' }}>Sürükle & bırak veya <span style={{ color:'#2563eb', fontWeight:600 }}>dosya seç</span></div>
+                <div style={{ fontSize:'0.78rem', color:'#5a7090' }}>Sürükle & bırak veya <span style={{ color:'#2563eb', fontWeight:600 }}>dosya seç</span></div>
                 <div style={{ fontSize:'0.62rem', color:'#94a3b8', marginTop:'0.2rem' }}>Marka listesi (CSV/Excel) veya Keepa Export — otomatik algılanır</div>
               </div>
 
               {error && <div style={{ padding:'0.65rem 0.8rem', background:'#fef2f2', border:'1px solid #fecaca', borderRadius:'8px', fontSize:'0.72rem', color:'#dc2626' }}>⚠ {error}</div>}
 
               {processingJob && (
-                <div style={{ background:'#eff6ff', border:'1px solid #bfdbfe', borderRadius:'9px', padding:'0.75rem 0.9rem' }}>
+                <div style={{ background:'rgba(59,130,246,0.12)', border:'1px solid #bfdbfe', borderRadius:'9px', padding:'0.75rem 0.9rem' }}>
                   <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', marginBottom:'0.4rem' }}>
                     <span style={{ width:7, height:7, borderRadius:'50%', background:'#3b82f6', animation:'pulse 1.4s ease-in-out infinite', display:'inline-block', flexShrink:0 }} />
                     <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#1d4ed8', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{processingJob.file_name}</span>
@@ -625,14 +625,14 @@ export default function DashboardPage() {
 
       {/* ── BREADCRUMB + PAGE HEADER ── */}
       <div style={{ marginBottom:'2rem' }}>
-        <nav style={{ display:'flex', alignItems:'center', gap:'0.3rem', fontSize:'0.6rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.65rem' }}>
+        <nav style={{ display:'flex', alignItems:'center', gap:'0.3rem', fontSize:'0.6rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.65rem' }}>
           <span>WholesaleScout</span>
           <span style={{ fontSize:'0.8rem', opacity:0.5 }}>›</span>
           <span style={{ color:'#497cff' }}>Marka Keşfi</span>
         </nav>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:'1rem', flexWrap:'wrap' }}>
           <div>
-            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#131b2e', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Marka Keşfi</h2>
+            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#e8f0fe', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Marka Keşfi</h2>
             <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:500 }}>OSINT + AI pipeline · Real-time enrichment · wholesale-scout.com</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
@@ -661,12 +661,12 @@ export default function DashboardPage() {
           { label:'Doğrulanan Domain', accent:'#57657a', value: stats.domainOk.toLocaleString(), badge: null, extra:'verified' },
           { label:'Ort. Uygunluk Skoru', accent:'#009668', value: brands.length > 0 ? (brands.reduce((s, b) => s + (b.confidence_score ?? 0), 0) / brands.length).toFixed(1) : '—', badge: null, extra:'/100' },
         ] as { label:string; accent:string; value:string; badge:string|null; extra:string|null }[]).map(card => (
-          <div key={card.label} style={{ background:'#fff', padding:'1.5rem', borderRadius:'12px', borderBottom:`4px solid ${card.accent}`, boxShadow:'0 1px 4px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', justifyContent:'space-between', minHeight:'128px' }}>
-            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>{card.label}</p>
+          <div key={card.label} style={{ background:'#0f1b2d', padding:'1.5rem', borderRadius:'12px', borderBottom:`4px solid ${card.accent}`, boxShadow:'0 1px 4px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', justifyContent:'space-between', minHeight:'128px' }}>
+            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>{card.label}</p>
             <div style={{ display:'flex', alignItems:'baseline', gap:'0.45rem', marginTop:'0.75rem' }}>
-              <span style={{ fontSize:'1.9rem', fontWeight:900, color:'#131b2e', lineHeight:1, fontFamily:'Manrope, sans-serif' }}>{card.value}</span>
+              <span style={{ fontSize:'1.9rem', fontWeight:900, color:'#e8f0fe', lineHeight:1, fontFamily:'Manrope, sans-serif' }}>{card.value}</span>
               {card.badge && <span style={{ fontSize:'0.68rem', fontWeight:700, color:'#009668' }}>{card.badge}</span>}
-              {card.extra === '/100' && <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#76777d' }}>/100</span>}
+              {card.extra === '/100' && <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#4a6080' }}>/100</span>}
               {card.extra === 'verified' && <span style={{ fontSize:'0.8rem', color:'#009668' }}>✓</span>}
             </div>
           </div>
@@ -692,15 +692,15 @@ export default function DashboardPage() {
         {/* Right actions */}
         <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           <div style={{ position:'relative' }}>
-            <span style={{ position:'absolute', left:'0.6rem', top:'50%', transform:'translateY(-50%)', color:'#76777d', pointerEvents:'none', display:'flex' }}><Ic.Search /></span>
+            <span style={{ position:'absolute', left:'0.6rem', top:'50%', transform:'translateY(-50%)', color:'#4a6080', pointerEvents:'none', display:'flex' }}><Ic.Search /></span>
             <input value={search} onChange={e => { setSearch(e.target.value); setBrandPage(0); }} placeholder="Marka ara…"
-              style={{ paddingLeft:'2rem', paddingRight:'0.75rem', paddingTop:'0.45rem', paddingBottom:'0.45rem', border:'1px solid rgba(198,198,205,0.4)', borderRadius:'10px', fontSize:'0.73rem', outline:'none', background:'#fff', color:'#131b2e', width:'200px', boxSizing:'border-box' }}
+              style={{ paddingLeft:'2rem', paddingRight:'0.75rem', paddingTop:'0.45rem', paddingBottom:'0.45rem', border:'1px solid rgba(198,198,205,0.4)', borderRadius:'10px', fontSize:'0.73rem', outline:'none', background:'#0f1b2d', color:'#e8f0fe', width:'200px', boxSizing:'border-box' }}
               onFocus={e => (e.target.style.borderColor='#497cff')} onBlur={e => (e.target.style.borderColor='rgba(198,198,205,0.4)')} />
           </div>
-          <button onClick={copyAllEmails} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fff', border:'1px solid rgba(198,198,205,0.35)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#131b2e', cursor:'pointer' }}>
+          <button onClick={copyAllEmails} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#e8f0fe', cursor:'pointer' }}>
             <Ic.Copy /> E-postaları Kopyala
           </button>
-          <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#fff', border:'1px solid rgba(198,198,205,0.35)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#131b2e', cursor:'pointer' }}>
+          <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#e8f0fe', cursor:'pointer' }}>
             <Ic.Download /> CSV İndir
           </button>
           {brands.some(b => !b.wholesale_email && b.qualification_status !== 'inactive') && !processingJob && (
@@ -732,7 +732,7 @@ export default function DashboardPage() {
             <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi.</span>
           </div>
           <button onClick={() => setShowRetryConfirm(true)} disabled={retrying}
-            style={{ padding:'0.5rem 1rem', background:'#fff', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
+            style={{ padding:'0.5rem 1rem', background:'#0f1b2d', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
             {retrying ? 'Taranıyor...' : '🔄 Tekrar Tara'}
           </button>
         </div>
@@ -756,7 +756,7 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div style={{ width:'100%', height:'6px', background:'rgba(255,255,255,0.2)', borderRadius:'999px', overflow:'hidden' }}>
-                <div style={{ height:'100%', width:`${pct}%`, background:'#fff', borderRadius:'999px', transition:'width 0.6s ease' }} />
+                <div style={{ height:'100%', width:`${pct}%`, background:'#0f1b2d', borderRadius:'999px', transition:'width 0.6s ease' }} />
               </div>
               <div style={{ fontSize:'0.65rem', color:'rgba(255,255,255,0.6)', marginTop:'0.3rem' }}>
                 Tablo otomatik güncelleniyor • Sayfayı kapatabilirsiniz, işlem arka planda devam eder
@@ -767,19 +767,19 @@ export default function DashboardPage() {
       })()}
 
       {/* ── DATA TABLE (Precision Ledger style) ── */}
-      <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(198,198,205,0.15)', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
+      <div style={{ background:'#0f1b2d', borderRadius:'16px', border:'1px solid rgba(255,255,255,0.06)', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
         {brands.length === 0 && !processingJob && !jobsLoaded ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2rem', marginBottom:'0.8rem' }}>
               <span style={{ display:'inline-block', width:24, height:24, borderRadius:'50%', border:'3px solid #e2e8f0', borderTopColor:'#3b82f6', animation:'spin 0.8s linear infinite' }} />
             </div>
-            <div style={{ fontWeight:700, color:'#64748b', fontSize:'0.85rem' }}>Veriler yükleniyor…</div>
+            <div style={{ fontWeight:700, color:'#5a7090', fontSize:'0.85rem' }}>Veriler yükleniyor…</div>
           </div>
         ) : brands.length === 0 && !processingJob ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2.5rem', marginBottom:'0.8rem' }}>🔍</div>
-            <div style={{ fontWeight:800, color:'#131b2e', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
-            <div style={{ color:'#76777d', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Marka yüklemek için "Yeni Araştırma" butonuna tıkla</div>
+            <div style={{ fontWeight:800, color:'#e8f0fe', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
+            <div style={{ color:'#4a6080', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Marka yüklemek için "Yeni Araştırma" butonuna tıkla</div>
             <button onClick={() => setShowUploadPanel(true)} style={{ padding:'0.6rem 1.5rem', background:'#00174b', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer' }}>
               + Yeni Araştırma
             </button>
@@ -800,7 +800,7 @@ export default function DashboardPage() {
                 <thead>
                   <tr style={{ background:'rgba(242,243,255,0.6)' }}>
                     {['MARKA ADI', 'DOMAIN & SOSYAL', 'İLETİŞİM E-POSTASI', 'TELEFON', 'AMAZON / ASIN', 'UYGUNLUK SKORU', 'DURUM', ''].map(h => (
-                      <th key={h} style={{ padding:'1rem 1.5rem', fontSize:'0.59rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
+                      <th key={h} style={{ padding:'1rem 1.5rem', fontSize:'0.59rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -828,11 +828,11 @@ export default function DashboardPage() {
                               {initials}
                             </div>
                             <div style={{ minWidth:0 }}>
-                              <p style={{ fontSize:'0.85rem', fontWeight:700, color:'#131b2e', display:'flex', alignItems:'center', gap:'0.4rem', margin:0, flexWrap:'wrap' }}>
+                              <p style={{ fontSize:'0.85rem', fontWeight:700, color:'#e8f0fe', display:'flex', alignItems:'center', gap:'0.4rem', margin:0, flexWrap:'wrap' }}>
                                 <span style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'150px', display:'inline-block' }}>{b.brand_name}</span>
                                 {qualBadge && <span style={{ fontSize:'0.56rem', background:qualBadge.bg, color:qualBadge.color, padding:'0.1rem 0.4rem', borderRadius:'3px', fontWeight:900, textTransform:'uppercase', letterSpacing:'0.05em', flexShrink:0 }}>{qualBadge.label}</span>}
                               </p>
-                              <p style={{ fontSize:'0.67rem', color:'#76777d', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
+                              <p style={{ fontSize:'0.67rem', color:'#4a6080', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
                                 {b.location || (b.qualification_status === 'inactive' && b.elimination_reason
                                   ? b.elimination_reason.substring(0, 50) + (b.elimination_reason.length > 50 ? '…' : '')
                                   : b.qualification_status ? ({ qualified: 'Uygun', marginal: 'Sınırda', inactive: 'Elendi' }[b.qualification_status] ?? b.qualification_status) : (b.distributor ? `Via ${b.distributor}` : '—'))}
@@ -859,10 +859,10 @@ export default function DashboardPage() {
                                 {b.official_domain}
                               </a>
                               <div style={{ display:'flex', gap:'0.35rem', alignItems:'center' }}>
-                                <a href={`https://${b.official_domain}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#76777d', display:'flex', lineHeight:1 }}><Ic.Globe /></a>
-                                {b.linkedin_url && <a href={b.linkedin_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#76777d', display:'flex', lineHeight:1 }}><Ic.LinkedIn /></a>}
-                                {b.instagram_url && <a href={b.instagram_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#76777d', display:'flex', lineHeight:1 }}><Ic.Instagram /></a>}
-                                {b.tiktok_url && <a href={b.tiktok_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#76777d', display:'flex', lineHeight:1 }}><Ic.TikTok /></a>}
+                                <a href={`https://${b.official_domain}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.Globe /></a>
+                                {b.linkedin_url && <a href={b.linkedin_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.LinkedIn /></a>}
+                                {b.instagram_url && <a href={b.instagram_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.Instagram /></a>}
+                                {b.tiktok_url && <a href={b.tiktok_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.TikTok /></a>}
                               </div>
                             </div>
                           ) : <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>}
@@ -879,7 +879,7 @@ export default function DashboardPage() {
                               <div style={{ position:'relative' }}>
                                 {/* Ana satır: primary email + +N badge */}
                                 <div style={{ display:'flex', alignItems:'center', gap:'0.3rem' }}>
-                                  <span style={{ fontSize:'0.73rem', fontWeight:600, color:'#131b2e', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'148px' }}>{b.wholesale_email}</span>
+                                  <span style={{ fontSize:'0.73rem', fontWeight:600, color:'#e8f0fe', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'148px' }}>{b.wholesale_email}</span>
                                   <button onClick={e => copyEmail(b.wholesale_email!, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===b.wholesale_email ? '#009668' : '#c6c6cd', borderRadius:'3px', flexShrink:0, display:'flex' }} onMouseEnter={e=>(e.currentTarget.style.color='#131b2e')} onMouseLeave={e=>(e.currentTarget.style.color=copiedEmail===b.wholesale_email?'#009668':'#c6c6cd')}>
                                     <Ic.Copy />
                                   </button>
@@ -887,7 +887,7 @@ export default function DashboardPage() {
                                   {extraCount > 0 && (
                                     <button
                                       onClick={e => { e.stopPropagation(); setExpandedEmailRow(isExpanded ? null : b.id); }}
-                                      style={{ fontSize:'0.58rem', fontWeight:700, color:'#2563eb', background:'#eff6ff', border:'1px solid #bfdbfe', borderRadius:'4px', padding:'0.1rem 0.35rem', cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>
+                                      style={{ fontSize:'0.58rem', fontWeight:700, color:'#2563eb', background:'rgba(59,130,246,0.12)', border:'1px solid #bfdbfe', borderRadius:'4px', padding:'0.1rem 0.35rem', cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>
                                       +{extraCount}
                                     </button>
                                   )}
@@ -895,12 +895,12 @@ export default function DashboardPage() {
 
                                 {/* Expanded dropdown */}
                                 {isExpanded && (
-                                  <div style={{ position:'absolute', top:'100%', left:0, zIndex:50, background:'#fff', border:'1px solid #e2e8f0', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', padding:'0.6rem', minWidth:'230px', marginTop:'0.3rem' }}>
+                                  <div style={{ position:'absolute', top:'100%', left:0, zIndex:50, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', padding:'0.6rem', minWidth:'230px', marginTop:'0.3rem' }}>
                                     <div style={{ fontSize:'0.58rem', color:'#94a3b8', fontWeight:700, textTransform:'uppercase', marginBottom:'0.4rem' }}>Tüm E-postalar</div>
                                     {/* Alternatif emailler */}
                                     {altEmails.map(email => (
                                       <div key={email} style={{ display:'flex', alignItems:'center', gap:'0.3rem', padding:'0.25rem 0', borderBottom:'1px solid #f8fafc' }}>
-                                        <span style={{ fontSize:'0.62rem', color:'#64748b', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{email}</span>
+                                        <span style={{ fontSize:'0.62rem', color:'#5a7090', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{email}</span>
                                         <button onClick={e => copyEmail(email, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===email ? '#009668' : '#c6c6cd', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
                                       </div>
                                     ))}
@@ -916,7 +916,7 @@ export default function DashboardPage() {
                                     {/* LinkedIn (email yoksa) */}
                                     {!dmEmail && b.decision_maker_name && b.decision_maker_linkedin && (
                                       <div style={{ display:'flex', alignItems:'center', gap:'0.3rem', paddingTop:'0.3rem', borderTop:'1px solid #f1f5f9', marginTop:'0.2rem' }}>
-                                        <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', fontSize:'0.6rem', fontWeight:600, color:'#0a66c2', background:'#eff6ff', padding:'0.15rem 0.45rem', borderRadius:'4px', textDecoration:'none', border:'1px solid #bfdbfe' }}>
+                                        <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', fontSize:'0.6rem', fontWeight:600, color:'#0a66c2', background:'rgba(59,130,246,0.12)', padding:'0.15rem 0.45rem', borderRadius:'4px', textDecoration:'none', border:'1px solid #bfdbfe' }}>
                                           <Ic.LinkedIn /> {b.decision_maker_name?.split(' ')[0]}
                                         </a>
                                       </div>
@@ -938,7 +938,7 @@ export default function DashboardPage() {
                                     {b.qualification_status === 'inactive' ? '⛔' : '⚠️'}
                                     {b.qualification_status === 'inactive' ? 'Uygun Değil' : 'Belirsiz'}
                                   </span>
-                                  <span style={{ fontSize:'0.58rem', color:'#64748b', lineHeight:'1.3' }}>{b.elimination_reason}</span>
+                                  <span style={{ fontSize:'0.58rem', color:'#5a7090', lineHeight:'1.3' }}>{b.elimination_reason}</span>
                                 </div>
                               ) : (
                                 <span style={{ color:'#c6c6cd', fontSize:'0.7rem' }}>E-posta bulunamadı</span>
@@ -949,7 +949,7 @@ export default function DashboardPage() {
                         {/* Phone */}
                         <td style={{ padding:'1.25rem 1.5rem' }}>
                           {b.phone ? (
-                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#131b2e', textDecoration:'none', whiteSpace:'nowrap' }}>
+                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#e8f0fe', textDecoration:'none', whiteSpace:'nowrap' }}>
                               📞 {b.phone}
                             </a>
                           ) : (
@@ -981,7 +981,7 @@ export default function DashboardPage() {
                                     </div>
                                     <span style={{ fontSize:'0.54rem', color:'#94a3b8', lineHeight:'1.2' }}>{reason}</span>
                                     {b.keepa_offer_count != null && (
-                                      <span style={{ fontSize:'0.54rem', color:'#64748b' }}>{b.keepa_offer_count} satici aktif</span>
+                                      <span style={{ fontSize:'0.54rem', color:'#5a7090' }}>{b.keepa_offer_count} satici aktif</span>
                                     )}
                                   </div>
                                 );
@@ -1044,8 +1044,8 @@ export default function DashboardPage() {
             </div>
             {/* Pagination */}
             <div style={{ padding:'1rem 1.5rem', background:'rgba(242,243,255,0.3)', borderTop:'1px solid rgba(198,198,205,0.12)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-              <p style={{ fontSize:'0.72rem', fontWeight:700, color:'#76777d', margin:0 }}>
-                Showing <span style={{ color:'#131b2e' }}>{filtered.length > 0 ? brandPage * BRAND_PAGE_SIZE + 1 : 0}–{Math.min((brandPage + 1) * BRAND_PAGE_SIZE, filtered.length)}</span> of <span style={{ color:'#131b2e' }}>{filtered.length}</span> leads
+              <p style={{ fontSize:'0.72rem', fontWeight:700, color:'#4a6080', margin:0 }}>
+                Showing <span style={{ color:'#e8f0fe' }}>{filtered.length > 0 ? brandPage * BRAND_PAGE_SIZE + 1 : 0}–{Math.min((brandPage + 1) * BRAND_PAGE_SIZE, filtered.length)}</span> of <span style={{ color:'#e8f0fe' }}>{filtered.length}</span> leads
               </p>
               {totalPages > 1 && (
                 <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
@@ -1067,18 +1067,18 @@ export default function DashboardPage() {
 
       {/* ── KEEPA TABLE ── */}
       {activeTab === 'keepa' && (
-        <div style={{ background:'#fff', borderRadius:'14px', border:'1px solid #e2e8f0', overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+        <div style={{ background:'#0f1b2d', borderRadius:'14px', border:'1px solid rgba(255,255,255,0.07)', overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
           {/* Keepa Toolbar */}
-          <div style={{ padding:'0.75rem 1rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:'0.6rem', flexWrap:'wrap', background:'#fafbfc' }}>
-            <span style={{ fontWeight:800, fontSize:'0.88rem', color:'#0f172a' }}>{filteredKeepa.length}</span>
-            <span style={{ fontSize:'0.72rem', color:'#64748b', fontWeight:500 }}>ürün</span>
+          <div style={{ padding:'0.75rem 1rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', gap:'0.6rem', flexWrap:'wrap', background:'#fafbfc' }}>
+            <span style={{ fontWeight:800, fontSize:'0.88rem', color:'#e8f0fe' }}>{filteredKeepa.length}</span>
+            <span style={{ fontSize:'0.72rem', color:'#5a7090', fontWeight:500 }}>ürün</span>
             {processingJob && <span style={{ fontSize:'0.63rem', color:'#3b82f6', fontWeight:600, display:'flex', alignItems:'center', gap:'0.2rem' }}><span style={{ width:5, height:5, borderRadius:'50%', background:'#3b82f6', animation:'pulse 1.4s ease-in-out infinite', display:'inline-block' }} />işleniyor…</span>}
             {/* Keepa job seçici */}
             {jobs.filter(j => j.job_type === 'keepa').length > 1 && (
               <select
                 value={selectedKeepaJobId ?? ''}
                 onChange={e => setSelectedKeepaJobId(e.target.value || null)}
-                style={{ padding:'0.22rem 0.5rem', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'0.63rem', color:'#475569', background:'#fff', cursor:'pointer' }}
+                style={{ padding:'0.22rem 0.5rem', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'6px', fontSize:'0.63rem', color:'#7a90b0', background:'#0f1b2d', cursor:'pointer' }}
               >
                 <option value=''>Tüm yüklemeler</option>
                 {jobs.filter(j => j.job_type === 'keepa').map(j => (
@@ -1103,20 +1103,20 @@ export default function DashboardPage() {
           {keepaProducts.length === 0 ? (
             <div style={{ padding:'4rem 2rem', textAlign:'center' }}>
               <div style={{ fontSize:'2.5rem', marginBottom:'0.65rem' }}>📊</div>
-              <div style={{ fontWeight:700, color:'#0f172a', marginBottom:'0.3rem', fontSize:'1rem' }}>Keepa verisi yok</div>
+              <div style={{ fontWeight:700, color:'#e8f0fe', marginBottom:'0.3rem', fontSize:'1rem' }}>Keepa verisi yok</div>
               <div style={{ color:'#94a3b8', fontSize:'0.78rem' }}>Sol panele Keepa CSV/Excel yükle.</div>
             </div>
           ) : filteredKeepa.length === 0 ? (
             <div style={{ padding:'2.5rem', textAlign:'center' }}>
               <div style={{ fontSize:'1.8rem', marginBottom:'0.4rem' }}>😶</div>
-              <div style={{ color:'#64748b', fontSize:'0.78rem', fontWeight:500 }}>Bu filtreyle eşleşen ürün bulunamadı.</div>
-              <button onClick={() => setKeepaFilter('all')} style={{ marginTop:'0.75rem', padding:'0.35rem 0.85rem', background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', borderRadius:'8px', fontSize:'0.7rem', fontWeight:600, cursor:'pointer' }}>Filtreyi Temizle</button>
+              <div style={{ color:'#5a7090', fontSize:'0.78rem', fontWeight:500 }}>Bu filtreyle eşleşen ürün bulunamadı.</div>
+              <button onClick={() => setKeepaFilter('all')} style={{ marginTop:'0.75rem', padding:'0.35rem 0.85rem', background:'rgba(59,130,246,0.12)', color:'#1d4ed8', border:'1px solid #bfdbfe', borderRadius:'8px', fontSize:'0.7rem', fontWeight:600, cursor:'pointer' }}>Filtreyi Temizle</button>
             </div>
           ) : (
             <div style={{ overflowX:'auto' }}>
               <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.73rem' }}>
                 <thead>
-                  <tr style={{ background:'#f8fafc', position:'sticky', top:0, zIndex:2 }}>
+                  <tr style={{ background:'#0b1427', position:'sticky', top:0, zIndex:2 }}>
                     {[
                       { label:'ASIN',       w:'105px' },
                       { label:'Marka / Ürün', w:'200px' },
@@ -1130,7 +1130,7 @@ export default function DashboardPage() {
                       { label:'Strateji / Sebep', w:'180px' },
                       { label:'İşlemler',   w:'110px' },
                     ].map(col => (
-                      <th key={col.label} style={{ padding:'0.55rem 0.75rem', textAlign:'left', fontWeight:700, color:'#94a3b8', fontSize:'0.58rem', textTransform:'uppercase', letterSpacing:'0.06em', borderBottom:'2px solid #f1f5f9', whiteSpace:'nowrap', minWidth:col.w }}>
+                      <th key={col.label} style={{ padding:'0.55rem 0.75rem', textAlign:'left', fontWeight:700, color:'#94a3b8', fontSize:'0.58rem', textTransform:'uppercase', letterSpacing:'0.06em', borderBottom:'2px solid rgba(255,255,255,0.05)', whiteSpace:'nowrap', minWidth:col.w }}>
                         {col.label}
                       </th>
                     ))}
@@ -1152,7 +1152,7 @@ export default function DashboardPage() {
                       </td>
                       {/* Marka / Ürün */}
                       <td style={{ padding:'0.5rem 0.75rem', maxWidth:'200px' }}>
-                        <div style={{ fontWeight:600, color:'#0f172a', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.brand}</div>
+                        <div style={{ fontWeight:600, color:'#e8f0fe', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.brand}</div>
                         <div style={{ fontSize:'0.6rem', color:'#94a3b8', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }} title={p.title}>{p.title}</div>
                       </td>
                       {/* Fiyat */}
@@ -1193,7 +1193,7 @@ export default function DashboardPage() {
                               <span style={{ fontSize:'0.7rem', fontWeight:700, color: p.wholesale_score >= 65 ? '#059669' : p.wholesale_score >= 40 ? '#d97706' : '#dc2626' }}>{Math.round(p.wholesale_score)}</span>
                               <span style={{ fontSize:'0.52rem', color:'#94a3b8' }}>/100</span>
                             </div>
-                            <div style={{ height:'3px', background:'#f1f5f9', borderRadius:'999px', overflow:'hidden' }}>
+                            <div style={{ height:'3px', background:'#0b1427', borderRadius:'999px', overflow:'hidden' }}>
                               <div style={{ height:'100%', width:`${p.wholesale_score}%`, background: p.wholesale_score >= 65 ? 'linear-gradient(90deg,#10b981,#059669)' : p.wholesale_score >= 40 ? 'linear-gradient(90deg,#f59e0b,#d97706)' : 'linear-gradient(90deg,#f87171,#dc2626)', borderRadius:'999px' }} />
                             </div>
                           </div>
@@ -1216,7 +1216,7 @@ export default function DashboardPage() {
                           return (
                             <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
                               <span style={{ padding:'0.12rem 0.4rem', borderRadius:'5px', fontSize:'0.6rem', fontWeight:700, background: bg, color, border:`1px solid ${border}`, whiteSpace:'nowrap', width:'fit-content' }}>{label}</span>
-                              <span style={{ fontSize:'0.52rem', color:'#64748b', lineHeight:'1.25' }}>{reason}</span>
+                              <span style={{ fontSize:'0.52rem', color:'#5a7090', lineHeight:'1.25' }}>{reason}</span>
                             </div>
                           );
                         })()}
@@ -1230,7 +1230,7 @@ export default function DashboardPage() {
                             <div style={{ display:'flex', flexDirection:'column', gap:'0.25rem' }}>
                               <div style={{ display:'flex', flexWrap:'wrap', gap:'0.18rem' }}>
                                 {(Array.isArray(tags) ? tags : []).slice(0, 4).map(s => (
-                                  <span key={String(s)} style={{ padding:'0.08rem 0.32rem', borderRadius:'3px', fontSize:'0.55rem', fontWeight:600, background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe', whiteSpace:'nowrap' }}>{String(s).trim()}</span>
+                                  <span key={String(s)} style={{ padding:'0.08rem 0.32rem', borderRadius:'3px', fontSize:'0.55rem', fontWeight:600, background:'rgba(59,130,246,0.12)', color:'#1d4ed8', border:'1px solid #bfdbfe', whiteSpace:'nowrap' }}>{String(s).trim()}</span>
                                 ))}
                               </div>
                               {p.eleme_nedeni && <span style={{ fontSize:'0.52rem', color:'#ef4444', lineHeight:'1.2' }}>{p.eleme_nedeni}</span>}
@@ -1252,19 +1252,19 @@ export default function DashboardPage() {
                           {/* Amazon satıcı listesi */}
                           <a href={`https://www.amazon.com/gp/offer-listing/${p.asin}`} target="_blank" rel="noreferrer"
                             title="Tüm satıcılar"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#fff', border:'1px solid #e2e8f0', textDecoration:'none', fontSize:'0.65rem', fontWeight:800, color:'#ff9900', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', textDecoration:'none', fontSize:'0.65rem', fontWeight:800, color:'#ff9900', flexShrink:0 }}>
                             ↗
                           </a>
                           {/* Keepa */}
                           <a href={`https://keepa.com/#!product/1-${p.asin}`} target="_blank" rel="noreferrer"
                             title="Keepa'da aç"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#fff', border:'1px solid #e2e8f0', textDecoration:'none', fontSize:'0.6rem', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', textDecoration:'none', fontSize:'0.6rem', flexShrink:0 }}>
                             🔍
                           </a>
                           {/* ASIN kopyala */}
                           <button onClick={() => navigator.clipboard.writeText(p.asin)}
                             title="ASIN kopyala"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:'0.6rem', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', fontSize:'0.6rem', flexShrink:0 }}>
                             📋
                           </button>
                         </div>
@@ -1284,13 +1284,13 @@ export default function DashboardPage() {
       {inspectedBrand && (
         <>
           <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.3)', zIndex:2000, backdropFilter:'blur(2px)' }} onClick={() => setInspectedBrand(null)} />
-          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'340px', background:'#fff', zIndex:2001, boxShadow:'-4px 0 24px rgba(0,0,0,0.1)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
-            <div style={{ padding:'1.1rem 1.2rem 0.8rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:'0.65rem' }}>
-              <div style={{ width:'36px', height:'36px', borderRadius:'8px', background:'#f1f5f9', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, color:'#64748b', fontSize:'0.85rem', flexShrink:0 }}>
+          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'340px', background:'#0f1b2d', zIndex:2001, boxShadow:'-4px 0 24px rgba(0,0,0,0.1)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
+            <div style={{ padding:'1.1rem 1.2rem 0.8rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', gap:'0.65rem' }}>
+              <div style={{ width:'36px', height:'36px', borderRadius:'8px', background:'#0b1427', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, color:'#5a7090', fontSize:'0.85rem', flexShrink:0 }}>
                 {inspectedBrand.brand_name?.[0]?.toUpperCase()}
               </div>
               <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0f172a' }}>{inspectedBrand.brand_name}</div>
+                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#e8f0fe' }}>{inspectedBrand.brand_name}</div>
                 {inspectedBrand.official_domain && <a href={`https://${inspectedBrand.official_domain}`} target="_blank" rel="noreferrer" style={{ fontSize:'0.68rem', color:'#3b82f6', textDecoration:'none' }}>{inspectedBrand.official_domain}</a>}
               </div>
               <button onClick={() => setInspectedBrand(null)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.2rem', color:'#94a3b8', fontSize:'1rem', lineHeight:1 }}>✕</button>
@@ -1307,7 +1307,7 @@ export default function DashboardPage() {
               {(inspectedBrand.wholesale_email || inspectedBrand.contact_form_url || inspectedBrand.decision_maker_name) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Contact</div>
-                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {inspectedBrand.wholesale_email ? (
                       <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
                         <span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px', flexShrink:0 }}>Email</span>
@@ -1320,7 +1320,7 @@ export default function DashboardPage() {
                       <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
                         <span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px', flexShrink:0 }}>Form</span>
                         <a href={inspectedBrand.contact_form_url} target="_blank" rel="noreferrer"
-                          style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.18rem 0.6rem', background:'#eff6ff', color:'#2563eb', border:'1px solid #bfdbfe', borderRadius:'5px', fontSize:'0.7rem', fontWeight:700, textDecoration:'none' }}>
+                          style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', padding:'0.18rem 0.6rem', background:'rgba(59,130,246,0.12)', color:'#2563eb', border:'1px solid #bfdbfe', borderRadius:'5px', fontSize:'0.7rem', fontWeight:700, textDecoration:'none' }}>
                           <Ic.ExternalLink /><span>İletişim Formu</span>
                         </a>
                       </div>
@@ -1329,8 +1329,8 @@ export default function DashboardPage() {
                       <div style={{ display:'flex', gap:'0.4rem' }}>
                         <span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px', flexShrink:0 }}>Contact</span>
                         <div>
-                          <div style={{ fontSize:'0.72rem', fontWeight:500, color:'#0f172a' }}>{inspectedBrand.decision_maker_name}</div>
-                          {inspectedBrand.decision_maker_title && <div style={{ fontSize:'0.64rem', color:'#64748b' }}>{inspectedBrand.decision_maker_title}</div>}
+                          <div style={{ fontSize:'0.72rem', fontWeight:500, color:'#e8f0fe' }}>{inspectedBrand.decision_maker_name}</div>
+                          {inspectedBrand.decision_maker_title && <div style={{ fontSize:'0.64rem', color:'#5a7090' }}>{inspectedBrand.decision_maker_title}</div>}
                         </div>
                       </div>
                     )}
@@ -1342,7 +1342,7 @@ export default function DashboardPage() {
               {(inspectedBrand.linkedin_url || inspectedBrand.instagram_url || inspectedBrand.tiktok_url) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Social Links</div>
-                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {[
                       { label:'LinkedIn',  url:inspectedBrand.linkedin_url,  followers: undefined },
                       { label:'Instagram', url:inspectedBrand.instagram_url, followers: inspectedBrand.instagram_followers },
@@ -1353,7 +1353,7 @@ export default function DashboardPage() {
                         <div style={{ flex:1, minWidth:0, display:'flex', alignItems:'center', gap:'0.35rem' }}>
                           <a href={x.url} target="_blank" rel="noreferrer" style={{ fontSize:'0.72rem', color:'#3b82f6', textDecoration:'none', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{x.url}</a>
                           {x.followers != null && (
-                            <span style={{ fontSize:'0.6rem', color:'#64748b', whiteSpace:'nowrap', flexShrink:0 }}>
+                            <span style={{ fontSize:'0.6rem', color:'#5a7090', whiteSpace:'nowrap', flexShrink:0 }}>
                               {x.followers >= 1000 ? `${(x.followers/1000).toFixed(1)}K` : x.followers} takipçi
                             </span>
                           )}
@@ -1368,12 +1368,12 @@ export default function DashboardPage() {
               {(inspectedBrand.brand_type || inspectedBrand.verification_score || inspectedBrand.ecommerce_platform || inspectedBrand.has_wholesale_page || inspectedBrand.faire_url || inspectedBrand.ssl_valid != null || inspectedBrand.trustpilot_rating) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>Marka Doğrulama</div>
-                  <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
+                  <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                     {/* Tip + Doğrulama skoru */}
                     <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                       <BrandTypeBadge type={inspectedBrand.brand_type} />
                       {inspectedBrand.verification_score !== undefined && (
-                        <span style={{ fontSize:'0.65rem', color:'#64748b' }}>
+                        <span style={{ fontSize:'0.65rem', color:'#5a7090' }}>
                           Doğrulama <strong style={{ color: inspectedBrand.verification_score >= 70 ? '#166534' : inspectedBrand.verification_score >= 40 ? '#1d4ed8' : '#94a3b8' }}>
                             {inspectedBrand.verification_score}/100
                           </strong>
@@ -1453,7 +1453,7 @@ export default function DashboardPage() {
                 return (
                   <div style={{ marginBottom:'0.8rem' }}>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>🎯 Ulaşım Planı</div>
-                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
+                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
 
                       {/* Kalifikasyon durumu */}
                       {qs && (
@@ -1466,7 +1466,7 @@ export default function DashboardPage() {
                             {qs==='qualified' ? '✓ Doğrulandı' : qs==='marginal' ? '~ Kısmi Doğrulama' : '✗ Ulaşılamaz'}
                           </span>
                           {signals.length > 0 && (
-                            <span style={{ fontSize:'0.58rem', color:'#64748b' }} title={signals.join(' • ')}>{signals.length} sinyal</span>
+                            <span style={{ fontSize:'0.58rem', color:'#5a7090' }} title={signals.join(' • ')}>{signals.length} sinyal</span>
                           )}
                         </div>
                       )}
@@ -1474,23 +1474,23 @@ export default function DashboardPage() {
                       {/* Outreach skoru — bar */}
                       <div>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'0.25rem' }}>
-                          <span style={{ fontSize:'0.62rem', color:'#64748b', fontWeight:600 }}>İletişim Hazırlık Skoru</span>
+                          <span style={{ fontSize:'0.62rem', color:'#5a7090', fontWeight:600 }}>İletişim Hazırlık Skoru</span>
                           <span style={{ fontSize:'0.7rem', fontWeight:800, color: osColor }}>{os}/100</span>
                         </div>
                         <div style={{ height:'6px', background:'#e2e8f0', borderRadius:'999px', overflow:'hidden' }}>
                           <div style={{ height:'100%', width:`${os}%`, background:`linear-gradient(90deg,${osColor},${osColor}aa)`, borderRadius:'999px', transition:'width 0.4s' }} />
                         </div>
-                        {rec && <div style={{ fontSize:'0.6rem', color:'#475569', marginTop:'0.2rem', fontStyle:'italic' }}>{rec}</div>}
+                        {rec && <div style={{ fontSize:'0.6rem', color:'#7a90b0', marginTop:'0.2rem', fontStyle:'italic' }}>{rec}</div>}
                       </div>
 
                       {/* Yaklaşım yöntemleri */}
                       {approaches.length > 0 && (
                         <div style={{ display:'flex', flexDirection:'column', gap:'0.3rem' }}>
-                          <div style={{ fontSize:'0.6rem', fontWeight:600, color:'#64748b', textTransform:'uppercase' }}>En İyi Yaklaşımlar</div>
+                          <div style={{ fontSize:'0.6rem', fontWeight:600, color:'#5a7090', textTransform:'uppercase' }}>En İyi Yaklaşımlar</div>
                           {approaches.slice(0, 3).map((a, i) => (
-                            <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.3rem 0.5rem', background:'#fff', borderRadius:'6px', border:'1px solid #e2e8f0' }}>
+                            <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.3rem 0.5rem', background:'#0f1b2d', borderRadius:'6px', border:'1px solid rgba(255,255,255,0.07)' }}>
                               <span style={{ fontSize:'0.8rem' }}>{a.icon}</span>
-                              <span style={{ fontSize:'0.63rem', color:'#0f172a', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{a.label}</span>
+                              <span style={{ fontSize:'0.63rem', color:'#e8f0fe', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{a.label}</span>
                               {a.value && (
                                 <a href={a.value.startsWith('http') ? a.value : `mailto:${a.value}`} target="_blank" rel="noreferrer"
                                   style={{ fontSize:'0.58rem', color:'#3b82f6', fontWeight:600, textDecoration:'none', flexShrink:0 }}>→</a>
@@ -1533,7 +1533,7 @@ export default function DashboardPage() {
                 return (
                   <div>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>📦 Dağıtım Şeması</div>
-                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.4rem' }}>
+                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.4rem' }}>
                       {/* Kanal tipi */}
                       {cfg && dt !== 'unknown' && (
                         <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
@@ -1564,7 +1564,7 @@ export default function DashboardPage() {
                           <div style={{ fontSize:'0.6rem', color:'#94a3b8', marginBottom:'0.2rem' }}>Diğer Platformlar</div>
                           <div style={{ display:'flex', flexWrap:'wrap', gap:'0.2rem' }}>
                             {kd.split(',').filter(Boolean).map(d => (
-                              <span key={d} style={{ padding:'0.15rem 0.4rem', borderRadius:'4px', fontSize:'0.62rem', fontWeight:600, background:'#eff6ff', color:'#1d4ed8', border:'1px solid #bfdbfe' }}>🏪 {d.trim()}</span>
+                              <span key={d} style={{ padding:'0.15rem 0.4rem', borderRadius:'4px', fontSize:'0.62rem', fontWeight:600, background:'rgba(59,130,246,0.12)', color:'#1d4ed8', border:'1px solid #bfdbfe' }}>🏪 {d.trim()}</span>
                             ))}
                           </div>
                         </div>
@@ -1617,7 +1617,7 @@ export default function DashboardPage() {
                 return (
                   <div>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>🔒 Güvenlik Analizi</div>
-                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e2e8f0', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
+                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                       {fr && (
                         <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
                           <span style={{ fontSize:'0.62rem', color:'#94a3b8', width:'50px', flexShrink:0 }}>Risk</span>
@@ -1652,7 +1652,7 @@ export default function DashboardPage() {
               {(inspectedBrand.location || inspectedBrand.company_employee_count) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Şirket Bilgisi</div>
-                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {inspectedBrand.location && <div style={{ display:'flex', gap:'0.4rem' }}><span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px' }}>Konum</span><span style={{ fontSize:'0.72rem', color:'#334155' }}>{inspectedBrand.location}</span></div>}
                     {inspectedBrand.company_employee_count && <div style={{ display:'flex', gap:'0.4rem' }}><span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px' }}>Çalışan</span><span style={{ fontSize:'0.72rem', color:'#334155' }}>{inspectedBrand.company_employee_count.toLocaleString()}</span></div>}
                   </div>
@@ -1667,13 +1667,13 @@ export default function DashboardPage() {
                   <div style={{ flex:1, height:'4px', background:'#e2e8f0', borderRadius:'999px', overflow:'hidden' }}>
                     <div style={{ height:'100%', width:`${inspectedBrand.confidence_score}%`, background: inspectedBrand.confidence_score>=70?'#22c55e':inspectedBrand.confidence_score>=40?'#3b82f6':'#ef4444', borderRadius:'999px' }} />
                   </div>
-                  <span style={{ fontSize:'0.7rem', fontWeight:700, color:'#0f172a', minWidth:'28px', textAlign:'right' }}>{inspectedBrand.confidence_score}%</span>
+                  <span style={{ fontSize:'0.7rem', fontWeight:700, color:'#e8f0fe', minWidth:'28px', textAlign:'right' }}>{inspectedBrand.confidence_score}%</span>
                 </div>
               </div>
             </div>
 
             <div style={{ padding:'0.8rem 1.2rem', borderTop:'1px solid #f1f5f9', display:'flex', gap:'0.45rem' }}>
-              <button onClick={() => { deleteBrand(inspectedBrand.id); }} style={{ flex:1, padding:'0.45rem', background:'#fff', color:'#ef4444', border:'1px solid #fecaca', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Sil</button>
+              <button onClick={() => { deleteBrand(inspectedBrand.id); }} style={{ flex:1, padding:'0.45rem', background:'#0f1b2d', color:'#ef4444', border:'1px solid #fecaca', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Sil</button>
               <button onClick={() => setInspectedBrand(null)} style={{ flex:1, padding:'0.45rem', background:'#0f172a', color:'#fff', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Kapat</button>
             </div>
           </div>
@@ -1684,14 +1684,14 @@ export default function DashboardPage() {
       {showRetryConfirm && (
         <>
           <div onClick={() => setShowRetryConfirm(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.4)', zIndex:999 }} />
-          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#fff', borderRadius:'16px', padding:'2rem', width:'420px', maxWidth:'90vw', zIndex:1000, boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
+          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#0f1b2d', borderRadius:'16px', padding:'2rem', width:'420px', maxWidth:'90vw', zIndex:1000, boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', marginBottom:'0.5rem' }}>🔄</div>
-            <h3 style={{ fontWeight:800, fontSize:'1.1rem', color:'#0f172a', margin:'0 0 0.5rem' }}>Başarısız Markaları Tekrar Tara</h3>
-            <p style={{ fontSize:'0.82rem', color:'#64748b', lineHeight:1.6, marginBottom:'1.25rem' }}>
-              <strong style={{ color:'#0f172a' }}>{failedBrandsList.length} marka</strong> için email bulunamadı. Bu markalar silinip tekrar taranacak. Her marka 1 kredi harcar.
+            <h3 style={{ fontWeight:800, fontSize:'1.1rem', color:'#e8f0fe', margin:'0 0 0.5rem' }}>Başarısız Markaları Tekrar Tara</h3>
+            <p style={{ fontSize:'0.82rem', color:'#5a7090', lineHeight:1.6, marginBottom:'1.25rem' }}>
+              <strong style={{ color:'#e8f0fe' }}>{failedBrandsList.length} marka</strong> için email bulunamadı. Bu markalar silinip tekrar taranacak. Her marka 1 kredi harcar.
             </p>
             <div style={{ display:'flex', gap:'0.5rem' }}>
-              <button onClick={() => setShowRetryConfirm(false)} style={{ flex:1, padding:'0.6rem', background:'#f8fafc', color:'#64748b', border:'1px solid #e2e8f0', borderRadius:'10px', fontWeight:600, fontSize:'0.8rem', cursor:'pointer' }}>Vazgeç</button>
+              <button onClick={() => setShowRetryConfirm(false)} style={{ flex:1, padding:'0.6rem', background:'#0b1427', color:'#5a7090', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'10px', fontWeight:600, fontSize:'0.8rem', cursor:'pointer' }}>Vazgeç</button>
               <button onClick={retryFailedBrands} disabled={retrying} style={{ flex:1, padding:'0.6rem', background:'#d97706', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', opacity: retrying ? 0.6 : 1 }}>
                 {retrying ? 'Gönderiliyor...' : `${failedBrandsList.length} Markayı Tara`}
               </button>

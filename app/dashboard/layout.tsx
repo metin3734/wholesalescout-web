@@ -131,28 +131,29 @@ export default async function DashboardLayout({
       </aside>
 
       {/* ── Main ──────────────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#f1f5f9' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#060d1a' }}>
         {/* Header */}
         <header style={{
-          background: '#fff', borderBottom: '1px solid #e8ecf0',
+          background: 'rgba(11,20,39,0.95)', borderBottom: '1px solid rgba(255,255,255,0.06)',
           padding: '0 1.5rem', height: '54px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexShrink: 0, zIndex: 30, boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+          flexShrink: 0, zIndex: 30,
+          backdropFilter: 'blur(12px)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{ width: '3px', height: '20px', borderRadius: '999px', background: 'linear-gradient(180deg,#3b82f6,#8b5cf6)', flexShrink: 0 }} />
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', letterSpacing: '-0.01em' }}>Lead Discovery</div>
-              <div style={{ color: '#94a3b8', fontSize: '0.67rem' }}>OSINT + AI pipeline · Real-time enrichment</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#e8f0fe', letterSpacing: '-0.01em' }}>WholesaleScout</div>
+              <div style={{ color: '#4a6080', fontSize: '0.67rem' }}>OSINT + AI pipeline · Real-time enrichment</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {limit !== 999999 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.3rem 0.7rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-                <div style={{ width: '48px', height: '3px', background: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.3rem 0.7rem', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px' }}>
+                <div style={{ width: '48px', height: '3px', background: 'rgba(255,255,255,0.1)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: `${pct}%`, background: pct > 85 ? '#ef4444' : '#3b82f6', borderRadius: '999px' }} />
                 </div>
-                <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 500 }}>{used}/{limit}</span>
+                <span style={{ fontSize: '0.7rem', color: '#6b7fa3', fontWeight: 500 }}>{used}/{limit}</span>
               </div>
             )}
             <div style={{
