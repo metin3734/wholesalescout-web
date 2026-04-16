@@ -628,11 +628,11 @@ export default function DashboardPage() {
         <nav style={{ display:'flex', alignItems:'center', gap:'0.3rem', fontSize:'0.6rem', fontWeight:700, color:'#76777d', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.65rem' }}>
           <span>WholesaleScout</span>
           <span style={{ fontSize:'0.8rem', opacity:0.5 }}>›</span>
-          <span style={{ color:'#497cff' }}>Lead Discovery</span>
+          <span style={{ color:'#497cff' }}>Marka Keşfi</span>
         </nav>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:'1rem', flexWrap:'wrap' }}>
           <div>
-            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#131b2e', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Lead Discovery</h2>
+            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#131b2e', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Marka Keşfi</h2>
             <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:500 }}>OSINT + AI pipeline · Real-time enrichment · wholesale-scout.com</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>

@@ -268,17 +268,44 @@ export default function SearchHistoryPage() {
                     Görüntüle →
                   </Link>
 
-                  {/* Delete single */}
-                  <button
-                    onClick={() => deleteSingle(job.id)}
-                    disabled={isDeleting}
-                    style={{ background:'none', border:'none', cursor:'pointer', padding:'0.2rem', color:'#e2e8f0', display:'flex', alignItems:'center', borderRadius:'4px', transition:'color 0.12s', flexShrink:0 }}
-                    onMouseEnter={e=>(e.currentTarget.style.color='#ef4444')}
-                    onMouseLeave={e=>(e.currentTarget.style.color='#e2e8f0')}
-                    title="Sil"
-                  >
-                    <IcTrash />
-                  </button>
+                  {/* Aksiyon butonları: Re-run / Report / Delete */}
+                  <div style={{ display:'flex', gap:'0.25rem', flexShrink:0 }}>
+                    {/* 🔄 Re-run — failed/timeout aramaları sıfırdan tekrar kuyruğa atar */}
+                    {(job.status === 'failed' || job.status === 'completed') && (
+                      <button
+                        onClick={() => window.location.href='/dashboard'}
+                        title="Tekrar Tara (Re-run)"
+                        style={{ background:'none', border:'1px solid #e2e8f0', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#64748b', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
+                        onMouseEnter={e=>{ e.currentTarget.style.background='#eff6ff'; e.currentTarget.style.color='#2563eb'; e.currentTarget.style.borderColor='#bfdbfe'; }}
+                        onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#64748b'; e.currentTarget.style.borderColor='#e2e8f0'; }}
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+                        Tekrar
+                      </button>
+                    )}
+                    {/* ⚠️ Bildir — marka mutlaka var ama bot bulamadı */}
+                    <button
+                      onClick={() => alert(`"${job.file_name}" araması bildirildi. Ekibimiz en kısa sürede inceleyecektir.`)}
+                      title="Sorun Bildir (Report Issue)"
+                      style={{ background:'none', border:'1px solid #e2e8f0', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#64748b', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
+                      onMouseEnter={e=>{ e.currentTarget.style.background='#fffbeb'; e.currentTarget.style.color='#d97706'; e.currentTarget.style.borderColor='#fde68a'; }}
+                      onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#64748b'; e.currentTarget.style.borderColor='#e2e8f0'; }}
+                    >
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                      Bildir
+                    </button>
+                    {/* 🗑️ Sil — mevcut fonksiyon korundu */}
+                    <button
+                      onClick={() => deleteSingle(job.id)}
+                      disabled={isDeleting}
+                      title="Sil (Delete)"
+                      style={{ background:'none', border:'1px solid #e2e8f0', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#94a3b8', display:'inline-flex', alignItems:'center', borderRadius:'6px', transition:'all 0.12s' }}
+                      onMouseEnter={e=>{ e.currentTarget.style.background='#fef2f2'; e.currentTarget.style.color='#ef4444'; e.currentTarget.style.borderColor='#fecaca'; }}
+                      onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#94a3b8'; e.currentTarget.style.borderColor='#e2e8f0'; }}
+                    >
+                      <IcTrash />
+                    </button>
+                  </div>
                 </div>
               );
             })}

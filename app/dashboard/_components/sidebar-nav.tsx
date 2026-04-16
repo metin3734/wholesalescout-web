@@ -9,7 +9,7 @@ const NAV_GROUPS = [
     items: [
       {
         href: '/dashboard',
-        label: 'Lead Discovery',
+        label: 'Marka Keşfi',
         icon: (
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -18,7 +18,7 @@ const NAV_GROUPS = [
       },
       {
         href: '/dashboard/leads',
-        label: 'My Leads',
+        label: 'Kayıtlı İletişimler',
         icon: (
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
@@ -28,7 +28,7 @@ const NAV_GROUPS = [
       },
       {
         href: '/dashboard/history',
-        label: 'Search History',
+        label: 'Arama Geçmişi',
         icon: (
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>

@@ -75,17 +75,17 @@ export default function HomePage() {
                 Amazon FBA Toptan Satış Araştırması
               </span>
               <h1 style={{ fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 52, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', color: '#0f172a', marginBottom: 20 }}>
-                Toptan kişileri{' '}
-                <span style={{ color: '#2563eb' }}>10 kat daha hızlı</span>{' '}
-                bul.
+                Amazon FBA İşletmenizi{' '}
+                <span style={{ color: '#2563eb' }}>Gerçek Zamanlı Zeka (OSINT)</span>{' '}
+                ile Büyütün.
               </h1>
               <p style={{ fontSize: 18, color: '#64748b', lineHeight: 1.7, marginBottom: 32, maxWidth: 460 }}>
-                Marka listenizi veya Keepa CSV&apos;nizi yükleyin. WholesaleScout dakikalar içinde
-                doğrulanmış domainleri, karar verici e-postalarını ve LinkedIn profillerini bulur.
+                Dünya çapındaki toptancıları saniyeler içinde keşfedin, binlerce doğrulanmış
+                iletişim verisini tek tıkla otomatik e-posta kampanyalarına dönüştürün.
               </p>
               <div style={{ display: 'flex', gap: 12 }}>
-                <Link href="/auth/login" style={{ background: '#2563eb', color: '#fff', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  Dashboard&apos;a Git
+                <Link href="/auth/signup" style={{ background: '#2563eb', color: '#fff', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  Ücretsiz Müşteri Keşfine Başla
                   <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
                 </Link>
                 <Link href="#features" style={{ background: '#fff', color: '#374151', border: '1px solid #d1d5db', padding: '14px 24px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
