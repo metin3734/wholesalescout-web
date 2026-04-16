@@ -285,6 +285,7 @@ export default function DashboardPage() {
   const [showUploadPanel, setShowUploadPanel] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const [showRetryConfirm, setShowRetryConfirm] = useState(false);
+  const [expandedEmailRow, setExpandedEmailRow] = useState<string|null>(null); // brand id
   const fileRef = useRef<HTMLInputElement>(null);
 
   // Başarısız marka sayısı
@@ -451,13 +452,46 @@ export default function DashboardPage() {
     navigator.clipboard.writeText(emails).then(() => alert(`${filtered.filter(b => b.wholesale_email).length} emails copied!`));
   }
 
+  // Kişisel email filtresi — firstname.lastname@ pattern
+  function _isPersonalEmail(email: string): boolean {
+    const prefix = email.split('@')[0];
+    return /^[a-z]+\.[a-z]+$/i.test(prefix) || /^[a-z]\.[a-z]+$/i.test(prefix);
+  }
+
+  // Temiz alternatif emailler — kişisel + primary duplicate filtreli
+  function _getCleanAltEmails(b: Brand): string[] {
+    let alts: {email:string,role:string}[] = [];
+    try { alts = JSON.parse(b.alternative_emails||'[]'); } catch {}
+    return alts
+      .map(a => a.email)
+      .filter(e => e !== b.wholesale_email && !_isPersonalEmail(e))
+      .slice(0, 4);
+  }
+
   function exportCSV() {
-    const rows = [['Brand','Domain','Email','Email Source','Contact','Title','Instagram','TikTok','LinkedIn','Location','Employees','Score','Status']];
+    // Her marka için tüm emailler organik olarak ayrı satırlarda
+    const rows = [['Brand','Domain','Email','Email Type','Email Source','Contact','Title','LinkedIn_DM','Instagram','TikTok','LinkedIn','Score','Status']];
     for (const b of filtered) {
-      rows.push([b.brand_name, b.official_domain??'', b.wholesale_email??'', b.email_source??'', b.decision_maker_name??'', b.decision_maker_title??'', b.instagram_url??'', b.tiktok_url??'', b.linkedin_url??'', b.location??'', String(b.company_employee_count??''), String(b.confidence_score), b.lead_status??'New']);
+      const altEmails = _getCleanAltEmails(b);
+      const dmEmail   = b.decision_maker_email && b.decision_maker_email !== b.wholesale_email ? b.decision_maker_email : '';
+
+      // Ana email
+      if (b.wholesale_email) {
+        rows.push([b.brand_name, b.official_domain??'', b.wholesale_email, 'PRIMARY', b.email_source??'', b.decision_maker_name??'', b.decision_maker_title??'', b.decision_maker_linkedin??'', b.instagram_url??'', b.tiktok_url??'', b.linkedin_url??'', String(b.confidence_score), b.lead_status??'New']);
+      } else {
+        rows.push([b.brand_name, b.official_domain??'', '', '', '', b.decision_maker_name??'', b.decision_maker_title??'', b.decision_maker_linkedin??'', b.instagram_url??'', b.tiktok_url??'', b.linkedin_url??'', String(b.confidence_score), b.lead_status??'New']);
+      }
+      // Alternatif emailler — aynı marka için ek satırlar
+      for (const alt of altEmails) {
+        rows.push([b.brand_name, b.official_domain??'', alt, 'ALTERNATIVE', 'scraped', '', '', '', '', '', '', '', '']);
+      }
+      // Karar verici emaili
+      if (dmEmail) {
+        rows.push([b.brand_name, b.official_domain??'', dmEmail, 'DECISION_MAKER', 'pattern', b.decision_maker_name??'', b.decision_maker_title??'', b.decision_maker_linkedin??'', '', '', '', '', '']);
+      }
     }
-    const csv = rows.map(r => r.map(c => `"${c.replace(/"/g,'""')}"`).join(',')).join('\n');
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv' })); a.download = `leads-${Date.now()}.csv`; a.click();
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' })); a.download = `leads-${Date.now()}.csv`; a.click();
   }
 
   /* ── Stats (for metric cards) ── */
@@ -833,44 +867,60 @@ export default function DashboardPage() {
                             </div>
                           ) : <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>}
                         </td>
-                        {/* Contact Email — çoklu email + karar verici + LinkedIn */}
-                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                        {/* Contact Email — primary +N badge, tıklayınca dropdown */}
+                        <td style={{ padding:'1.25rem 1.5rem', position:'relative' }} onClick={e=>e.stopPropagation()}>
                           {b.wholesale_email ? (() => {
-                            // Alternatif emailleri parse et
-                            let altEmails: {email:string,role:string}[] = [];
-                            try { altEmails = JSON.parse(b.alternative_emails||'[]'); } catch {}
-                            const allEmails = [
-                              {email: b.wholesale_email, role: 'primary'},
-                              ...altEmails.filter(a => a.email !== b.wholesale_email).slice(0,3)
-                            ];
+                            const altEmails = _getCleanAltEmails(b);
+                            const dmEmail   = b.decision_maker_email && b.decision_maker_email !== b.wholesale_email ? b.decision_maker_email : null;
+                            const extraCount = altEmails.length + (dmEmail ? 1 : 0);
+                            const isExpanded = expandedEmailRow === b.id;
+
                             return (
-                              <div style={{ display:'flex', flexDirection:'column', gap:'0.35rem', minWidth:'170px' }}>
-                                {/* Tüm emailler */}
-                                {allEmails.map(({email, role}) => (
-                                  <div key={email} style={{ display:'flex', alignItems:'center', gap:'0.25rem' }}>
-                                    {role !== 'primary' && <span style={{ fontSize:'0.5rem', color:'#94a3b8', fontWeight:700, textTransform:'uppercase', minWidth:'28px' }}>{role}</span>}
-                                    <span style={{ fontSize:'0.72rem', fontWeight: role==='primary' ? 600 : 400, color: role==='primary' ? '#131b2e' : '#64748b', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'145px' }}>{email}</span>
-                                    <button onClick={e => copyEmail(email, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===email ? '#009668' : '#c6c6cd', borderRadius:'3px', flexShrink:0, display:'flex' }} onMouseEnter={e=>(e.currentTarget.style.color='#131b2e')} onMouseLeave={e=>(e.currentTarget.style.color=copiedEmail===email?'#009668':'#c6c6cd')}>
-                                      <Ic.Copy />
+                              <div style={{ position:'relative' }}>
+                                {/* Ana satır: primary email + +N badge */}
+                                <div style={{ display:'flex', alignItems:'center', gap:'0.3rem' }}>
+                                  <span style={{ fontSize:'0.73rem', fontWeight:600, color:'#131b2e', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'148px' }}>{b.wholesale_email}</span>
+                                  <button onClick={e => copyEmail(b.wholesale_email!, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===b.wholesale_email ? '#009668' : '#c6c6cd', borderRadius:'3px', flexShrink:0, display:'flex' }} onMouseEnter={e=>(e.currentTarget.style.color='#131b2e')} onMouseLeave={e=>(e.currentTarget.style.color=copiedEmail===b.wholesale_email?'#009668':'#c6c6cd')}>
+                                    <Ic.Copy />
+                                  </button>
+                                  {/* +N badge */}
+                                  {extraCount > 0 && (
+                                    <button
+                                      onClick={e => { e.stopPropagation(); setExpandedEmailRow(isExpanded ? null : b.id); }}
+                                      style={{ fontSize:'0.58rem', fontWeight:700, color:'#2563eb', background:'#eff6ff', border:'1px solid #bfdbfe', borderRadius:'4px', padding:'0.1rem 0.35rem', cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>
+                                      +{extraCount}
                                     </button>
-                                  </div>
-                                ))}
-                                {/* Karar verici emaili (varsa) */}
-                                {b.decision_maker_email && b.decision_maker_email !== b.wholesale_email && (
-                                  <div style={{ display:'flex', alignItems:'center', gap:'0.25rem', paddingTop:'0.2rem', borderTop:'1px solid #f1f5f9', marginTop:'0.1rem' }}>
-                                    <span style={{ fontSize:'0.5rem', color:'#6366f1', fontWeight:700, textTransform:'uppercase', minWidth:'28px' }}>KV</span>
-                                    <span style={{ fontSize:'0.68rem', color:'#6366f1', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'130px' }}>{b.decision_maker_email}</span>
-                                    <button onClick={e => copyEmail(b.decision_maker_email!, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===b.decision_maker_email ? '#009668' : '#c6c6cd', borderRadius:'3px', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
-                                    {b.decision_maker_linkedin && <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} title={b.decision_maker_name||'LinkedIn'} style={{ color:'#0a66c2', display:'flex', marginLeft:'2px' }}><Ic.LinkedIn /></a>}
-                                  </div>
-                                )}
-                                {/* Karar verici sadece LinkedIn varsa (email yoksa) */}
-                                {!b.decision_maker_email && b.decision_maker_name && b.decision_maker_linkedin && (
-                                  <div style={{ display:'flex', alignItems:'center', gap:'0.3rem', paddingTop:'0.2rem', borderTop:'1px solid #f1f5f9', marginTop:'0.1rem' }}>
-                                    <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', fontSize:'0.6rem', fontWeight:600, color:'#0a66c2', background:'#eff6ff', padding:'0.15rem 0.4rem', borderRadius:'4px', textDecoration:'none', whiteSpace:'nowrap', border:'1px solid #bfdbfe' }}>
-                                      <Ic.LinkedIn /> {(b.decision_maker_name||'').split(' ')[0]}
-                                    </a>
-                                    <span style={{ fontSize:'0.55rem', color:'#94a3b8' }}>{b.decision_maker_title?.substring(0,20)}</span>
+                                  )}
+                                </div>
+
+                                {/* Expanded dropdown */}
+                                {isExpanded && (
+                                  <div style={{ position:'absolute', top:'100%', left:0, zIndex:50, background:'#fff', border:'1px solid #e2e8f0', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', padding:'0.6rem', minWidth:'230px', marginTop:'0.3rem' }}>
+                                    <div style={{ fontSize:'0.58rem', color:'#94a3b8', fontWeight:700, textTransform:'uppercase', marginBottom:'0.4rem' }}>Tüm E-postalar</div>
+                                    {/* Alternatif emailler */}
+                                    {altEmails.map(email => (
+                                      <div key={email} style={{ display:'flex', alignItems:'center', gap:'0.3rem', padding:'0.25rem 0', borderBottom:'1px solid #f8fafc' }}>
+                                        <span style={{ fontSize:'0.62rem', color:'#64748b', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{email}</span>
+                                        <button onClick={e => copyEmail(email, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===email ? '#009668' : '#c6c6cd', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
+                                      </div>
+                                    ))}
+                                    {/* Karar verici emaili */}
+                                    {dmEmail && (
+                                      <div style={{ display:'flex', alignItems:'center', gap:'0.3rem', padding:'0.25rem 0', borderTop:'1px solid #f1f5f9', marginTop:'0.2rem' }}>
+                                        <span style={{ fontSize:'0.55rem', fontWeight:700, color:'#6366f1', minWidth:'24px' }}>KV</span>
+                                        <span style={{ fontSize:'0.62rem', color:'#6366f1', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{dmEmail}</span>
+                                        <button onClick={e => copyEmail(dmEmail, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===dmEmail ? '#009668' : '#c6c6cd', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
+                                        {b.decision_maker_linkedin && <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" style={{ color:'#0a66c2', display:'flex' }}><Ic.LinkedIn /></a>}
+                                      </div>
+                                    )}
+                                    {/* LinkedIn (email yoksa) */}
+                                    {!dmEmail && b.decision_maker_name && b.decision_maker_linkedin && (
+                                      <div style={{ display:'flex', alignItems:'center', gap:'0.3rem', paddingTop:'0.3rem', borderTop:'1px solid #f1f5f9', marginTop:'0.2rem' }}>
+                                        <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" style={{ display:'inline-flex', alignItems:'center', gap:'0.25rem', fontSize:'0.6rem', fontWeight:600, color:'#0a66c2', background:'#eff6ff', padding:'0.15rem 0.45rem', borderRadius:'4px', textDecoration:'none', border:'1px solid #bfdbfe' }}>
+                                          <Ic.LinkedIn /> {b.decision_maker_name?.split(' ')[0]}
+                                        </a>
+                                      </div>
+                                    )}
                                   </div>
                                 )}
                               </div>
