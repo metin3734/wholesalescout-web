@@ -936,7 +936,7 @@ export default function DashboardPage() {
                                 <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
                                   <span style={{ fontSize:'0.65rem', fontWeight:700, color: b.qualification_status === 'inactive' ? '#dc2626' : '#d97706', display:'flex', alignItems:'center', gap:'0.25rem' }}>
                                     {b.qualification_status === 'inactive' ? '⛔' : '⚠️'}
-                                    {b.qualification_status === 'inactive' ? 'Uygun Değil' : 'Belirsiz'}
+                                    {b.qualification_status === 'inactive' ? 'Elendi' : 'Kısmi Eşleşme'}
                                   </span>
                                   <span style={{ fontSize:'0.58rem', color:'#6b7280', lineHeight:'1.3' }}>{b.elimination_reason}</span>
                                 </div>
