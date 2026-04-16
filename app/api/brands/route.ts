@@ -26,7 +26,8 @@ export async function GET() {
         'qualification_status,qualification_score,qualification_signals,' +
         'outreach_score,outreach_approach,outreach_recommendation,outreach_email_template,' +
         'keepa_score,keepa_asin,keepa_amazon_url,keepa_offer_count,contact_form_url,' +
-        'email_verification_status'
+        'email_verification_status,' +
+        'decision_maker_linkedin,decision_maker_email,decision_makers,alternative_emails,elimination_reason'
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
