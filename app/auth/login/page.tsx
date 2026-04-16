@@ -37,43 +37,43 @@ function LoginForm() {
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '0.7rem 0.9rem',
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(255,255,255,0.1)',
+    background: '#f9fafb',
+    border: '1px solid #e5e7eb',
     borderRadius: '10px', fontSize: '0.9rem',
-    color: '#e8f0fe', outline: 'none',
+    color: '#1f2937', outline: 'none',
     transition: 'border-color 0.15s',
   };
 
   return (
-    <div style={{ display:'flex', height:'100vh', width:'100%', overflow:'hidden', background:'#060d1a', fontFamily:'"Inter",system-ui,sans-serif' }}>
+    <div style={{ display:'flex', height:'100vh', width:'100%', overflow:'hidden', background:'#f8fafc', fontFamily:'"Inter",system-ui,sans-serif' }}>
 
-      {/* ── Sol panel: Marka/slogan ────────────────────────────── */}
+      {/* ── Left panel: Brand/slogan ────────────────────────────── */}
       <div style={{
         flex: '0 0 45%', maxWidth: 480,
-        background: 'linear-gradient(135deg, #0b1e4a 0%, #0d2060 40%, #0f2878 100%)',
+        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 40%, #1e40af 100%)',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'flex-start',
         padding: '3rem 3.5rem', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Dekoratif ışık efektleri */}
-        <div style={{ position:'absolute', top:'-100px', left:'-80px', width:'400px', height:'400px', background:'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:'-60px', right:'-60px', width:'300px', height:'300px', background:'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
+        {/* Decorative light effects */}
+        <div style={{ position:'absolute', top:'-100px', left:'-80px', width:'400px', height:'400px', background:'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:'-60px', right:'-60px', width:'300px', height:'300px', background:'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
 
         {/* Logo */}
         <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', marginBottom:'4rem' }}>
-          <div style={{ width:40, height:40, background:'linear-gradient(135deg,#3b82f6,#8b5cf6)', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 0 20px rgba(59,130,246,0.4)' }}>
+          <div style={{ width:40, height:40, background:'linear-gradient(135deg,#3b82f6,#8b5cf6)', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 0 20px rgba(255,255,255,0.3)' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
           </div>
-          <span style={{ color:'#e8f0fe', fontWeight:800, fontSize:'1.1rem', letterSpacing:'-0.02em' }}>WholesaleScout</span>
+          <span style={{ color:'#ffffff', fontWeight:800, fontSize:'1.1rem', letterSpacing:'-0.02em' }}>WholesaleScout</span>
         </div>
 
         {/* Slogan */}
         <h2 style={{ fontSize:'2.4rem', fontWeight:800, color:'#fff', lineHeight:1.15, letterSpacing:'-0.03em', marginBottom:'1rem', fontFamily:'"Manrope",system-ui,sans-serif' }}>
           Find Your<br />Edge.
         </h2>
-        <p style={{ fontSize:'1rem', color:'rgba(200,220,255,0.7)', lineHeight:1.65, marginBottom:'2.5rem', maxWidth:'300px' }}>
+        <p style={{ fontSize:'1rem', color:'rgba(255,255,255,0.85)', lineHeight:1.65, marginBottom:'2.5rem', maxWidth:'300px' }}>
           Empowering Wholesale Businesses.<br />
           Real-time OSINT · AI-powered · 500+ brands/day
         </p>
@@ -82,40 +82,40 @@ function LoginForm() {
         <div style={{ display:'flex', gap:'2rem' }}>
           {[['3.4K+','Doğrulanmış İletişim'],['98%','Veri Doğruluğu'],['2dk','Marka Başına']].map(([v,l]) => (
             <div key={l}>
-              <div style={{ fontSize:'1.4rem', fontWeight:800, color:'#60a5fa', fontFamily:'"Manrope",system-ui,sans-serif' }}>{v}</div>
-              <div style={{ fontSize:'0.65rem', color:'rgba(150,180,220,0.7)', marginTop:'0.1rem' }}>{l}</div>
+              <div style={{ fontSize:'1.4rem', fontWeight:800, color:'#ffffff', fontFamily:'"Manrope",system-ui,sans-serif' }}>{v}</div>
+              <div style={{ fontSize:'0.65rem', color:'rgba(255,255,255,0.75)', marginTop:'0.1rem' }}>{l}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Sağ panel: Giriş formu ───────────────────────────────── */}
-      <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem', background:'#08111f' }}>
+      {/* ── Right panel: Login form ───────────────────────────────── */}
+      <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem', background:'#ffffff' }}>
         <div style={{ width:'100%', maxWidth:'400px' }}>
 
-          <h1 style={{ fontSize:'1.75rem', fontWeight:800, color:'#e8f0fe', letterSpacing:'-0.03em', marginBottom:'0.4rem', fontFamily:'"Manrope",system-ui,sans-serif' }}>
+          <h1 style={{ fontSize:'1.75rem', fontWeight:800, color:'#1f2937', letterSpacing:'-0.03em', marginBottom:'0.4rem', fontFamily:'"Manrope",system-ui,sans-serif' }}>
             Welcome Back!
           </h1>
-          <p style={{ color:'#5a7090', fontSize:'0.88rem', marginBottom:'2rem' }}>
+          <p style={{ color:'#6b7280', fontSize:'0.88rem', marginBottom:'2rem' }}>
             Sign in to your account.
           </p>
 
           {error && (
-            <div style={{ background:'rgba(239,68,68,0.1)', border:'1px solid rgba(239,68,68,0.25)', color:'#f87171', padding:'0.75rem 1rem', borderRadius:'10px', fontSize:'0.85rem', marginBottom:'1.25rem' }}>
+            <div style={{ background:'#fef2f2', border:'1px solid #fecaca', color:'#dc2626', padding:'0.75rem 1rem', borderRadius:'10px', fontSize:'0.85rem', marginBottom:'1.25rem' }}>
               {error}
             </div>
           )}
 
-          {/* Google butonu */}
+          {/* Google button */}
           <button onClick={handleGoogle} style={{
             width:'100%', padding:'0.72rem', marginBottom:'1.5rem',
-            background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)',
-            borderRadius:'10px', cursor:'pointer', fontWeight:600, fontSize:'0.9rem', color:'#e8f0fe',
+            background:'#ffffff', border:'1px solid #e5e7eb',
+            borderRadius:'10px', cursor:'pointer', fontWeight:600, fontSize:'0.9rem', color:'#374151',
             display:'flex', alignItems:'center', justifyContent:'center', gap:'0.6rem',
             transition:'all 0.15s',
           }}
-          onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.09)';}}
-          onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.05)';}}
+          onMouseEnter={e=>{e.currentTarget.style.background='#f9fafb'; e.currentTarget.style.borderColor='#d1d5db';}}
+          onMouseLeave={e=>{e.currentTarget.style.background='#ffffff'; e.currentTarget.style.borderColor='#e5e7eb';}}
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -127,16 +127,16 @@ function LoginForm() {
           </button>
 
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', marginBottom:'1.5rem' }}>
-            <div style={{ flex:1, height:'1px', background:'rgba(255,255,255,0.07)' }} />
-            <span style={{ fontSize:'0.75rem', color:'#3a5070' }}>or sign in with email</span>
-            <div style={{ flex:1, height:'1px', background:'rgba(255,255,255,0.07)' }} />
+            <div style={{ flex:1, height:'1px', background:'#e5e7eb' }} />
+            <span style={{ fontSize:'0.75rem', color:'#9ca3af' }}>or sign in with email</span>
+            <div style={{ flex:1, height:'1px', background:'#e5e7eb' }} />
           </div>
 
           <form onSubmit={handleLogin} style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
             <div>
-              <label style={{ display:'block', fontSize:'0.8rem', fontWeight:600, color:'#7a90b0', marginBottom:'0.4rem', letterSpacing:'0.02em' }}>Email Address</label>
+              <label style={{ display:'block', fontSize:'0.8rem', fontWeight:600, color:'#6b7280', marginBottom:'0.4rem', letterSpacing:'0.02em' }}>Email Address</label>
               <div style={{ position:'relative' }}>
-                <span style={{ position:'absolute', left:'0.8rem', top:'50%', transform:'translateY(-50%)', color:'#3a5070', display:'flex' }}>
+                <span style={{ position:'absolute', left:'0.8rem', top:'50%', transform:'translateY(-50%)', color:'#9ca3af', display:'flex' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </span>
                 <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required placeholder="yourname@email.com" style={{ ...inputStyle, paddingLeft:'2.4rem' }} />
@@ -145,15 +145,15 @@ function LoginForm() {
 
             <div>
               <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'0.4rem' }}>
-                <label style={{ fontSize:'0.8rem', fontWeight:600, color:'#7a90b0', letterSpacing:'0.02em' }}>Password</label>
-                <Link href="/auth/forgot-password" style={{ fontSize:'0.75rem', color:'#3b82f6', textDecoration:'none' }}>Forgot Password?</Link>
+                <label style={{ fontSize:'0.8rem', fontWeight:600, color:'#6b7280', letterSpacing:'0.02em' }}>Password</label>
+                <Link href="/auth/forgot-password" style={{ fontSize:'0.75rem', color:'#2563eb', textDecoration:'none' }}>Forgot Password?</Link>
               </div>
               <div style={{ position:'relative' }}>
-                <span style={{ position:'absolute', left:'0.8rem', top:'50%', transform:'translateY(-50%)', color:'#3a5070', display:'flex' }}>
+                <span style={{ position:'absolute', left:'0.8rem', top:'50%', transform:'translateY(-50%)', color:'#9ca3af', display:'flex' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </span>
                 <input type={showPass?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} required placeholder="••••••••" style={{ ...inputStyle, paddingLeft:'2.4rem', paddingRight:'2.4rem' }} />
-                <button type="button" onClick={()=>setShowPass(!showPass)} style={{ position:'absolute', right:'0.8rem', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', cursor:'pointer', color:'#3a5070', display:'flex' }}>
+                <button type="button" onClick={()=>setShowPass(!showPass)} style={{ position:'absolute', right:'0.8rem', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', cursor:'pointer', color:'#9ca3af', display:'flex' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{showPass ? <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}</svg>
                 </button>
               </div>
@@ -172,9 +172,9 @@ function LoginForm() {
             </button>
           </form>
 
-          <p style={{ textAlign:'center', marginTop:'1.5rem', fontSize:'0.85rem', color:'#3a5070' }}>
+          <p style={{ textAlign:'center', marginTop:'1.5rem', fontSize:'0.85rem', color:'#9ca3af' }}>
             Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" style={{ color:'#3b82f6', fontWeight:700, textDecoration:'none' }}>Sign Up</Link>
+            <Link href="/auth/signup" style={{ color:'#2563eb', fontWeight:700, textDecoration:'none' }}>Sign Up</Link>
           </p>
         </div>
       </div>

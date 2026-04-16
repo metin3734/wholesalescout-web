@@ -114,10 +114,10 @@ export default function SidebarNav() {
                   padding: '0.48rem 0.65rem', borderRadius: '8px',
                   textDecoration: 'none', marginBottom: '0.08rem',
                   background: active
-                    ? 'linear-gradient(135deg, rgba(59,130,246,0.16), rgba(139,92,246,0.08))'
+                    ? '#eff6ff'
                     : 'transparent',
                   border: active
-                    ? '1px solid rgba(59,130,246,0.18)'
+                    ? '1px solid #dbeafe'
                     : '1px solid transparent',
                   transition: 'all 0.15s ease',
                   position: 'relative',
@@ -132,13 +132,13 @@ export default function SidebarNav() {
                   }} />
                 )}
 
-                <span style={{ color: active ? '#60a5fa' : '#475569', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                <span style={{ color: active ? '#2563eb' : '#6b7280', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
                   {item.icon}
                 </span>
                 <span style={{
                   fontSize: '0.82rem',
                   fontWeight: active ? 600 : 400,
-                  color: active ? '#e2e8f0' : '#64748b',
+                  color: active ? '#1f2937' : '#6b7280',
                   transition: 'color 0.15s',
                 }}>
                   {item.label}

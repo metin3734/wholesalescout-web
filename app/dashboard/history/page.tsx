@@ -97,7 +97,7 @@ export default function SearchHistoryPage() {
 
   if (loading) {
     return (
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'200px', color:'#4a6080', fontSize:'0.85rem' }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'200px', color:'#6b7280', fontSize:'0.85rem' }}>
         Yükleniyor…
       </div>
     );
@@ -105,10 +105,10 @@ export default function SearchHistoryPage() {
 
   if (jobs.length === 0) {
     return (
-      <div style={{ background:'#0f1b2d', borderRadius:'12px', border:'1px solid rgba(255,255,255,0.07)', padding:'4rem 2rem', textAlign:'center' }}>
+      <div style={{ background:'#ffffff', borderRadius:'12px', border:'1px solid #e5e7eb', padding:'4rem 2rem', textAlign:'center' }}>
         <div style={{ fontSize:'2.5rem', marginBottom:'0.75rem' }}>🕐</div>
-        <div style={{ fontWeight:600, color:'#e8f0fe', marginBottom:'0.3rem' }}>Henüz arama geçmişi yok</div>
-        <div style={{ color:'#4a6080', fontSize:'0.82rem', marginBottom:'1.25rem' }}>
+        <div style={{ fontWeight:600, color:'#1f2937', marginBottom:'0.3rem' }}>Henüz arama geçmişi yok</div>
+        <div style={{ color:'#6b7280', fontSize:'0.82rem', marginBottom:'1.25rem' }}>
           Tamamlanan aramalar burada görünür.
         </div>
         <Link href="/dashboard" style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', padding:'0.5rem 1.2rem', background:'#2563eb', color:'#fff', borderRadius:'8px', fontSize:'0.82rem', fontWeight:600, textDecoration:'none' }}>
@@ -133,12 +133,12 @@ export default function SearchHistoryPage() {
           { label:'Tamamlanan',   value:totalSearches,   icon:'✅' },
           { label:'Zenginleştirilen Marka', value:totalBrands, icon:'📊' },
         ].map((s) => (
-          <div key={s.label} style={{ background:'#0f1b2d', borderRadius:'10px', border:'1px solid rgba(255,255,255,0.07)', padding:'1rem 1.25rem' }}>
+          <div key={s.label} style={{ background:'#ffffff', borderRadius:'10px', border:'1px solid #e5e7eb', padding:'1rem 1.25rem' }}>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.4rem' }}>
-              <span style={{ fontSize:'0.7rem', color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.05em', fontWeight:600 }}>{s.label}</span>
+              <span style={{ fontSize:'0.7rem', color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.05em', fontWeight:600 }}>{s.label}</span>
               <span style={{ fontSize:'1rem' }}>{s.icon}</span>
             </div>
-            <div style={{ fontWeight:700, fontSize:'1.5rem', color:'#e8f0fe' }}>{s.value}</div>
+            <div style={{ fontWeight:700, fontSize:'1.5rem', color:'#1f2937' }}>{s.value}</div>
           </div>
         ))}
       </div>
@@ -155,7 +155,7 @@ export default function SearchHistoryPage() {
           </button>
           <button
             onClick={() => setSelectedIds(new Set())}
-            style={{ fontSize:'0.73rem', color:'#5a7090', background:'none', border:'none', cursor:'pointer' }}
+            style={{ fontSize:'0.73rem', color:'#6b7280', background:'none', border:'none', cursor:'pointer' }}
           >
             İptal
           </button>
@@ -170,7 +170,7 @@ export default function SearchHistoryPage() {
           onChange={toggleSelectAll}
           style={{ cursor:'pointer', width:'13px', height:'13px', accentColor:'#2563eb' }}
         />
-        <span style={{ fontSize:'0.73rem', color:'#5a7090' }}>
+        <span style={{ fontSize:'0.73rem', color:'#6b7280' }}>
           {allSelected ? 'Tümünü kaldır' : 'Tümünü seç'}
         </span>
       </div>
@@ -180,7 +180,7 @@ export default function SearchHistoryPage() {
         <div key={date}>
           {/* Date header */}
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', marginBottom:'0.6rem' }}>
-            <div style={{ fontWeight:700, fontSize:'0.78rem', color:'#5a7090', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>
+            <div style={{ fontWeight:700, fontSize:'0.78rem', color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>
               {date}
             </div>
             <div style={{ flex:1, height:'1px', background:'#f1f5f9' }} />
@@ -195,7 +195,7 @@ export default function SearchHistoryPage() {
               const isDeleting = deletingIds.has(job.id);
 
               return (
-                <div key={job.id} style={{ background: isSelected ? '#f0f7ff' : '#fff', borderRadius:'10px', border: isSelected ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.06)', padding:'0.85rem 1.25rem', display:'flex', alignItems:'center', gap:'0.75rem', opacity: isDeleting ? 0.4 : 1, transition:'all 0.15s' }}>
+                <div key={job.id} style={{ background: isSelected ? '#f0f7ff' : '#fff', borderRadius:'10px', border: isSelected ? '1px solid rgba(59,130,246,0.35)' : '1px solid #e5e7eb', padding:'0.85rem 1.25rem', display:'flex', alignItems:'center', gap:'0.75rem', opacity: isDeleting ? 0.4 : 1, transition:'all 0.15s' }}>
 
                   {/* Checkbox */}
                   <input
@@ -206,7 +206,7 @@ export default function SearchHistoryPage() {
                   />
 
                   {/* Time */}
-                  <div style={{ minWidth:'44px', fontSize:'0.7rem', color:'#4a6080', flexShrink:0 }}>{time}</div>
+                  <div style={{ minWidth:'44px', fontSize:'0.7rem', color:'#6b7280', flexShrink:0 }}>{time}</div>
 
                   {/* Status dot */}
                   <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:sc, flexShrink:0 }} />
@@ -218,11 +218,11 @@ export default function SearchHistoryPage() {
 
                   {/* File info */}
                   <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontWeight:600, fontSize:'0.83rem', color:'#e8f0fe', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                    <div style={{ fontWeight:600, fontSize:'0.83rem', color:'#1f2937', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
                       {job.file_name}
                     </div>
                     {job.status === 'completed' && (
-                      <div style={{ fontSize:'0.68rem', color:'#4a6080', marginTop:'0.1rem' }}>
+                      <div style={{ fontSize:'0.68rem', color:'#6b7280', marginTop:'0.1rem' }}>
                         {job.processed_brands} marka zenginleştirildi
                       </div>
                     )}
@@ -239,7 +239,7 @@ export default function SearchHistoryPage() {
                       <div style={{ height:'4px', background:'#e2e8f0', borderRadius:'999px', overflow:'hidden' }}>
                         <div style={{ height:'100%', width:`${pct}%`, background:sc, borderRadius:'999px', transition:'width 0.4s' }} />
                       </div>
-                      <div style={{ fontSize:'0.62rem', color:'#4a6080', marginTop:'0.2rem', textAlign:'right' }}>{pct}%</div>
+                      <div style={{ fontSize:'0.62rem', color:'#6b7280', marginTop:'0.2rem', textAlign:'right' }}>{pct}%</div>
                     </div>
                   )}
 
@@ -252,7 +252,7 @@ export default function SearchHistoryPage() {
                   {job.status === 'completed' && (
                     <div style={{ display:'flex', gap:'0.3rem', flexShrink:0 }}>
                       {job.result_csv && (
-                        <a href={`/api/download/${job.id}?format=csv`} style={{ padding:'0.22rem 0.5rem', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'6px', color:'#475569', fontSize:'0.65rem', fontWeight:500, textDecoration:'none' }}>CSV</a>
+                        <a href={`/api/download/${job.id}?format=csv`} style={{ padding:'0.22rem 0.5rem', border:'1px solid #e5e7eb', borderRadius:'6px', color:'#475569', fontSize:'0.65rem', fontWeight:500, textDecoration:'none' }}>CSV</a>
                       )}
                       {job.result_xlsx && (
                         <a href={`/api/download/${job.id}?format=xlsx`} style={{ padding:'0.22rem 0.5rem', border:'1px solid #2563eb', borderRadius:'6px', background:'#2563eb', color:'#fff', fontSize:'0.65rem', fontWeight:500, textDecoration:'none' }}>Excel</a>
@@ -275,7 +275,7 @@ export default function SearchHistoryPage() {
                       <button
                         onClick={() => window.location.href='/dashboard'}
                         title="Tekrar Tara (Re-run)"
-                        style={{ background:'none', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#5a7090', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
+                        style={{ background:'none', border:'1px solid #e5e7eb', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#6b7280', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
                         onMouseEnter={e=>{ e.currentTarget.style.background='#eff6ff'; e.currentTarget.style.color='#2563eb'; e.currentTarget.style.borderColor='#bfdbfe'; }}
                         onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#64748b'; e.currentTarget.style.borderColor='#e2e8f0'; }}
                       >
@@ -287,7 +287,7 @@ export default function SearchHistoryPage() {
                     <button
                       onClick={() => alert(`"${job.file_name}" araması bildirildi. Ekibimiz en kısa sürede inceleyecektir.`)}
                       title="Sorun Bildir (Report Issue)"
-                      style={{ background:'none', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#5a7090', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
+                      style={{ background:'none', border:'1px solid #e5e7eb', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#6b7280', display:'inline-flex', alignItems:'center', gap:'0.2rem', borderRadius:'6px', fontSize:'0.6rem', fontWeight:600, transition:'all 0.12s' }}
                       onMouseEnter={e=>{ e.currentTarget.style.background='#fffbeb'; e.currentTarget.style.color='#d97706'; e.currentTarget.style.borderColor='#fde68a'; }}
                       onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#64748b'; e.currentTarget.style.borderColor='#e2e8f0'; }}
                     >
@@ -299,7 +299,7 @@ export default function SearchHistoryPage() {
                       onClick={() => deleteSingle(job.id)}
                       disabled={isDeleting}
                       title="Sil (Delete)"
-                      style={{ background:'none', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#4a6080', display:'inline-flex', alignItems:'center', borderRadius:'6px', transition:'all 0.12s' }}
+                      style={{ background:'none', border:'1px solid #e5e7eb', cursor:'pointer', padding:'0.25rem 0.4rem', color:'#6b7280', display:'inline-flex', alignItems:'center', borderRadius:'6px', transition:'all 0.12s' }}
                       onMouseEnter={e=>{ e.currentTarget.style.background='#fef2f2'; e.currentTarget.style.color='#ef4444'; e.currentTarget.style.borderColor='#fecaca'; }}
                       onMouseLeave={e=>{ e.currentTarget.style.background='none'; e.currentTarget.style.color='#94a3b8'; e.currentTarget.style.borderColor='#e2e8f0'; }}
                     >

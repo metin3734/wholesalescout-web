@@ -181,7 +181,7 @@ function BrandTypeBadge({ type }: { type?: string }) {
   const cfg =
     type === 'brand'       ? { label:'✓ Marka',        bg:'#f0fdf4', color:'#166534', border:'#bbf7d0' } :
     type === 'distributor' ? { label:'⚠ Distribütör',  bg:'#fef3c7', color:'#92400e', border:'#fde68a' } :
-                             { label:'◆ Perakendeci',  bg:'#f1f5f9', color:'#7a90b0', border:'#e2e8f0' };
+                             { label:'◆ Perakendeci',  bg:'#f1f5f9', color:'#6b7280', border:'#e2e8f0' };
   return (
     <span style={{ padding:'0.1rem 0.4rem', borderRadius:'4px', fontSize:'0.6rem', fontWeight:700, background:cfg.bg, color:cfg.color, border:`1px solid ${cfg.border}`, whiteSpace:'nowrap' }}>
       {cfg.label}
@@ -241,11 +241,11 @@ function StatusDropdown({ brandId, current, onUpdate }: { brandId: string; curre
       {open && (
         <>
           <div style={{ position:'fixed', inset:0, zIndex:99 }} onClick={() => setOpen(false)} />
-          <div style={{ position:'absolute', top:'110%', left:0, zIndex:100, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'7px', boxShadow:'0 4px 16px rgba(0,0,0,0.12)', minWidth:'130px', overflow:'hidden' }}>
+          <div style={{ position:'absolute', top:'110%', left:0, zIndex:100, background:'#ffffff', border:'1px solid #e5e7eb', borderRadius:'7px', boxShadow:'0 4px 16px rgba(0,0,0,0.12)', minWidth:'130px', overflow:'hidden' }}>
             {LEAD_STATUSES.map((s) => {
               const c = LEAD_STATUS_CFG[s];
               return (
-                <button key={s} onClick={() => select(s)} style={{ display:'flex', alignItems:'center', gap:'0.45rem', width:'100%', padding:'0.45rem 0.7rem', background: s === val ? '#f8fafc' : '#fff', border:'none', cursor:'pointer', fontSize:'0.73rem', fontWeight: s === val ? 700 : 400, color:'#e8f0fe', textAlign:'left' }}>
+                <button key={s} onClick={() => select(s)} style={{ display:'flex', alignItems:'center', gap:'0.45rem', width:'100%', padding:'0.45rem 0.7rem', background: s === val ? '#f8fafc' : '#fff', border:'none', cursor:'pointer', fontSize:'0.73rem', fontWeight: s === val ? 700 : 400, color:'#1f2937', textAlign:'left' }}>
                   <span style={{ width:6, height:6, borderRadius:'50%', background:c.dot, flexShrink:0 }} />
                   {s}
                   {s === val && <span style={{ marginLeft:'auto', color:'#94a3b8', fontSize:'0.62rem' }}>✓</span>}
@@ -544,31 +544,31 @@ export default function DashboardPage() {
       {/* ── UPLOAD SLIDE-IN PANEL ── */}
       {showUploadPanel && (
         <>
-          <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.35)', zIndex:1900, backdropFilter:'blur(2px)' }} onClick={() => setShowUploadPanel(false)} />
-          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'380px', background:'#0f1b2d', zIndex:1901, boxShadow:'-4px 0 32px rgba(0,0,0,0.14)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
+          <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.15)', zIndex:1900, backdropFilter:'blur(2px)' }} onClick={() => setShowUploadPanel(false)} />
+          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'380px', background:'#ffffff', zIndex:1901, boxShadow:'-4px 0 32px rgba(0,0,0,0.14)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
             {/* Header */}
-            <div style={{ padding:'1.3rem 1.4rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div style={{ padding:'1.3rem 1.4rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
               <div>
-                <div style={{ fontWeight:800, fontSize:'1rem', color:'#e8f0fe' }}>New Research</div>
+                <div style={{ fontWeight:800, fontSize:'1rem', color:'#1f2937' }}>New Research</div>
                 <div style={{ fontSize:'0.72rem', color:'#94a3b8', marginTop:'0.1rem' }}>Upload brands or Keepa data</div>
               </div>
-              <button onClick={() => setShowUploadPanel(false)} style={{ background:'#0b1427', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', color:'#5a7090', fontSize:'0.9rem', padding:'0.3rem 0.55rem', borderRadius:'7px', lineHeight:1 }}>✕</button>
+              <button onClick={() => setShowUploadPanel(false)} style={{ background:'#f8fafc', border:'1px solid #e5e7eb', cursor:'pointer', color:'#6b7280', fontSize:'0.9rem', padding:'0.3rem 0.55rem', borderRadius:'7px', lineHeight:1 }}>✕</button>
             </div>
             {/* Body */}
             <div style={{ flex:1, padding:'1.25rem 1.4rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
               {/* Brand name textarea — her zaman görünür */}
               <div>
-                <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#7a90b0', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Marka İsimleri</label>
+                <label style={{ display:'block', fontSize:'0.72rem', fontWeight:700, color:'#6b7280', marginBottom:'0.35rem', textTransform:'uppercase', letterSpacing:'0.04em' }}>Marka İsimleri</label>
                 <textarea
                   value={pastedBrands}
                   onChange={(e) => setPastedBrands(e.target.value)}
                   placeholder={'Nike\nAdidas\nPuma\n(her satıra bir marka)'}
                   rows={5}
-                  style={{ width:'100%', resize:'none', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#c8d8f0', background:'#0b1427', boxSizing:'border-box', lineHeight:1.5 }}
+                  style={{ width:'100%', resize:'none', border:'1px solid #e5e7eb', borderRadius:'8px', padding:'0.6rem 0.75rem', fontSize:'0.8rem', fontFamily:'inherit', outline:'none', color:'#1f2937', background:'#f8fafc', boxSizing:'border-box', lineHeight:1.5 }}
                   onFocus={e => (e.target.style.borderColor='#3b82f6')}
                   onBlur={e => (e.target.style.borderColor='#e2e8f0')}
                 />
-                {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#5a7090', marginTop:'0.25rem' }}>{pasteLineCount} marka girildi</div>}
+                {pasteLineCount > 0 && <div style={{ fontSize:'0.65rem', color:'#6b7280', marginTop:'0.25rem' }}>{pasteLineCount} marka girildi</div>}
               </div>
 
               <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
@@ -587,7 +587,7 @@ export default function DashboardPage() {
               >
                 <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls,.tsv,.txt" onChange={(e) => { const f = e.target.files?.[0]; if (f) { submitFile(f); setShowUploadPanel(false); } e.target.value=''; }} style={{ display:'none' }} />
                 <div style={{ fontSize:'1.5rem', marginBottom:'0.4rem' }}>📂</div>
-                <div style={{ fontSize:'0.78rem', color:'#5a7090' }}>Sürükle & bırak veya <span style={{ color:'#2563eb', fontWeight:600 }}>dosya seç</span></div>
+                <div style={{ fontSize:'0.78rem', color:'#6b7280' }}>Sürükle & bırak veya <span style={{ color:'#2563eb', fontWeight:600 }}>dosya seç</span></div>
                 <div style={{ fontSize:'0.62rem', color:'#94a3b8', marginTop:'0.2rem' }}>Marka listesi (CSV/Excel) veya Keepa Export — otomatik algılanır</div>
               </div>
 
@@ -625,14 +625,14 @@ export default function DashboardPage() {
 
       {/* ── BREADCRUMB + PAGE HEADER ── */}
       <div style={{ marginBottom:'2rem' }}>
-        <nav style={{ display:'flex', alignItems:'center', gap:'0.3rem', fontSize:'0.6rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.65rem' }}>
+        <nav style={{ display:'flex', alignItems:'center', gap:'0.3rem', fontSize:'0.6rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.65rem' }}>
           <span>WholesaleScout</span>
           <span style={{ fontSize:'0.8rem', opacity:0.5 }}>›</span>
           <span style={{ color:'#497cff' }}>Marka Keşfi</span>
         </nav>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:'1rem', flexWrap:'wrap' }}>
           <div>
-            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#e8f0fe', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Marka Keşfi</h2>
+            <h2 style={{ fontSize:'2.1rem', fontWeight:900, color:'#1f2937', letterSpacing:'-0.03em', lineHeight:1, fontFamily:'Manrope, sans-serif', margin:0 }}>Marka Keşfi</h2>
             <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:500 }}>OSINT + AI pipeline · Real-time enrichment · wholesale-scout.com</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
@@ -642,7 +642,7 @@ export default function DashboardPage() {
                 {processingJob ? `İşleniyor ${processingJob.processed_brands}/${processingJob.total_brands || '?'}` : 'AI Agent: Aktif'}
               </span>
             </div>
-            <button onClick={() => setShowUploadPanel(true)} style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', padding:'0.55rem 1.2rem', background:'#00174b', color:'#fff', border:'none', borderRadius:'12px', fontSize:'0.8rem', fontWeight:700, cursor:'pointer', boxShadow:'0 2px 8px rgba(0,23,75,0.2)' }}>
+            <button onClick={() => setShowUploadPanel(true)} style={{ display:'inline-flex', alignItems:'center', gap:'0.4rem', padding:'0.55rem 1.2rem', background:'#2563eb', color:'#fff', border:'none', borderRadius:'12px', fontSize:'0.8rem', fontWeight:700, cursor:'pointer', boxShadow:'0 2px 8px rgba(0,23,75,0.2)' }}>
               + Yeni Araştırma
             </button>
           </div>
@@ -656,17 +656,17 @@ export default function DashboardPage() {
       {/* ── KPI CARDS (Precision Ledger style) ── */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:'1.5rem', marginBottom:'2.5rem' }}>
         {([
-          { label:'Toplam Marka', accent:'#00174b', value: stats.total.toLocaleString(), badge: brands.length > 0 ? `+${Math.max(0, brands.length - Math.floor(brands.length * 0.86))} bu oturum` : null, extra: null },
+          { label:'Toplam Marka', accent:'#2563eb', value: stats.total.toLocaleString(), badge: brands.length > 0 ? `+${Math.max(0, brands.length - Math.floor(brands.length * 0.86))} bu oturum` : null, extra: null },
           { label:'Bulunan E-posta',    accent:'#497cff', value: stats.emailFound.toLocaleString(), badge: stats.total > 0 ? `${Math.round(stats.emailFound / stats.total * 100)}% Oran` : null, extra: null },
           { label:'Doğrulanan Domain', accent:'#57657a', value: stats.domainOk.toLocaleString(), badge: null, extra:'verified' },
           { label:'Ort. Uygunluk Skoru', accent:'#009668', value: brands.length > 0 ? (brands.reduce((s, b) => s + (b.confidence_score ?? 0), 0) / brands.length).toFixed(1) : '—', badge: null, extra:'/100' },
         ] as { label:string; accent:string; value:string; badge:string|null; extra:string|null }[]).map(card => (
-          <div key={card.label} style={{ background:'#0f1b2d', padding:'1.5rem', borderRadius:'12px', borderBottom:`4px solid ${card.accent}`, boxShadow:'0 1px 4px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', justifyContent:'space-between', minHeight:'128px' }}>
-            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>{card.label}</p>
+          <div key={card.label} style={{ background:'#ffffff', padding:'1.5rem', borderRadius:'12px', borderBottom:`4px solid ${card.accent}`, boxShadow:'0 1px 4px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', justifyContent:'space-between', minHeight:'128px' }}>
+            <p style={{ fontSize:'0.62rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.09em', margin:0 }}>{card.label}</p>
             <div style={{ display:'flex', alignItems:'baseline', gap:'0.45rem', marginTop:'0.75rem' }}>
-              <span style={{ fontSize:'1.9rem', fontWeight:900, color:'#e8f0fe', lineHeight:1, fontFamily:'Manrope, sans-serif' }}>{card.value}</span>
+              <span style={{ fontSize:'1.9rem', fontWeight:900, color:'#1f2937', lineHeight:1, fontFamily:'Manrope, sans-serif' }}>{card.value}</span>
               {card.badge && <span style={{ fontSize:'0.68rem', fontWeight:700, color:'#009668' }}>{card.badge}</span>}
-              {card.extra === '/100' && <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#4a6080' }}>/100</span>}
+              {card.extra === '/100' && <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280' }}>/100</span>}
               {card.extra === 'verified' && <span style={{ fontSize:'0.8rem', color:'#009668' }}>✓</span>}
             </div>
           </div>
@@ -692,15 +692,15 @@ export default function DashboardPage() {
         {/* Right actions */}
         <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
           <div style={{ position:'relative' }}>
-            <span style={{ position:'absolute', left:'0.6rem', top:'50%', transform:'translateY(-50%)', color:'#4a6080', pointerEvents:'none', display:'flex' }}><Ic.Search /></span>
+            <span style={{ position:'absolute', left:'0.6rem', top:'50%', transform:'translateY(-50%)', color:'#6b7280', pointerEvents:'none', display:'flex' }}><Ic.Search /></span>
             <input value={search} onChange={e => { setSearch(e.target.value); setBrandPage(0); }} placeholder="Marka ara…"
-              style={{ paddingLeft:'2rem', paddingRight:'0.75rem', paddingTop:'0.45rem', paddingBottom:'0.45rem', border:'1px solid rgba(198,198,205,0.4)', borderRadius:'10px', fontSize:'0.73rem', outline:'none', background:'#0f1b2d', color:'#e8f0fe', width:'200px', boxSizing:'border-box' }}
+              style={{ paddingLeft:'2rem', paddingRight:'0.75rem', paddingTop:'0.45rem', paddingBottom:'0.45rem', border:'1px solid rgba(198,198,205,0.4)', borderRadius:'10px', fontSize:'0.73rem', outline:'none', background:'#ffffff', color:'#1f2937', width:'200px', boxSizing:'border-box' }}
               onFocus={e => (e.target.style.borderColor='#497cff')} onBlur={e => (e.target.style.borderColor='rgba(198,198,205,0.4)')} />
           </div>
-          <button onClick={copyAllEmails} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#e8f0fe', cursor:'pointer' }}>
+          <button onClick={copyAllEmails} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#ffffff', border:'1px solid #e5e7eb', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#1f2937', cursor:'pointer' }}>
             <Ic.Copy /> E-postaları Kopyala
           </button>
-          <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#e8f0fe', cursor:'pointer' }}>
+          <button onClick={exportCSV} style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem', padding:'0.45rem 0.9rem', background:'#ffffff', border:'1px solid #e5e7eb', borderRadius:'10px', fontSize:'0.72rem', fontWeight:700, color:'#1f2937', cursor:'pointer' }}>
             <Ic.Download /> CSV İndir
           </button>
           {brands.some(b => !b.wholesale_email && b.qualification_status !== 'inactive') && !processingJob && (
@@ -732,7 +732,7 @@ export default function DashboardPage() {
             <span style={{ fontSize:'0.68rem', color:'rgba(255,255,255,0.85)', marginLeft:'0.5rem' }}>Tarama tamamlanamadı — kalan markalar işlenemedi.</span>
           </div>
           <button onClick={() => setShowRetryConfirm(true)} disabled={retrying}
-            style={{ padding:'0.5rem 1rem', background:'#0f1b2d', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
+            style={{ padding:'0.5rem 1rem', background:'#ffffff', color:'#d97706', border:'none', borderRadius:'8px', fontWeight:700, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', opacity: retrying ? 0.6 : 1 }}>
             {retrying ? 'Taranıyor...' : '🔄 Tekrar Tara'}
           </button>
         </div>
@@ -744,7 +744,7 @@ export default function DashboardPage() {
         const done  = processingJob.processed_brands || 0;
         const pct   = Math.round((done / total) * 100);
         return (
-          <div style={{ background:'linear-gradient(135deg,#1e3a8a,#2563eb)', borderRadius:'12px', padding:'1rem 1.5rem', marginBottom:'1rem', display:'flex', alignItems:'center', gap:'1.25rem' }}>
+          <div style={{ background:'linear-gradient(135deg,#1e3a8a,#2563eb)', borderRadius:'12px', padding:'0.75rem 0.85rem', marginBottom:'1rem', display:'flex', alignItems:'center', gap:'1.25rem' }}>
             <span style={{ width:18, height:18, borderRadius:'50%', border:'3px solid rgba(255,255,255,0.35)', borderTopColor:'#fff', animation:'spin 0.8s linear infinite', display:'inline-block', flexShrink:0 }} />
             <div style={{ flex:1 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.4rem' }}>
@@ -756,7 +756,7 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div style={{ width:'100%', height:'6px', background:'rgba(255,255,255,0.2)', borderRadius:'999px', overflow:'hidden' }}>
-                <div style={{ height:'100%', width:`${pct}%`, background:'#0f1b2d', borderRadius:'999px', transition:'width 0.6s ease' }} />
+                <div style={{ height:'100%', width:`${pct}%`, background:'#ffffff', borderRadius:'999px', transition:'width 0.6s ease' }} />
               </div>
               <div style={{ fontSize:'0.65rem', color:'rgba(255,255,255,0.6)', marginTop:'0.3rem' }}>
                 Tablo otomatik güncelleniyor • Sayfayı kapatabilirsiniz, işlem arka planda devam eder
@@ -767,27 +767,27 @@ export default function DashboardPage() {
       })()}
 
       {/* ── DATA TABLE (Precision Ledger style) ── */}
-      <div style={{ background:'#0f1b2d', borderRadius:'16px', border:'1px solid rgba(255,255,255,0.06)', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
+      <div style={{ background:'#ffffff', borderRadius:'16px', border:'1px solid #e5e7eb', boxShadow:'0 1px 4px rgba(0,0,0,0.04)', overflow:'hidden' }}>
         {brands.length === 0 && !processingJob && !jobsLoaded ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2rem', marginBottom:'0.8rem' }}>
               <span style={{ display:'inline-block', width:24, height:24, borderRadius:'50%', border:'3px solid #e2e8f0', borderTopColor:'#3b82f6', animation:'spin 0.8s linear infinite' }} />
             </div>
-            <div style={{ fontWeight:700, color:'#5a7090', fontSize:'0.85rem' }}>Veriler yükleniyor…</div>
+            <div style={{ fontWeight:700, color:'#6b7280', fontSize:'0.85rem' }}>Veriler yükleniyor…</div>
           </div>
         ) : brands.length === 0 && !processingJob ? (
           <div style={{ padding:'5rem 2rem', textAlign:'center' }}>
             <div style={{ fontSize:'2.5rem', marginBottom:'0.8rem' }}>🔍</div>
-            <div style={{ fontWeight:800, color:'#e8f0fe', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
-            <div style={{ color:'#4a6080', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Marka yüklemek için "Yeni Araştırma" butonuna tıkla</div>
-            <button onClick={() => setShowUploadPanel(true)} style={{ padding:'0.6rem 1.5rem', background:'#00174b', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer' }}>
+            <div style={{ fontWeight:800, color:'#1f2937', fontSize:'1.05rem', marginBottom:'0.4rem', fontFamily:'Manrope, sans-serif' }}>Henüz lead yok</div>
+            <div style={{ color:'#6b7280', fontSize:'0.8rem', marginBottom:'1.5rem' }}>Marka yüklemek için "Yeni Araştırma" butonuna tıkla</div>
+            <button onClick={() => setShowUploadPanel(true)} style={{ padding:'0.6rem 1.5rem', background:'#2563eb', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer' }}>
               + Yeni Araştırma
             </button>
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ padding:'3rem', textAlign:'center' }}>
             <div style={{ fontSize:'2rem', marginBottom:'0.5rem' }}>😶</div>
-            <div style={{ color:'#57657a', fontSize:'0.8rem', fontWeight:500 }}>Bu filtreye uygun marka yok.</div>
+            <div style={{ color:'#6b7280', fontSize:'0.8rem', fontWeight:500 }}>Bu filtreye uygun marka yok.</div>
             <button onClick={() => { setFilterCategory('all'); setFilterStatus('All'); setSearch(''); setBrandPage(0); }}
               style={{ marginTop:'0.75rem', padding:'0.4rem 1rem', background:'#eaedff', color:'#497cff', border:'none', borderRadius:'8px', fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>
               Filtreleri Temizle
@@ -800,7 +800,7 @@ export default function DashboardPage() {
                 <thead>
                   <tr style={{ background:'rgba(242,243,255,0.6)' }}>
                     {['MARKA ADI', 'DOMAIN & SOSYAL', 'İLETİŞİM E-POSTASI', 'TELEFON', 'AMAZON / ASIN', 'UYGUNLUK SKORU', 'DURUM', ''].map(h => (
-                      <th key={h} style={{ padding:'1rem 1.5rem', fontSize:'0.59rem', fontWeight:700, color:'#4a6080', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
+                      <th key={h} style={{ padding:'0.75rem 0.85rem', fontSize:'0.59rem', fontWeight:700, color:'#6b7280', textTransform:'uppercase', letterSpacing:'0.1em', whiteSpace:'nowrap', borderBottom:'1px solid rgba(198,198,205,0.2)' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -822,17 +822,17 @@ export default function DashboardPage() {
                         onClick={() => setInspectedBrand(inspectedBrand?.id === b.id ? null : b)}
                       >
                         {/* Brand Name */}
-                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                        <td style={{ padding:'0.75rem 0.85rem' }}>
                           <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
-                            <div style={{ width:40, height:40, borderRadius:'8px', background:'#dae2fd', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#00174b', fontSize:'0.72rem', flexShrink:0, letterSpacing:'-0.01em' }}>
+                            <div style={{ width:40, height:40, borderRadius:'8px', background:'#dae2fd', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#1e40af', fontSize:'0.72rem', flexShrink:0, letterSpacing:'-0.01em' }}>
                               {initials}
                             </div>
                             <div style={{ minWidth:0 }}>
-                              <p style={{ fontSize:'0.85rem', fontWeight:700, color:'#e8f0fe', display:'flex', alignItems:'center', gap:'0.4rem', margin:0, flexWrap:'wrap' }}>
-                                <span style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'150px', display:'inline-block' }}>{b.brand_name}</span>
+                              <p style={{ fontSize:'0.85rem', fontWeight:700, color:'#1f2937', display:'flex', alignItems:'center', gap:'0.4rem', margin:0, flexWrap:'wrap' }}>
+                                <span style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'120px', display:'inline-block' }}>{b.brand_name}</span>
                                 {qualBadge && <span style={{ fontSize:'0.56rem', background:qualBadge.bg, color:qualBadge.color, padding:'0.1rem 0.4rem', borderRadius:'3px', fontWeight:900, textTransform:'uppercase', letterSpacing:'0.05em', flexShrink:0 }}>{qualBadge.label}</span>}
                               </p>
-                              <p style={{ fontSize:'0.67rem', color:'#4a6080', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
+                              <p style={{ fontSize:'0.67rem', color:'#6b7280', margin:0, marginTop:'0.1rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>
                                 {b.location || (b.qualification_status === 'inactive' && b.elimination_reason
                                   ? b.elimination_reason.substring(0, 50) + (b.elimination_reason.length > 50 ? '…' : '')
                                   : b.qualification_status ? ({ qualified: 'Uygun', marginal: 'Sınırda', inactive: 'Elendi' }[b.qualification_status] ?? b.qualification_status) : (b.distributor ? `Via ${b.distributor}` : '—'))}
@@ -851,7 +851,7 @@ export default function DashboardPage() {
                           </div>
                         </td>
                         {/* Domain & Socials */}
-                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                        <td style={{ padding:'0.75rem 0.85rem' }}>
                           {b.official_domain ? (
                             <div>
                               <a href={`https://${b.official_domain}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}
@@ -859,16 +859,16 @@ export default function DashboardPage() {
                                 {b.official_domain}
                               </a>
                               <div style={{ display:'flex', gap:'0.35rem', alignItems:'center' }}>
-                                <a href={`https://${b.official_domain}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.Globe /></a>
-                                {b.linkedin_url && <a href={b.linkedin_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.LinkedIn /></a>}
-                                {b.instagram_url && <a href={b.instagram_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.Instagram /></a>}
-                                {b.tiktok_url && <a href={b.tiktok_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#4a6080', display:'flex', lineHeight:1 }}><Ic.TikTok /></a>}
+                                <a href={`https://${b.official_domain}`} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#6b7280', display:'flex', lineHeight:1 }}><Ic.Globe /></a>
+                                {b.linkedin_url && <a href={b.linkedin_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#6b7280', display:'flex', lineHeight:1 }}><Ic.LinkedIn /></a>}
+                                {b.instagram_url && <a href={b.instagram_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#6b7280', display:'flex', lineHeight:1 }}><Ic.Instagram /></a>}
+                                {b.tiktok_url && <a href={b.tiktok_url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ color:'#6b7280', display:'flex', lineHeight:1 }}><Ic.TikTok /></a>}
                               </div>
                             </div>
-                          ) : <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>}
+                          ) : <span style={{ color:'#9ca3af', fontSize:'0.75rem' }}>—</span>}
                         </td>
                         {/* Contact Email — primary +N badge, tıklayınca dropdown */}
-                        <td style={{ padding:'1.25rem 1.5rem', position:'relative' }} onClick={e=>e.stopPropagation()}>
+                        <td style={{ padding:'0.75rem 0.85rem', position:'relative' }} onClick={e=>e.stopPropagation()}>
                           {b.wholesale_email ? (() => {
                             const altEmails = _getCleanAltEmails(b);
                             const dmEmail   = b.decision_maker_email && b.decision_maker_email !== b.wholesale_email ? b.decision_maker_email : null;
@@ -879,8 +879,8 @@ export default function DashboardPage() {
                               <div style={{ position:'relative' }}>
                                 {/* Ana satır: primary email + +N badge */}
                                 <div style={{ display:'flex', alignItems:'center', gap:'0.3rem' }}>
-                                  <span style={{ fontSize:'0.73rem', fontWeight:600, color:'#e8f0fe', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'148px' }}>{b.wholesale_email}</span>
-                                  <button onClick={e => copyEmail(b.wholesale_email!, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===b.wholesale_email ? '#009668' : '#c6c6cd', borderRadius:'3px', flexShrink:0, display:'flex' }} onMouseEnter={e=>(e.currentTarget.style.color='#131b2e')} onMouseLeave={e=>(e.currentTarget.style.color=copiedEmail===b.wholesale_email?'#009668':'#c6c6cd')}>
+                                  <span style={{ fontSize:'0.73rem', fontWeight:600, color:'#1f2937', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'120px' }}>{b.wholesale_email}</span>
+                                  <button onClick={e => copyEmail(b.wholesale_email!, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===b.wholesale_email ? '#009668' : '#9ca3af', borderRadius:'3px', flexShrink:0, display:'flex' }} onMouseEnter={e=>(e.currentTarget.style.color='#1f2937')} onMouseLeave={e=>(e.currentTarget.style.color=copiedEmail===b.wholesale_email?'#009668':'#9ca3af')}>
                                     <Ic.Copy />
                                   </button>
                                   {/* +N badge */}
@@ -895,13 +895,13 @@ export default function DashboardPage() {
 
                                 {/* Expanded dropdown */}
                                 {isExpanded && (
-                                  <div style={{ position:'absolute', top:'100%', left:0, zIndex:50, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', padding:'0.6rem', minWidth:'230px', marginTop:'0.3rem' }}>
+                                  <div style={{ position:'absolute', top:'100%', left:0, zIndex:50, background:'#ffffff', border:'1px solid #e5e7eb', borderRadius:'10px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', padding:'0.6rem', minWidth:'230px', marginTop:'0.3rem' }}>
                                     <div style={{ fontSize:'0.58rem', color:'#94a3b8', fontWeight:700, textTransform:'uppercase', marginBottom:'0.4rem' }}>Tüm E-postalar</div>
                                     {/* Alternatif emailler */}
                                     {altEmails.map(email => (
                                       <div key={email} style={{ display:'flex', alignItems:'center', gap:'0.3rem', padding:'0.25rem 0', borderBottom:'1px solid #f8fafc' }}>
-                                        <span style={{ fontSize:'0.62rem', color:'#5a7090', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{email}</span>
-                                        <button onClick={e => copyEmail(email, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===email ? '#009668' : '#c6c6cd', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
+                                        <span style={{ fontSize:'0.62rem', color:'#6b7280', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{email}</span>
+                                        <button onClick={e => copyEmail(email, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===email ? '#009668' : '#9ca3af', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
                                       </div>
                                     ))}
                                     {/* Karar verici emaili */}
@@ -909,7 +909,7 @@ export default function DashboardPage() {
                                       <div style={{ display:'flex', alignItems:'center', gap:'0.3rem', padding:'0.25rem 0', borderTop:'1px solid #f1f5f9', marginTop:'0.2rem' }}>
                                         <span style={{ fontSize:'0.55rem', fontWeight:700, color:'#6366f1', minWidth:'24px' }}>KV</span>
                                         <span style={{ fontSize:'0.62rem', color:'#6366f1', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{dmEmail}</span>
-                                        <button onClick={e => copyEmail(dmEmail, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===dmEmail ? '#009668' : '#c6c6cd', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
+                                        <button onClick={e => copyEmail(dmEmail, e)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.1rem', color: copiedEmail===dmEmail ? '#009668' : '#9ca3af', flexShrink:0, display:'flex' }}><Ic.Copy /></button>
                                         {b.decision_maker_linkedin && <a href={b.decision_maker_linkedin} target="_blank" rel="noreferrer" style={{ color:'#0a66c2', display:'flex' }}><Ic.LinkedIn /></a>}
                                       </div>
                                     )}
@@ -938,26 +938,26 @@ export default function DashboardPage() {
                                     {b.qualification_status === 'inactive' ? '⛔' : '⚠️'}
                                     {b.qualification_status === 'inactive' ? 'Uygun Değil' : 'Belirsiz'}
                                   </span>
-                                  <span style={{ fontSize:'0.58rem', color:'#5a7090', lineHeight:'1.3' }}>{b.elimination_reason}</span>
+                                  <span style={{ fontSize:'0.58rem', color:'#6b7280', lineHeight:'1.3' }}>{b.elimination_reason}</span>
                                 </div>
                               ) : (
-                                <span style={{ color:'#c6c6cd', fontSize:'0.7rem' }}>E-posta bulunamadı</span>
+                                <span style={{ color:'#9ca3af', fontSize:'0.7rem' }}>E-posta bulunamadı</span>
                               )}
                             </div>
                           )}
                         </td>
                         {/* Phone */}
-                        <td style={{ padding:'1.25rem 1.5rem' }}>
+                        <td style={{ padding:'0.75rem 0.85rem' }}>
                           {b.phone ? (
-                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#e8f0fe', textDecoration:'none', whiteSpace:'nowrap' }}>
+                            <a href={`tel:${b.phone}`} style={{ fontSize:'0.73rem', fontWeight:500, color:'#1f2937', textDecoration:'none', whiteSpace:'nowrap' }}>
                               📞 {b.phone}
                             </a>
                           ) : (
-                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
+                            <span style={{ color:'#9ca3af', fontSize:'0.75rem' }}>—</span>
                           )}
                         </td>
                         {/* Amazon / ASIN */}
-                        <td style={{ padding:'1.25rem 1.5rem' }} onClick={e => e.stopPropagation()}>
+                        <td style={{ padding:'0.75rem 0.85rem' }} onClick={e => e.stopPropagation()}>
                           {b.keepa_asin ? (
                             <div style={{ display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                               <a href={b.keepa_amazon_url ?? `https://www.amazon.com/dp/${b.keepa_asin}`} target="_blank" rel="noreferrer"
@@ -981,19 +981,19 @@ export default function DashboardPage() {
                                     </div>
                                     <span style={{ fontSize:'0.54rem', color:'#94a3b8', lineHeight:'1.2' }}>{reason}</span>
                                     {b.keepa_offer_count != null && (
-                                      <span style={{ fontSize:'0.54rem', color:'#5a7090' }}>{b.keepa_offer_count} satici aktif</span>
+                                      <span style={{ fontSize:'0.54rem', color:'#6b7280' }}>{b.keepa_offer_count} satici aktif</span>
                                     )}
                                   </div>
                                 );
                               })()}
                             </div>
                           ) : (
-                            <span style={{ color:'#c6c6cd', fontSize:'0.75rem' }}>—</span>
+                            <span style={{ color:'#9ca3af', fontSize:'0.75rem' }}>—</span>
                           )}
                         </td>
                         {/* Viability Score */}
-                        <td style={{ padding:'1.25rem 1.5rem' }}>
-                          <div style={{ width:'140px' }}>
+                        <td style={{ padding:'0.75rem 0.85rem' }}>
+                          <div style={{ width:'120px' }}>
                             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'0.25rem' }}>
                               <span style={{ fontSize:'0.6rem', color:'#94a3b8', fontWeight:600, textTransform:'uppercase' }}>Brand</span>
                               <span style={{ fontSize:'0.75rem', fontWeight:900, color:scoreColor }}>{score}/100</span>
@@ -1024,15 +1024,15 @@ export default function DashboardPage() {
                           </div>
                         </td>
                         {/* Status */}
-                        <td style={{ padding:'1.25rem 1.5rem' }} onClick={e => e.stopPropagation()}>
+                        <td style={{ padding:'0.75rem 0.85rem' }} onClick={e => e.stopPropagation()}>
                           <StatusDropdown brandId={b.id} current={b.lead_status} onUpdate={handleStatusUpdate} />
                         </td>
                         {/* Action */}
-                        <td style={{ padding:'1.25rem 1.5rem', textAlign:'right' }} onClick={e => e.stopPropagation()}>
+                        <td style={{ padding:'0.75rem 0.85rem', textAlign:'right' }} onClick={e => e.stopPropagation()}>
                           <button onClick={() => deleteBrand(b.id)} disabled={deletingId === b.id}
-                            style={{ background:'none', border:'none', cursor:'pointer', padding:'0.25rem', color:'#c6c6cd', borderRadius:'4px', display:'inline-flex', alignItems:'center', transition:'color 0.12s', opacity: deletingId === b.id ? 0.4 : 1 }}
+                            style={{ background:'none', border:'none', cursor:'pointer', padding:'0.25rem', color:'#9ca3af', borderRadius:'4px', display:'inline-flex', alignItems:'center', transition:'color 0.12s', opacity: deletingId === b.id ? 0.4 : 1 }}
                             onMouseEnter={e => (e.currentTarget.style.color = '#ba1a1a')}
-                            onMouseLeave={e => (e.currentTarget.style.color = '#c6c6cd')}>
+                            onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}>
                             <Ic.Trash />
                           </button>
                         </td>
@@ -1043,17 +1043,17 @@ export default function DashboardPage() {
               </table>
             </div>
             {/* Pagination */}
-            <div style={{ padding:'1rem 1.5rem', background:'rgba(242,243,255,0.3)', borderTop:'1px solid rgba(198,198,205,0.12)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-              <p style={{ fontSize:'0.72rem', fontWeight:700, color:'#4a6080', margin:0 }}>
-                Showing <span style={{ color:'#e8f0fe' }}>{filtered.length > 0 ? brandPage * BRAND_PAGE_SIZE + 1 : 0}–{Math.min((brandPage + 1) * BRAND_PAGE_SIZE, filtered.length)}</span> of <span style={{ color:'#e8f0fe' }}>{filtered.length}</span> leads
+            <div style={{ padding:'0.75rem 0.85rem', background:'rgba(242,243,255,0.3)', borderTop:'1px solid rgba(198,198,205,0.12)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <p style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', margin:0 }}>
+                Showing <span style={{ color:'#1f2937' }}>{filtered.length > 0 ? brandPage * BRAND_PAGE_SIZE + 1 : 0}–{Math.min((brandPage + 1) * BRAND_PAGE_SIZE, filtered.length)}</span> of <span style={{ color:'#1f2937' }}>{filtered.length}</span> leads
               </p>
               {totalPages > 1 && (
                 <div style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                   <button onClick={() => setBrandPage(p => Math.max(0, p - 1))} disabled={brandPage === 0}
-                    style={{ padding:'0.35rem 0.65rem', borderRadius:'8px', border:'1px solid rgba(198,198,205,0.3)', background: brandPage === 0 ? '#f8fafc' : '#fff', color: brandPage === 0 ? '#c6c6cd' : '#131b2e', fontSize:'0.72rem', cursor: brandPage === 0 ? 'default' : 'pointer' }}>‹</button>
-                  <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#57657a', minWidth:'80px', textAlign:'center' }}>{brandPage + 1} / {totalPages}</span>
+                    style={{ padding:'0.35rem 0.65rem', borderRadius:'8px', border:'1px solid rgba(198,198,205,0.3)', background: brandPage === 0 ? '#f8fafc' : '#fff', color: brandPage === 0 ? '#9ca3af' : '#1f2937', fontSize:'0.72rem', cursor: brandPage === 0 ? 'default' : 'pointer' }}>‹</button>
+                  <span style={{ fontSize:'0.72rem', fontWeight:700, color:'#6b7280', minWidth:'80px', textAlign:'center' }}>{brandPage + 1} / {totalPages}</span>
                   <button onClick={() => setBrandPage(p => Math.min(totalPages - 1, p + 1))} disabled={brandPage === totalPages - 1}
-                    style={{ padding:'0.35rem 0.65rem', borderRadius:'8px', border:'1px solid rgba(198,198,205,0.3)', background: brandPage === totalPages - 1 ? '#f8fafc' : '#fff', color: brandPage === totalPages - 1 ? '#c6c6cd' : '#131b2e', fontSize:'0.72rem', cursor: brandPage === totalPages - 1 ? 'default' : 'pointer' }}>›</button>
+                    style={{ padding:'0.35rem 0.65rem', borderRadius:'8px', border:'1px solid rgba(198,198,205,0.3)', background: brandPage === totalPages - 1 ? '#f8fafc' : '#fff', color: brandPage === totalPages - 1 ? '#9ca3af' : '#1f2937', fontSize:'0.72rem', cursor: brandPage === totalPages - 1 ? 'default' : 'pointer' }}>›</button>
                 </div>
               )}
             </div>
@@ -1067,18 +1067,18 @@ export default function DashboardPage() {
 
       {/* ── KEEPA TABLE ── */}
       {activeTab === 'keepa' && (
-        <div style={{ background:'#0f1b2d', borderRadius:'14px', border:'1px solid rgba(255,255,255,0.07)', overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
+        <div style={{ background:'#ffffff', borderRadius:'14px', border:'1px solid #e5e7eb', overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.05)' }}>
           {/* Keepa Toolbar */}
-          <div style={{ padding:'0.75rem 1rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', gap:'0.6rem', flexWrap:'wrap', background:'#fafbfc' }}>
-            <span style={{ fontWeight:800, fontSize:'0.88rem', color:'#e8f0fe' }}>{filteredKeepa.length}</span>
-            <span style={{ fontSize:'0.72rem', color:'#5a7090', fontWeight:500 }}>ürün</span>
+          <div style={{ padding:'0.75rem 1rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:'0.6rem', flexWrap:'wrap', background:'#fafbfc' }}>
+            <span style={{ fontWeight:800, fontSize:'0.88rem', color:'#1f2937' }}>{filteredKeepa.length}</span>
+            <span style={{ fontSize:'0.72rem', color:'#6b7280', fontWeight:500 }}>ürün</span>
             {processingJob && <span style={{ fontSize:'0.63rem', color:'#3b82f6', fontWeight:600, display:'flex', alignItems:'center', gap:'0.2rem' }}><span style={{ width:5, height:5, borderRadius:'50%', background:'#3b82f6', animation:'pulse 1.4s ease-in-out infinite', display:'inline-block' }} />işleniyor…</span>}
             {/* Keepa job seçici */}
             {jobs.filter(j => j.job_type === 'keepa').length > 1 && (
               <select
                 value={selectedKeepaJobId ?? ''}
                 onChange={e => setSelectedKeepaJobId(e.target.value || null)}
-                style={{ padding:'0.22rem 0.5rem', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'6px', fontSize:'0.63rem', color:'#7a90b0', background:'#0f1b2d', cursor:'pointer' }}
+                style={{ padding:'0.22rem 0.5rem', border:'1px solid #e5e7eb', borderRadius:'6px', fontSize:'0.63rem', color:'#6b7280', background:'#ffffff', cursor:'pointer' }}
               >
                 <option value=''>Tüm yüklemeler</option>
                 {jobs.filter(j => j.job_type === 'keepa').map(j => (
@@ -1103,20 +1103,20 @@ export default function DashboardPage() {
           {keepaProducts.length === 0 ? (
             <div style={{ padding:'4rem 2rem', textAlign:'center' }}>
               <div style={{ fontSize:'2.5rem', marginBottom:'0.65rem' }}>📊</div>
-              <div style={{ fontWeight:700, color:'#e8f0fe', marginBottom:'0.3rem', fontSize:'1rem' }}>Keepa verisi yok</div>
+              <div style={{ fontWeight:700, color:'#1f2937', marginBottom:'0.3rem', fontSize:'1rem' }}>Keepa verisi yok</div>
               <div style={{ color:'#94a3b8', fontSize:'0.78rem' }}>Sol panele Keepa CSV/Excel yükle.</div>
             </div>
           ) : filteredKeepa.length === 0 ? (
             <div style={{ padding:'2.5rem', textAlign:'center' }}>
               <div style={{ fontSize:'1.8rem', marginBottom:'0.4rem' }}>😶</div>
-              <div style={{ color:'#5a7090', fontSize:'0.78rem', fontWeight:500 }}>Bu filtreyle eşleşen ürün bulunamadı.</div>
+              <div style={{ color:'#6b7280', fontSize:'0.78rem', fontWeight:500 }}>Bu filtreyle eşleşen ürün bulunamadı.</div>
               <button onClick={() => setKeepaFilter('all')} style={{ marginTop:'0.75rem', padding:'0.35rem 0.85rem', background:'rgba(59,130,246,0.12)', color:'#1d4ed8', border:'1px solid #bfdbfe', borderRadius:'8px', fontSize:'0.7rem', fontWeight:600, cursor:'pointer' }}>Filtreyi Temizle</button>
             </div>
           ) : (
             <div style={{ overflowX:'auto' }}>
               <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.73rem' }}>
                 <thead>
-                  <tr style={{ background:'#0b1427', position:'sticky', top:0, zIndex:2 }}>
+                  <tr style={{ background:'#f8fafc', position:'sticky', top:0, zIndex:2 }}>
                     {[
                       { label:'ASIN',       w:'105px' },
                       { label:'Marka / Ürün', w:'200px' },
@@ -1130,7 +1130,7 @@ export default function DashboardPage() {
                       { label:'Strateji / Sebep', w:'180px' },
                       { label:'İşlemler',   w:'110px' },
                     ].map(col => (
-                      <th key={col.label} style={{ padding:'0.55rem 0.75rem', textAlign:'left', fontWeight:700, color:'#94a3b8', fontSize:'0.58rem', textTransform:'uppercase', letterSpacing:'0.06em', borderBottom:'2px solid rgba(255,255,255,0.05)', whiteSpace:'nowrap', minWidth:col.w }}>
+                      <th key={col.label} style={{ padding:'0.55rem 0.75rem', textAlign:'left', fontWeight:700, color:'#94a3b8', fontSize:'0.58rem', textTransform:'uppercase', letterSpacing:'0.06em', borderBottom:'2px solid #e5e7eb', whiteSpace:'nowrap', minWidth:col.w }}>
                         {col.label}
                       </th>
                     ))}
@@ -1152,7 +1152,7 @@ export default function DashboardPage() {
                       </td>
                       {/* Marka / Ürün */}
                       <td style={{ padding:'0.5rem 0.75rem', maxWidth:'200px' }}>
-                        <div style={{ fontWeight:600, color:'#e8f0fe', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.brand}</div>
+                        <div style={{ fontWeight:600, color:'#1f2937', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.brand}</div>
                         <div style={{ fontSize:'0.6rem', color:'#94a3b8', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }} title={p.title}>{p.title}</div>
                       </td>
                       {/* Fiyat */}
@@ -1193,7 +1193,7 @@ export default function DashboardPage() {
                               <span style={{ fontSize:'0.7rem', fontWeight:700, color: p.wholesale_score >= 65 ? '#059669' : p.wholesale_score >= 40 ? '#d97706' : '#dc2626' }}>{Math.round(p.wholesale_score)}</span>
                               <span style={{ fontSize:'0.52rem', color:'#94a3b8' }}>/100</span>
                             </div>
-                            <div style={{ height:'3px', background:'#0b1427', borderRadius:'999px', overflow:'hidden' }}>
+                            <div style={{ height:'3px', background:'#f8fafc', borderRadius:'999px', overflow:'hidden' }}>
                               <div style={{ height:'100%', width:`${p.wholesale_score}%`, background: p.wholesale_score >= 65 ? 'linear-gradient(90deg,#10b981,#059669)' : p.wholesale_score >= 40 ? 'linear-gradient(90deg,#f59e0b,#d97706)' : 'linear-gradient(90deg,#f87171,#dc2626)', borderRadius:'999px' }} />
                             </div>
                           </div>
@@ -1216,7 +1216,7 @@ export default function DashboardPage() {
                           return (
                             <div style={{ display:'flex', flexDirection:'column', gap:'0.2rem' }}>
                               <span style={{ padding:'0.12rem 0.4rem', borderRadius:'5px', fontSize:'0.6rem', fontWeight:700, background: bg, color, border:`1px solid ${border}`, whiteSpace:'nowrap', width:'fit-content' }}>{label}</span>
-                              <span style={{ fontSize:'0.52rem', color:'#5a7090', lineHeight:'1.25' }}>{reason}</span>
+                              <span style={{ fontSize:'0.52rem', color:'#6b7280', lineHeight:'1.25' }}>{reason}</span>
                             </div>
                           );
                         })()}
@@ -1252,19 +1252,19 @@ export default function DashboardPage() {
                           {/* Amazon satıcı listesi */}
                           <a href={`https://www.amazon.com/gp/offer-listing/${p.asin}`} target="_blank" rel="noreferrer"
                             title="Tüm satıcılar"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', textDecoration:'none', fontSize:'0.65rem', fontWeight:800, color:'#ff9900', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#ffffff', border:'1px solid #e5e7eb', textDecoration:'none', fontSize:'0.65rem', fontWeight:800, color:'#ff9900', flexShrink:0 }}>
                             ↗
                           </a>
                           {/* Keepa */}
                           <a href={`https://keepa.com/#!product/1-${p.asin}`} target="_blank" rel="noreferrer"
                             title="Keepa'da aç"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', textDecoration:'none', fontSize:'0.6rem', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#ffffff', border:'1px solid #e5e7eb', textDecoration:'none', fontSize:'0.6rem', flexShrink:0 }}>
                             🔍
                           </a>
                           {/* ASIN kopyala */}
                           <button onClick={() => navigator.clipboard.writeText(p.asin)}
                             title="ASIN kopyala"
-                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#0f1b2d', border:'1px solid rgba(255,255,255,0.07)', cursor:'pointer', fontSize:'0.6rem', flexShrink:0 }}>
+                            style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:24, height:24, borderRadius:5, background:'#ffffff', border:'1px solid #e5e7eb', cursor:'pointer', fontSize:'0.6rem', flexShrink:0 }}>
                             📋
                           </button>
                         </div>
@@ -1283,14 +1283,14 @@ export default function DashboardPage() {
       {/* ── DETAIL DRAWER ── */}
       {inspectedBrand && (
         <>
-          <div style={{ position:'fixed', inset:0, background:'rgba(15,23,42,0.3)', zIndex:2000, backdropFilter:'blur(2px)' }} onClick={() => setInspectedBrand(null)} />
-          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'340px', background:'#0f1b2d', zIndex:2001, boxShadow:'-4px 0 24px rgba(0,0,0,0.1)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
-            <div style={{ padding:'1.1rem 1.2rem 0.8rem', borderBottom:'1px solid rgba(255,255,255,0.05)', display:'flex', alignItems:'center', gap:'0.65rem' }}>
-              <div style={{ width:'36px', height:'36px', borderRadius:'8px', background:'#0b1427', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, color:'#5a7090', fontSize:'0.85rem', flexShrink:0 }}>
+          <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.12)', zIndex:2000, backdropFilter:'blur(2px)' }} onClick={() => setInspectedBrand(null)} />
+          <div style={{ position:'fixed', top:0, right:0, bottom:0, width:'340px', background:'#ffffff', zIndex:2001, boxShadow:'-4px 0 24px rgba(0,0,0,0.1)', overflowY:'auto', display:'flex', flexDirection:'column' }}>
+            <div style={{ padding:'1.1rem 1.2rem 0.8rem', borderBottom:'1px solid #f1f5f9', display:'flex', alignItems:'center', gap:'0.65rem' }}>
+              <div style={{ width:'36px', height:'36px', borderRadius:'8px', background:'#f8fafc', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, color:'#6b7280', fontSize:'0.85rem', flexShrink:0 }}>
                 {inspectedBrand.brand_name?.[0]?.toUpperCase()}
               </div>
               <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#e8f0fe' }}>{inspectedBrand.brand_name}</div>
+                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#1f2937' }}>{inspectedBrand.brand_name}</div>
                 {inspectedBrand.official_domain && <a href={`https://${inspectedBrand.official_domain}`} target="_blank" rel="noreferrer" style={{ fontSize:'0.68rem', color:'#3b82f6', textDecoration:'none' }}>{inspectedBrand.official_domain}</a>}
               </div>
               <button onClick={() => setInspectedBrand(null)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0.2rem', color:'#94a3b8', fontSize:'1rem', lineHeight:1 }}>✕</button>
@@ -1307,7 +1307,7 @@ export default function DashboardPage() {
               {(inspectedBrand.wholesale_email || inspectedBrand.contact_form_url || inspectedBrand.decision_maker_name) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Contact</div>
-                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {inspectedBrand.wholesale_email ? (
                       <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
                         <span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px', flexShrink:0 }}>Email</span>
@@ -1329,8 +1329,8 @@ export default function DashboardPage() {
                       <div style={{ display:'flex', gap:'0.4rem' }}>
                         <span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px', flexShrink:0 }}>Contact</span>
                         <div>
-                          <div style={{ fontSize:'0.72rem', fontWeight:500, color:'#e8f0fe' }}>{inspectedBrand.decision_maker_name}</div>
-                          {inspectedBrand.decision_maker_title && <div style={{ fontSize:'0.64rem', color:'#5a7090' }}>{inspectedBrand.decision_maker_title}</div>}
+                          <div style={{ fontSize:'0.72rem', fontWeight:500, color:'#1f2937' }}>{inspectedBrand.decision_maker_name}</div>
+                          {inspectedBrand.decision_maker_title && <div style={{ fontSize:'0.64rem', color:'#6b7280' }}>{inspectedBrand.decision_maker_title}</div>}
                         </div>
                       </div>
                     )}
@@ -1342,7 +1342,7 @@ export default function DashboardPage() {
               {(inspectedBrand.linkedin_url || inspectedBrand.instagram_url || inspectedBrand.tiktok_url) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Social Links</div>
-                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {[
                       { label:'LinkedIn',  url:inspectedBrand.linkedin_url,  followers: undefined },
                       { label:'Instagram', url:inspectedBrand.instagram_url, followers: inspectedBrand.instagram_followers },
@@ -1353,7 +1353,7 @@ export default function DashboardPage() {
                         <div style={{ flex:1, minWidth:0, display:'flex', alignItems:'center', gap:'0.35rem' }}>
                           <a href={x.url} target="_blank" rel="noreferrer" style={{ fontSize:'0.72rem', color:'#3b82f6', textDecoration:'none', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{x.url}</a>
                           {x.followers != null && (
-                            <span style={{ fontSize:'0.6rem', color:'#5a7090', whiteSpace:'nowrap', flexShrink:0 }}>
+                            <span style={{ fontSize:'0.6rem', color:'#6b7280', whiteSpace:'nowrap', flexShrink:0 }}>
                               {x.followers >= 1000 ? `${(x.followers/1000).toFixed(1)}K` : x.followers} takipçi
                             </span>
                           )}
@@ -1368,12 +1368,12 @@ export default function DashboardPage() {
               {(inspectedBrand.brand_type || inspectedBrand.verification_score || inspectedBrand.ecommerce_platform || inspectedBrand.has_wholesale_page || inspectedBrand.faire_url || inspectedBrand.ssl_valid != null || inspectedBrand.trustpilot_rating) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>Marka Doğrulama</div>
-                  <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
+                  <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e5e7eb', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                     {/* Tip + Doğrulama skoru */}
                     <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                       <BrandTypeBadge type={inspectedBrand.brand_type} />
                       {inspectedBrand.verification_score !== undefined && (
-                        <span style={{ fontSize:'0.65rem', color:'#5a7090' }}>
+                        <span style={{ fontSize:'0.65rem', color:'#6b7280' }}>
                           Doğrulama <strong style={{ color: inspectedBrand.verification_score >= 70 ? '#166534' : inspectedBrand.verification_score >= 40 ? '#1d4ed8' : '#94a3b8' }}>
                             {inspectedBrand.verification_score}/100
                           </strong>
@@ -1453,7 +1453,7 @@ export default function DashboardPage() {
                 return (
                   <div style={{ marginBottom:'0.8rem' }}>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>🎯 Ulaşım Planı</div>
-                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
+                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e5e7eb', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.5rem' }}>
 
                       {/* Kalifikasyon durumu */}
                       {qs && (
@@ -1466,7 +1466,7 @@ export default function DashboardPage() {
                             {qs==='qualified' ? '✓ Doğrulandı' : qs==='marginal' ? '~ Kısmi Doğrulama' : '✗ Ulaşılamaz'}
                           </span>
                           {signals.length > 0 && (
-                            <span style={{ fontSize:'0.58rem', color:'#5a7090' }} title={signals.join(' • ')}>{signals.length} sinyal</span>
+                            <span style={{ fontSize:'0.58rem', color:'#6b7280' }} title={signals.join(' • ')}>{signals.length} sinyal</span>
                           )}
                         </div>
                       )}
@@ -1474,23 +1474,23 @@ export default function DashboardPage() {
                       {/* Outreach skoru — bar */}
                       <div>
                         <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'0.25rem' }}>
-                          <span style={{ fontSize:'0.62rem', color:'#5a7090', fontWeight:600 }}>İletişim Hazırlık Skoru</span>
+                          <span style={{ fontSize:'0.62rem', color:'#6b7280', fontWeight:600 }}>İletişim Hazırlık Skoru</span>
                           <span style={{ fontSize:'0.7rem', fontWeight:800, color: osColor }}>{os}/100</span>
                         </div>
                         <div style={{ height:'6px', background:'#e2e8f0', borderRadius:'999px', overflow:'hidden' }}>
                           <div style={{ height:'100%', width:`${os}%`, background:`linear-gradient(90deg,${osColor},${osColor}aa)`, borderRadius:'999px', transition:'width 0.4s' }} />
                         </div>
-                        {rec && <div style={{ fontSize:'0.6rem', color:'#7a90b0', marginTop:'0.2rem', fontStyle:'italic' }}>{rec}</div>}
+                        {rec && <div style={{ fontSize:'0.6rem', color:'#6b7280', marginTop:'0.2rem', fontStyle:'italic' }}>{rec}</div>}
                       </div>
 
                       {/* Yaklaşım yöntemleri */}
                       {approaches.length > 0 && (
                         <div style={{ display:'flex', flexDirection:'column', gap:'0.3rem' }}>
-                          <div style={{ fontSize:'0.6rem', fontWeight:600, color:'#5a7090', textTransform:'uppercase' }}>En İyi Yaklaşımlar</div>
+                          <div style={{ fontSize:'0.6rem', fontWeight:600, color:'#6b7280', textTransform:'uppercase' }}>En İyi Yaklaşımlar</div>
                           {approaches.slice(0, 3).map((a, i) => (
-                            <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.3rem 0.5rem', background:'#0f1b2d', borderRadius:'6px', border:'1px solid rgba(255,255,255,0.07)' }}>
+                            <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.3rem 0.5rem', background:'#ffffff', borderRadius:'6px', border:'1px solid #e5e7eb' }}>
                               <span style={{ fontSize:'0.8rem' }}>{a.icon}</span>
-                              <span style={{ fontSize:'0.63rem', color:'#e8f0fe', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{a.label}</span>
+                              <span style={{ fontSize:'0.63rem', color:'#1f2937', flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{a.label}</span>
                               {a.value && (
                                 <a href={a.value.startsWith('http') ? a.value : `mailto:${a.value}`} target="_blank" rel="noreferrer"
                                   style={{ fontSize:'0.58rem', color:'#3b82f6', fontWeight:600, textDecoration:'none', flexShrink:0 }}>→</a>
@@ -1533,7 +1533,7 @@ export default function DashboardPage() {
                 return (
                   <div>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>📦 Dağıtım Şeması</div>
-                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.4rem' }}>
+                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e5e7eb', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.4rem' }}>
                       {/* Kanal tipi */}
                       {cfg && dt !== 'unknown' && (
                         <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
@@ -1617,7 +1617,7 @@ export default function DashboardPage() {
                 return (
                   <div>
                     <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.4rem' }}>🔒 Güvenlik Analizi</div>
-                    <div style={{ background:'#0b1427', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.07)', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
+                    <div style={{ background:'#f8fafc', borderRadius:'8px', border:'1px solid #e5e7eb', padding:'0.65rem 0.8rem', display:'flex', flexDirection:'column', gap:'0.35rem' }}>
                       {fr && (
                         <div style={{ display:'flex', gap:'0.4rem', alignItems:'center' }}>
                           <span style={{ fontSize:'0.62rem', color:'#94a3b8', width:'50px', flexShrink:0 }}>Risk</span>
@@ -1652,7 +1652,7 @@ export default function DashboardPage() {
               {(inspectedBrand.location || inspectedBrand.company_employee_count) && (
                 <div>
                   <div style={{ fontSize:'0.62rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', color:'#94a3b8', marginBottom:'0.35rem' }}>Şirket Bilgisi</div>
-                  <div style={{ background:'#0b1427', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
+                  <div style={{ background:'#f8fafc', borderRadius:'7px', padding:'0.65rem 0.8rem', border:'1px solid #f1f5f9', display:'flex', flexDirection:'column', gap:'0.3rem' }}>
                     {inspectedBrand.location && <div style={{ display:'flex', gap:'0.4rem' }}><span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px' }}>Konum</span><span style={{ fontSize:'0.72rem', color:'#334155' }}>{inspectedBrand.location}</span></div>}
                     {inspectedBrand.company_employee_count && <div style={{ display:'flex', gap:'0.4rem' }}><span style={{ fontSize:'0.68rem', color:'#94a3b8', width:'55px' }}>Çalışan</span><span style={{ fontSize:'0.72rem', color:'#334155' }}>{inspectedBrand.company_employee_count.toLocaleString()}</span></div>}
                   </div>
@@ -1667,14 +1667,14 @@ export default function DashboardPage() {
                   <div style={{ flex:1, height:'4px', background:'#e2e8f0', borderRadius:'999px', overflow:'hidden' }}>
                     <div style={{ height:'100%', width:`${inspectedBrand.confidence_score}%`, background: inspectedBrand.confidence_score>=70?'#22c55e':inspectedBrand.confidence_score>=40?'#3b82f6':'#ef4444', borderRadius:'999px' }} />
                   </div>
-                  <span style={{ fontSize:'0.7rem', fontWeight:700, color:'#e8f0fe', minWidth:'28px', textAlign:'right' }}>{inspectedBrand.confidence_score}%</span>
+                  <span style={{ fontSize:'0.7rem', fontWeight:700, color:'#1f2937', minWidth:'28px', textAlign:'right' }}>{inspectedBrand.confidence_score}%</span>
                 </div>
               </div>
             </div>
 
             <div style={{ padding:'0.8rem 1.2rem', borderTop:'1px solid #f1f5f9', display:'flex', gap:'0.45rem' }}>
-              <button onClick={() => { deleteBrand(inspectedBrand.id); }} style={{ flex:1, padding:'0.45rem', background:'#0f1b2d', color:'#ef4444', border:'1px solid #fecaca', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Sil</button>
-              <button onClick={() => setInspectedBrand(null)} style={{ flex:1, padding:'0.45rem', background:'#0f172a', color:'#fff', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Kapat</button>
+              <button onClick={() => { deleteBrand(inspectedBrand.id); }} style={{ flex:1, padding:'0.45rem', background:'#ffffff', color:'#ef4444', border:'1px solid #fecaca', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Sil</button>
+              <button onClick={() => setInspectedBrand(null)} style={{ flex:1, padding:'0.45rem', background:'#1f2937', color:'#fff', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'0.75rem', cursor:'pointer' }}>Kapat</button>
             </div>
           </div>
         </>
@@ -1684,14 +1684,14 @@ export default function DashboardPage() {
       {showRetryConfirm && (
         <>
           <div onClick={() => setShowRetryConfirm(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.4)', zIndex:999 }} />
-          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#0f1b2d', borderRadius:'16px', padding:'2rem', width:'420px', maxWidth:'90vw', zIndex:1000, boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
+          <div style={{ position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'#ffffff', borderRadius:'16px', padding:'2rem', width:'420px', maxWidth:'90vw', zIndex:1000, boxShadow:'0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ fontSize:'1.5rem', marginBottom:'0.5rem' }}>🔄</div>
-            <h3 style={{ fontWeight:800, fontSize:'1.1rem', color:'#e8f0fe', margin:'0 0 0.5rem' }}>Başarısız Markaları Tekrar Tara</h3>
-            <p style={{ fontSize:'0.82rem', color:'#5a7090', lineHeight:1.6, marginBottom:'1.25rem' }}>
-              <strong style={{ color:'#e8f0fe' }}>{failedBrandsList.length} marka</strong> için email bulunamadı. Bu markalar silinip tekrar taranacak. Her marka 1 kredi harcar.
+            <h3 style={{ fontWeight:800, fontSize:'1.1rem', color:'#1f2937', margin:'0 0 0.5rem' }}>Başarısız Markaları Tekrar Tara</h3>
+            <p style={{ fontSize:'0.82rem', color:'#6b7280', lineHeight:1.6, marginBottom:'1.25rem' }}>
+              <strong style={{ color:'#1f2937' }}>{failedBrandsList.length} marka</strong> için email bulunamadı. Bu markalar silinip tekrar taranacak. Her marka 1 kredi harcar.
             </p>
             <div style={{ display:'flex', gap:'0.5rem' }}>
-              <button onClick={() => setShowRetryConfirm(false)} style={{ flex:1, padding:'0.6rem', background:'#0b1427', color:'#5a7090', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'10px', fontWeight:600, fontSize:'0.8rem', cursor:'pointer' }}>Vazgeç</button>
+              <button onClick={() => setShowRetryConfirm(false)} style={{ flex:1, padding:'0.6rem', background:'#f8fafc', color:'#6b7280', border:'1px solid #e5e7eb', borderRadius:'10px', fontWeight:600, fontSize:'0.8rem', cursor:'pointer' }}>Vazgeç</button>
               <button onClick={retryFailedBrands} disabled={retrying} style={{ flex:1, padding:'0.6rem', background:'#d97706', color:'#fff', border:'none', borderRadius:'10px', fontWeight:700, fontSize:'0.8rem', cursor:'pointer', opacity: retrying ? 0.6 : 1 }}>
                 {retrying ? 'Gönderiliyor...' : `${failedBrandsList.length} Markayı Tara`}
               </button>
