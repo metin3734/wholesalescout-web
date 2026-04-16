@@ -61,6 +61,7 @@ interface Brand {
   qualification_signals?: string;
   elimination_reason?: string;
   decision_maker_email?: string;
+  decision_maker_linkedin?: string;
   alternative_emails?: string;  // JSON: [{email, role, priority}]
   outreach_score?: number;
   outreach_approach?: string;
