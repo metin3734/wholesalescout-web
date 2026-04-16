@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Profile {
   full_name?: string;
@@ -9,6 +9,153 @@ interface Profile {
   brands_limit?: number;
   credits_balance?: number;
   balance?: number;
+}
+
+// ── API Keys Panel Bileşeni ──────────────────────────────────────────────────
+
+const API_KEY_CONFIGS = [
+  {
+    key_type: 'hunter',
+    label: 'Hunter.io',
+    description: 'Domain arama — 500 ücretsiz arama/ay. Scraping başarısız olduğunda devreye girer.',
+    placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    link: 'https://hunter.io/api-documentation/v2',
+    linkText: 'API key al',
+    badge: '500/ay ücretsiz',
+    badgeColor: '#059669',
+  },
+  {
+    key_type: 'apollo',
+    label: 'Apollo.io',
+    description: 'Karar verici kişi araması — 50 ücretsiz/ay. İsim + unvan + email bulur.',
+    placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxxxx',
+    link: 'https://developer.apollo.io',
+    linkText: 'API key al',
+    badge: '50/ay ücretsiz',
+    badgeColor: '#2563eb',
+  },
+  {
+    key_type: 'brave',
+    label: 'Brave Search API',
+    description: 'Web arama — varsayılan key sistem key\'i. Kendi key\'inizi girerek kotayı artırın.',
+    placeholder: 'BSA...',
+    link: 'https://api.search.brave.com',
+    linkText: 'API key al',
+    badge: '2000/ay ücretsiz',
+    badgeColor: '#7c3aed',
+  },
+  {
+    key_type: 'clearout',
+    label: 'Clearout.io',
+    description: 'Email doğrulama — ücretli. T0-T3.8 başarısız olduğunda son çare olarak kullanılır.',
+    placeholder: 'co_...',
+    link: 'https://app.clearout.io/settings',
+    linkText: 'API key al',
+    badge: 'Ücretli',
+    badgeColor: '#dc2626',
+  },
+];
+
+function ApiKeysPanel() {
+  const [keys, setKeys] = useState<Record<string, string>>({});
+  const [saved, setSaved] = useState<Record<string, boolean>>({});
+  const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState<Record<string, boolean>>({});
+
+  const loadKeys = useCallback(async () => {
+    try {
+      const r = await fetch('/api/settings/api-keys');
+      if (r.ok) {
+        const data = await r.json();
+        const maskedMap: Record<string, string> = {};
+        for (const k of (data.keys || [])) {
+          maskedMap[k.key_type] = k.has_key ? k.api_key_masked : '';
+        }
+        setKeys(maskedMap);
+      }
+    } catch { /* ignore */ }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { loadKeys(); }, [loadKeys]);
+
+  const handleSave = async (key_type: string, value: string) => {
+    try {
+      const r = await fetch('/api/settings/api-keys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key_type, api_key: value }),
+      });
+      if (r.ok) {
+        setSaved(p => ({ ...p, [key_type]: true }));
+        setTimeout(() => setSaved(p => ({ ...p, [key_type]: false })), 2500);
+        await loadKeys();
+      }
+    } catch { /* ignore */ }
+  };
+
+  return (
+    <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
+      <div style={{ padding: '0.9rem 1.4rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h2 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a', margin: 0 }}>🔑 API Key'lerim</h2>
+          <p style={{ fontSize: '0.72rem', color: '#64748b', margin: '0.2rem 0 0' }}>Kendi API key'lerinizi kullanarak aylık ücretsiz kotanızı yazılıma ekleyin</p>
+        </div>
+      </div>
+      <div style={{ padding: '1.25rem 1.4rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        {loading ? (
+          <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Yükleniyor…</div>
+        ) : API_KEY_CONFIGS.map(cfg => (
+          <div key={cfg.key_type} style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start', paddingBottom: '1.25rem', borderBottom: '1px solid #f8fafc' }}>
+            {/* Sol: label + açıklama */}
+            <div style={{ minWidth: '200px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <span style={{ fontWeight: 700, fontSize: '0.82rem', color: '#0f172a' }}>{cfg.label}</span>
+                <span style={{ fontSize: '0.58rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: '4px', color: cfg.badgeColor, background: cfg.badgeColor + '15', border: `1px solid ${cfg.badgeColor}30` }}>
+                  {cfg.badge}
+                </span>
+              </div>
+              <p style={{ fontSize: '0.68rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>{cfg.description}</p>
+              <a href={cfg.link} target="_blank" rel="noreferrer" style={{ fontSize: '0.65rem', color: '#2563eb', textDecoration: 'none', marginTop: '0.3rem', display: 'inline-block' }}>
+                → {cfg.linkText} ↗
+              </a>
+            </div>
+            {/* Sağ: input + kaydet */}
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <div style={{ position: 'relative', flex: 1 }}>
+                  <input
+                    type={visible[cfg.key_type] ? 'text' : 'password'}
+                    placeholder={keys[cfg.key_type] ? '••••••••••••••••' : cfg.placeholder}
+                    defaultValue=""
+                    onChange={e => setKeys(p => ({ ...p, [cfg.key_type + '_input']: e.target.value }))}
+                    style={{ width: '100%', padding: '0.5rem 2.2rem 0.5rem 0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '0.78rem', fontFamily: 'monospace', boxSizing: 'border-box', background: '#fafafa', outline: 'none' }}
+                  />
+                  <button onClick={() => setVisible(p => ({ ...p, [cfg.key_type]: !p[cfg.key_type] }))}
+                    style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.75rem', color: '#94a3b8' }}>
+                    {visible[cfg.key_type] ? '🙈' : '👁'}
+                  </button>
+                </div>
+                <button
+                  onClick={() => handleSave(cfg.key_type, keys[cfg.key_type + '_input'] || '')}
+                  style={{ padding: '0.5rem 1rem', background: saved[cfg.key_type] ? '#059669' : '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.2s', minWidth: '80px' }}>
+                  {saved[cfg.key_type] ? '✓ Kaydedildi' : 'Kaydet'}
+                </button>
+              </div>
+              {/* Mevcut key durumu */}
+              {keys[cfg.key_type] && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.4rem' }}>
+                  <span style={{ fontSize: '0.55rem', color: '#059669' }}>●</span>
+                  <span style={{ fontSize: '0.65rem', color: '#64748b', fontFamily: 'monospace' }}>Aktif key: {keys[cfg.key_type]}</span>
+                  <button onClick={() => handleSave(cfg.key_type, '')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.6rem', color: '#ef4444', marginLeft: '0.25rem' }}>✕ Kaldır</button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -228,6 +375,9 @@ export default function SettingsPage() {
           </button>
         </Field>
       </Section>
+
+      {/* ── API KEYS PANELİ ── */}
+      <ApiKeysPanel />
 
       {/* Save button */}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
